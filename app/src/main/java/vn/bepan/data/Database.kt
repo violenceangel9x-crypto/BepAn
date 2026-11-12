@@ -6,7 +6,7 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.flow.Flow
 
-const val KITCHEN_SCHEMA_VERSION = 4
+const val KITCHEN_SCHEMA_VERSION = 5
 
 @Entity(primaryKeys = ["personId", "effective"], foreignKeys = [ForeignKey(entity = Person::class, parentColumns = ["id"], childColumns = ["personId"], onDelete = ForeignKey.RESTRICT)])
 data class MembershipPeriod(val personId: String, val effective: String, val group: String, val active: Boolean)
@@ -44,6 +44,26 @@ data class AssistantAction(@PrimaryKey val operationId: String, val traceId: Str
     @Query("SELECT * FROM MembershipPeriod ORDER BY personId, effective") suspend fun memberships(): List<MembershipPeriod>
     @Insert suspend fun membership(value: MembershipPeriod)
     @Query("SELECT COUNT(*) FROM Audit") suspend fun auditCount(): Long
+    @Query("SELECT version FROM FinanceVersion WHERE id=1") suspend fun financeVersion(): Long?
+    @Insert(onConflict = OnConflictStrategy.IGNORE) suspend fun ensureFinance(value: FinanceVersion)
+    @Query("UPDATE FinanceVersion SET version=version+1 WHERE id=1") suspend fun bumpFinance()
+    @Query("SELECT * FROM CashOpening WHERE id=1") suspend fun cashOpening(): CashOpening?
+    @Insert suspend fun cashOpening(value: CashOpening)
+    @Query("SELECT * FROM CashEntry ORDER BY date, recordedAt, id") suspend fun cashEntries(): List<CashEntry>
+    @Query("SELECT * FROM CashEntry WHERE date>=:start AND date<:end ORDER BY date, recordedAt, id") suspend fun cashEntries(start: String, end: String): List<CashEntry>
+    @Query("SELECT * FROM CashEntry WHERE period=:period ORDER BY date, recordedAt, id") suspend fun periodCash(period: String): List<CashEntry>
+    @Insert suspend fun cashEntry(value: CashEntry)
+    @Query("SELECT * FROM PaymentAllocation WHERE period=:period ORDER BY entryId,personId") suspend fun allocations(period: String): List<PaymentAllocation>
+    @Insert suspend fun allocations(value: List<PaymentAllocation>)
+    @Query("SELECT * FROM Settlement WHERE fromPeriod=:period OR toPeriod=:period ORDER BY id") suspend fun settlements(period: String): List<Settlement>
+    @Query("SELECT * FROM Settlement WHERE id=:id") suspend fun settlement(id: String): Settlement?
+    @Insert suspend fun settlement(value: Settlement)
+    @Update suspend fun updateSettlement(value: Settlement)
+    @Upsert suspend fun financeDraft(value: FinanceDraft)
+    @Query("SELECT * FROM FinanceDraft ORDER BY rowid DESC") suspend fun financeDrafts(): List<FinanceDraft>
+    @Query("DELETE FROM FinanceDraft WHERE id=:id") suspend fun deleteFinanceDraft(id: String)
+    @Query("SELECT * FROM ClosedMeal WHERE date>=:start AND date<:end") suspend fun closedMeals(start: String, end: String): List<ClosedMeal>
+    @Query("SELECT * FROM Day WHERE date>=:start AND date<:end ORDER BY date") suspend fun days(start: String, end: String): List<Day>
     @Query("SELECT * FROM Day WHERE date=:date") suspend fun day(date: String): Day?
     @Insert(onConflict = OnConflictStrategy.IGNORE) suspend fun ensureDay(value: Day)
     @Update suspend fun updateDay(value: Day)
@@ -85,10 +105,29 @@ data class AssistantAction(@PrimaryKey val operationId: String, val traceId: Str
     @Upsert suspend fun note(value: Note)
 }
 
-@Database(entities = [MembershipPeriod::class, Person::class, Day::class, MealOverride::class, Schedule::class, Menu::class, Purchase::class, ClosedMeal::class, CloseRevision::class, Rate::class, Audit::class, Receipt::class, AssistantAction::class, ChatMessage::class, Note::class], version = KITCHEN_SCHEMA_VERSION, exportSchema = true)
+@Database(entities = [FinanceVersion::class, CashOpening::class, CashEntry::class, PaymentAllocation::class, Settlement::class, FinanceDraft::class, MembershipPeriod::class, Person::class, Day::class, MealOverride::class, Schedule::class, Menu::class, Purchase::class, ClosedMeal::class, CloseRevision::class, Rate::class, Audit::class, Receipt::class, AssistantAction::class, ChatMessage::class, Note::class], version = KITCHEN_SCHEMA_VERSION, exportSchema = true)
 abstract class KitchenDatabase : RoomDatabase() {
     abstract fun dao(): KitchenDao
     companion object {
+        val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("CREATE TABLE IF NOT EXISTS FinanceVersion (id INTEGER NOT NULL, version INTEGER NOT NULL, PRIMARY KEY(id))")
+                db.execSQL("INSERT INTO FinanceVersion VALUES (1,0)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS CashOpening (id INTEGER NOT NULL, date TEXT NOT NULL, amount INTEGER NOT NULL, PRIMARY KEY(id))")
+                db.execSQL("CREATE TABLE IF NOT EXISTS CashEntry (id TEXT NOT NULL, kind TEXT NOT NULL, date TEXT NOT NULL, period TEXT NOT NULL, amount INTEGER NOT NULL, description TEXT NOT NULL, recordedAt TEXT NOT NULL, sourceId TEXT NOT NULL, purchaseId TEXT, legacy INTEGER NOT NULL, reversalOf TEXT NOT NULL, PRIMARY KEY(id), FOREIGN KEY(purchaseId) REFERENCES Purchase(id) ON UPDATE NO ACTION ON DELETE RESTRICT)")
+                db.execSQL("CREATE INDEX index_CashEntry_date ON CashEntry(date)")
+                db.execSQL("CREATE INDEX index_CashEntry_period ON CashEntry(period)")
+                db.execSQL("CREATE UNIQUE INDEX index_CashEntry_sourceId ON CashEntry(sourceId)")
+                db.execSQL("CREATE UNIQUE INDEX index_CashEntry_purchaseId ON CashEntry(purchaseId)")
+                db.execSQL("INSERT INTO CashEntry SELECT p.id,'PURCHASE',COALESCE(date(r.timestamp,'+7 hours'),p.date),substr(p.date,1,7),-p.amount,p.description,COALESCE(r.timestamp,''),'purchase:'||p.id,p.id,CASE WHEN r.timestamp IS NULL THEN 1 ELSE 0 END,'' FROM Purchase p LEFT JOIN Receipt r ON r.operationId=p.id")
+                db.execSQL("CREATE TABLE IF NOT EXISTS PaymentAllocation (entryId TEXT NOT NULL, personId TEXT NOT NULL, period TEXT NOT NULL, `group` TEXT NOT NULL, amount INTEGER NOT NULL, PRIMARY KEY(entryId,personId), FOREIGN KEY(entryId) REFERENCES CashEntry(id) ON UPDATE NO ACTION ON DELETE RESTRICT, FOREIGN KEY(personId) REFERENCES Person(id) ON UPDATE NO ACTION ON DELETE RESTRICT)")
+                db.execSQL("CREATE INDEX index_PaymentAllocation_personId ON PaymentAllocation(personId)")
+                db.execSQL("CREATE INDEX index_PaymentAllocation_period ON PaymentAllocation(period)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS Settlement (id TEXT NOT NULL, personId TEXT NOT NULL, fromPeriod TEXT NOT NULL, toPeriod TEXT NOT NULL, amount INTEGER NOT NULL, status TEXT NOT NULL, cashEntryId TEXT, PRIMARY KEY(id), FOREIGN KEY(personId) REFERENCES Person(id) ON UPDATE NO ACTION ON DELETE RESTRICT, FOREIGN KEY(cashEntryId) REFERENCES CashEntry(id) ON UPDATE NO ACTION ON DELETE RESTRICT)")
+                listOf("personId","fromPeriod","toPeriod","cashEntryId").forEach { db.execSQL("CREATE INDEX index_Settlement_$it ON Settlement($it)") }
+                db.execSQL("CREATE TABLE IF NOT EXISTS FinanceDraft (id TEXT NOT NULL, command TEXT NOT NULL, PRIMARY KEY(id))")
+            }
+        }
         val MIGRATION_3_4 = object : Migration(3, 4) {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL("CREATE TABLE IF NOT EXISTS MembershipPeriod (personId TEXT NOT NULL, effective TEXT NOT NULL, `group` TEXT NOT NULL, active INTEGER NOT NULL, PRIMARY KEY(personId,effective), FOREIGN KEY(personId) REFERENCES Person(id) ON UPDATE NO ACTION ON DELETE RESTRICT)")
@@ -112,6 +151,6 @@ abstract class KitchenDatabase : RoomDatabase() {
             }
         }
         fun open(context: Context, name: String = "kitchen.db"): KitchenDatabase =
-            Room.databaseBuilder(context, KitchenDatabase::class.java, name).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4).build()
+            Room.databaseBuilder(context, KitchenDatabase::class.java, name).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5).build()
     }
 }

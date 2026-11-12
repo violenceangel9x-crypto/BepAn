@@ -31,6 +31,9 @@ class MigrationTest {
             assertEquals(true, rows.single { it.meal == "LUNCH" }.registered)
             assertEquals(28800L, rows.filter { it.enabled }.sumOf { it.price })
             assertEquals(85000L, db.dao().purchases().sumOf { it.amount })
+            assertEquals(-85000L, db.dao().cashEntries().single().amount)
+            assertEquals("purchase", db.dao().cashEntries().single().purchaseId)
+            assertTrue(db.dao().cashEntries().single().legacy)
         } finally { db.close() }
     }
     @Test fun migrateRealExportedV1PreservesPeopleAuditAndReceipt() = runBlocking {

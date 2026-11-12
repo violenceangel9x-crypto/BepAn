@@ -2,6 +2,14 @@
 
 ## Triển khai Mốc 2 — tiến độ theo từng phần
 
+### 2.2 — Đạt kiểm tra JVM/build
+
+- Schema **5**, migration 4→5 thêm CashEntry/PaymentAllocation/Settlement, phiên bản quỹ, số dư mở sổ và bản nháp xác nhận tài chính. Đường nâng từ v1/v2 vẫn giữ người, chat, suất chốt và Purchase/Audit/receipt.
+- Mỗi Purchase mới ghi đúng một CashEntry cùng transaction. Migration sinh một dòng chi cho mỗi Purchase cũ, giữ ID/tham chiếu duy nhất; lấy ngày thực ghi từ receipt khi có, đánh dấu legacy khi thiếu, không tạo receipt thu/chi giả.
+- FinanceRepository tách kỳ nghiệp vụ/ngày tiền thực tế khỏi ngày ăn; có token tài chính riêng (ghi chú không làm cũ preview tiền), preview lưu Room, hủy, replay và số dư mở quỹ. Số dư mở sổ không giả thành khoản vừa thu; chưa có đầu quỹ thì cashBalance trả null.
+- `scripts/build.ps1`: **BUILD SUCCESSFUL**, **42/42 JVM test đạt**, lint không lỗi. Ca mới kiểm tra một chi duy nhất, mở quỹ, phục hồi preview sau mở lại DB, replay sau commit, rollback Audit và stale khi chốt ngày.
+- Tiếp theo: **2.3** read model sổ tháng, bảng ngang/chi tiết và nguồn tính dùng chung.
+
 ### 2.1 — Đạt kiểm tra JVM/build, native tổng hợp ở 2.9
 
 - Schema **4**, migration 3→4 tạo MembershipPeriod từ ngày vào/ngừng đã có. Nhóm/hoạt động được giải theo ngày, ngày chốt vẫn dùng snapshot; giữ ID và không xóa người có lịch sử.

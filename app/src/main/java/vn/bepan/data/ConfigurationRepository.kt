@@ -56,6 +56,7 @@ class ConfigurationRepository(private val db: KitchenDatabase, log: TechnicalLog
             dao.membership(MembershipPeriod(command.personId, command.effective, command.group, command.active))
         }
         dao.days().filter { !it.closed && it.date >= command.effective }.forEach { dao.updateDay(it.copy(version = it.version + 1)) }
+        dao.ensureFinance(FinanceVersion()); dao.bumpFinance()
         BusinessChange(if (command.rate != null) "Định mức · ${command.effective}" else command.name, before,
             command.rate?.toString() ?: "${command.group} · ${command.effective} · ${if (command.active) "Đang ăn" else "Ngừng ăn"}")
     }

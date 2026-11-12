@@ -18,6 +18,7 @@ class KitchenRepository(val db: KitchenDatabase, val log: TechnicalLog) {
     val dao = db.dao()
     var auditFaultForTest: Boolean = false
     suspend fun initialize(debug: Boolean) = db.withTransaction {
+        dao.ensureFinance(FinanceVersion())
         if (dao.rates().isEmpty()) dao.rate(Rate("2000-01-01"))
         if (debug && dao.people().isEmpty()) {
             listOf("Nguyễn Văn Nam", "Trần Minh Nam", "Lê Minh Anh", "Phạm Đức Hùng", "Hoàng Văn Bình", "Đỗ Quang Huy", "Vũ Thanh Sơn", "Bùi Minh Tuấn", "Đặng Hải Long", "Ngô Đức Thành").forEachIndexed { i, name ->
@@ -92,6 +93,8 @@ class KitchenRepository(val db: KitchenDatabase, val log: TechnicalLog) {
                     Kind.PURCHASE -> {
                         requireRule(command.amount in 1..1_000_000_000L && command.text.isNotBlank() && command.text.length <= 500, "INVALID_ARGUMENT")
                         dao.purchase(Purchase(command.operationId, command.date, command.amount, command.text))
+                        dao.cashEntry(CashEntry(command.operationId, "PURCHASE", today(), command.date.take(7), -command.amount,
+                            command.text, Instant.now().toString(), "purchase:${command.operationId}", command.operationId))
                         after = "${command.text} · ${money(command.amount)}"
                     }
                     Kind.MENU -> {
@@ -141,6 +144,9 @@ class KitchenRepository(val db: KitchenDatabase, val log: TechnicalLog) {
                     else -> throw RuleViolation("COMMAND_UNSUPPORTED")
                 }
                 val version = snap.day.version + 1
+                if (command.kind in listOf(Kind.PURCHASE, Kind.CLOSE_DAY, Kind.ADJUST_ATTENDANCE, Kind.GUEST, Kind.ATTENDANCE, Kind.SCHEDULE)) {
+                    dao.ensureFinance(FinanceVersion()); dao.bumpFinance()
+                }
                 dao.updateDay(snap.day.copy(version = version, closed = snap.day.closed || command.kind == Kind.CLOSE_DAY))
                 if (auditFaultForTest) throw RuleViolation("AUDIT_FAILED")
                 dao.audit(Audit(id(), command.operationId, traceId = ctx.traceId, timestamp = Instant.now().toString(), source = ctx.source.name, provider = ctx.provider.name,

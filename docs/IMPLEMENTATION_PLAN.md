@@ -64,7 +64,7 @@ Chuỗi chính: **2.0 → 2.1 → 2.2 → 2.3 → 2.4 → 2.5 → 2.6 → 2.7 �
 
 **Đạt khi:** thêm người trên DB trống, đổi nhóm/ngừng/ăn lại giữa tháng, đổi giá 700→900 bù giữa kỳ đúng ngày; lịch sử không đổi và preview cũ bị từ chối.
 
-### 2.2 · Sổ quỹ, phạm vi lệnh tài chính và migration — P0
+### 2.2 · Sổ quỹ, phạm vi lệnh tài chính và migration — P0 — Đã đạt JVM/build
 
 - Tách lệnh tiền khỏi điều kiện ngày bữa nháp; dùng kiểu lệnh rõ phạm vi người/kỳ/chứng từ. Giữ cơ chế receipt/hash/Audit của repository.
 - Thêm CashEntry, PaymentAllocation, Settlement và phiên bản tài chính liên quan; unique/FK/index theo nguồn giao dịch, kỳ, người và trạng thái. Ràng buộc tổng phân bổ được kiểm tra trong transaction.

@@ -20,7 +20,7 @@ enum class Meal(val label: String, val price: Long, val grams: Long) {
 enum class Group(val label: String) { OFFICER("Cán bộ"), SOLDIER("Chiến sĩ"), GUEST("Khách") }
 enum class Source { MANUAL, ASSISTANT, SYSTEM }
 enum class Provider { NONE, MOCK, GEMINI }
-enum class Kind { ATTENDANCE, ADJUST_ATTENDANCE, PURCHASE, MENU, CLOSE_DAY, SCHEDULE, GUEST, NOTE, PROFILE, RATE }
+enum class Kind { ATTENDANCE, ADJUST_ATTENDANCE, PURCHASE, MENU, CLOSE_DAY, SCHEDULE, GUEST, NOTE, PROFILE, RATE, OPENING_BALANCE, COLLECTION, RESERVE_REFUND, REFUND, CANCEL_SETTLEMENT, CARRY, SUBSIDY_RECEIPT, REVERSE_CASH }
 enum class ActionStatus { PENDING, SAVED, CANCELLED, EXPIRED, UNDONE, ERROR }
 class RuleViolation(val code: String) : Exception(code)
 fun requireRule(condition: Boolean, code: String) { if (!condition) throw RuleViolation(code) }
