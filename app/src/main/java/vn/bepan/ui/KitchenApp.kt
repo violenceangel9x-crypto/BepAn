@@ -146,10 +146,10 @@ fun KitchenApp(
                             0 -> TodayScreen(state, vm)
                             1 -> FinanceScreen(state)
                             2 -> NotesScreen(state, vm) { nav.navigate("audit") }
-                            3 -> SettingsScreen(state, vm) {
+                            3 -> SettingsScreen(state, vm, diagnose = {
                                 vm.diagnostics()
                                 nav.navigate("diagnostics")
-                            }
+                            }, configure = { nav.navigate("configuration") })
                         }
                     }
                 }
@@ -174,6 +174,7 @@ fun KitchenApp(
                 composable("audit") {
                     HistoryScreen(state) { nav.popBackStack() }
                 }
+                composable("configuration") { ConfigurationScreen(state, vm) { nav.popBackStack() } }
                 composable("diagnostics") {
                     DiagnosticsScreen(state, vm) { nav.popBackStack() }
                 }

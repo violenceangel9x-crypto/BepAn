@@ -53,7 +53,7 @@ Chuỗi chính: **2.0 → 2.1 → 2.2 → 2.3 → 2.4 → 2.5 → 2.6 → 2.7 �
 
 **Đạt khi:** khách chưa đăng ký không thành “Có cắt”; khách chỉ trưa không bật sáng/tối sau chốt; người cũ có tên; preview tiền bằng chênh lệch thực ghi; charge/chi/bù gạo cũ giữ nguyên.
 
-### 2.1 · Hồ sơ và định mức có hiệu lực — P0
+### 2.1 · Hồ sơ và định mức có hiệu lực — P0 — Đã đạt JVM/build
 
 - Thêm lịch sử nhóm/trạng thái người ăn với ID cố định; có ngày vào/ngừng/ăn lại, khoảng hiệu lực không mâu thuẫn. Không xóa vật lý người đã có phát sinh.
 - Làm Cài đặt → Người ăn và Định mức: giá ba bữa, phí gạo/gia vị/chất đốt, gram và mức bù, ngày hiệu lực. Kiểm tra số nguyên/giới hạn/phí không vượt giá bữa.

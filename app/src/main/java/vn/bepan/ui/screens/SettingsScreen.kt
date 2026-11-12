@@ -38,7 +38,7 @@ import vn.bepan.ui.components.Section
 import vn.bepan.ui.components.lightFieldColors
 
 @Composable
-fun SettingsScreen(state: UiState, vm: KitchenViewModel, diagnose: () -> Unit) {
+fun SettingsScreen(state: UiState, vm: KitchenViewModel, diagnose: () -> Unit, configure: () -> Unit = {}) {
     var endpoint by remember(state.endpoint) { mutableStateOf(state.endpoint) }
     var apiKey by remember { mutableStateOf("") }
     var showKey by remember { mutableStateOf(false) }
@@ -64,6 +64,9 @@ fun SettingsScreen(state: UiState, vm: KitchenViewModel, diagnose: () -> Unit) {
         item {
             ScreenHeader("Cài đặt", "Bếp ăn ${BuildConfig.VERSION_NAME}")
         }
+        item { Section("Người ăn & định mức", "Hồ sơ, nhóm, giá và bù gạo theo ngày hiệu lực") {
+            Button(onClick = configure, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text("Quản lý người ăn & định mức") }
+        } }
         item {
             Section(
                 title = "Gemini",
@@ -254,7 +257,7 @@ fun SettingsScreen(state: UiState, vm: KitchenViewModel, diagnose: () -> Unit) {
                     )
                 }
                 Text(
-                    "Quản lý hồ sơ, thay định mức có ngày hiệu lực và sao lưu/khôi phục sẽ bổ sung ở mốc tiếp theo.",
+                    "Mở Người ăn & định mức để cấu hình có hiệu lực. Sao lưu/khôi phục thuộc mốc vận hành tiếp theo.",
                     fontSize = 13.sp,
                     color = MutedOnLight
                 )

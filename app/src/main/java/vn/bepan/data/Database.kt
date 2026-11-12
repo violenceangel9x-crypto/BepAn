@@ -6,7 +6,10 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.flow.Flow
 
-const val KITCHEN_SCHEMA_VERSION = 3
+const val KITCHEN_SCHEMA_VERSION = 4
+
+@Entity(primaryKeys = ["personId", "effective"], foreignKeys = [ForeignKey(entity = Person::class, parentColumns = ["id"], childColumns = ["personId"], onDelete = ForeignKey.RESTRICT)])
+data class MembershipPeriod(val personId: String, val effective: String, val group: String, val active: Boolean)
 
 @Entity data class Person(@PrimaryKey val id: String, val name: String, val group: String, val starts: String, val ends: String = "")
 @Entity data class Day(@PrimaryKey val date: String, val version: Long = 0, val closed: Boolean = false)
@@ -38,6 +41,9 @@ data class AssistantAction(@PrimaryKey val operationId: String, val traceId: Str
     @Query("SELECT * FROM Person ORDER BY id") suspend fun people(): List<Person>
     @Query("SELECT * FROM Person ORDER BY id") fun observePeople(): Flow<List<Person>>
     @Upsert suspend fun person(value: Person)
+    @Query("SELECT * FROM MembershipPeriod ORDER BY personId, effective") suspend fun memberships(): List<MembershipPeriod>
+    @Insert suspend fun membership(value: MembershipPeriod)
+    @Query("SELECT COUNT(*) FROM Audit") suspend fun auditCount(): Long
     @Query("SELECT * FROM Day WHERE date=:date") suspend fun day(date: String): Day?
     @Insert(onConflict = OnConflictStrategy.IGNORE) suspend fun ensureDay(value: Day)
     @Update suspend fun updateDay(value: Day)
@@ -79,10 +85,17 @@ data class AssistantAction(@PrimaryKey val operationId: String, val traceId: Str
     @Upsert suspend fun note(value: Note)
 }
 
-@Database(entities = [Person::class, Day::class, MealOverride::class, Schedule::class, Menu::class, Purchase::class, ClosedMeal::class, CloseRevision::class, Rate::class, Audit::class, Receipt::class, AssistantAction::class, ChatMessage::class, Note::class], version = KITCHEN_SCHEMA_VERSION, exportSchema = true)
+@Database(entities = [MembershipPeriod::class, Person::class, Day::class, MealOverride::class, Schedule::class, Menu::class, Purchase::class, ClosedMeal::class, CloseRevision::class, Rate::class, Audit::class, Receipt::class, AssistantAction::class, ChatMessage::class, Note::class], version = KITCHEN_SCHEMA_VERSION, exportSchema = true)
 abstract class KitchenDatabase : RoomDatabase() {
     abstract fun dao(): KitchenDao
     companion object {
+        val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("CREATE TABLE IF NOT EXISTS MembershipPeriod (personId TEXT NOT NULL, effective TEXT NOT NULL, `group` TEXT NOT NULL, active INTEGER NOT NULL, PRIMARY KEY(personId,effective), FOREIGN KEY(personId) REFERENCES Person(id) ON UPDATE NO ACTION ON DELETE RESTRICT)")
+                db.execSQL("INSERT INTO MembershipPeriod SELECT id, starts, `group`, 1 FROM Person")
+                db.execSQL("INSERT INTO MembershipPeriod SELECT id, date(ends,'+1 day'), `group`, 0 FROM Person WHERE ends!=''")
+            }
+        }
         val MIGRATION_2_3 = object : Migration(2, 3) {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL("ALTER TABLE ClosedMeal ADD COLUMN registered INTEGER DEFAULT NULL")
@@ -99,6 +112,6 @@ abstract class KitchenDatabase : RoomDatabase() {
             }
         }
         fun open(context: Context, name: String = "kitchen.db"): KitchenDatabase =
-            Room.databaseBuilder(context, KitchenDatabase::class.java, name).addMigrations(MIGRATION_1_2, MIGRATION_2_3).build()
+            Room.databaseBuilder(context, KitchenDatabase::class.java, name).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4).build()
     }
 }

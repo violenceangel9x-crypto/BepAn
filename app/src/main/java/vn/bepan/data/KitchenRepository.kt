@@ -31,12 +31,13 @@ class KitchenRepository(val db: KitchenDatabase, val log: TechnicalLog) {
         dao.ensureDay(Day(date))
         val day = dao.day(date)!!
         val people = dao.people()
+        val memberships = dao.memberships()
         val closed = dao.closedMeals().filter { it.date == date }
         val overrides = dao.overrides().filter { it.date == date }
         val schedules = dao.schedules().filter { it.start <= date && (it.end.isEmpty() || it.end >= date) }
         val rate = dao.rates().lastOrNull { it.effective <= date } ?: throw RuleViolation("RATE_MISSING")
         val servings = if (day.closed) closed.map { row -> Serving(people.first { it.id == row.personId }.copy(group = row.group), Meal.valueOf(row.meal), row.enabled, row.registered == true, row.price, row.registered != null) }
-        else people.filter { it.starts <= date && (it.ends.isEmpty() || it.ends >= date) }.flatMap { person ->
+        else people.mapNotNull { person -> activePerson(person, memberships, date) }.flatMap { person ->
             Meal.entries.map { meal ->
                 val baseline = person.group != Group.GUEST.name
                 val plan = schedules.filter { it.personId == person.id && it.meal == meal.name }
@@ -137,6 +138,7 @@ class KitchenRepository(val db: KitchenDatabase, val log: TechnicalLog) {
                         dao.note(Note(command.personId.ifEmpty { command.operationId }, command.text, command.enabled, Instant.now().toString()))
                         after = "${command.text} · Ghim: ${command.enabled}"
                     }
+                    else -> throw RuleViolation("COMMAND_UNSUPPORTED")
                 }
                 val version = snap.day.version + 1
                 dao.updateDay(snap.day.copy(version = version, closed = snap.day.closed || command.kind == Kind.CLOSE_DAY))
@@ -169,6 +171,12 @@ class KitchenRepository(val db: KitchenDatabase, val log: TechnicalLog) {
         RoomEvidence(if (receipts.isNotEmpty()) "COMMITTED" else "NOT_COMMITTED", receipts.size, audits.size)
     } catch (_: Exception) { RoomEvidence("UNKNOWN") }
     companion object {
+        fun activePerson(person: Person, memberships: List<MembershipPeriod>, date: String): Person? {
+            val history = memberships.filter { it.personId == person.id }
+            if (history.isEmpty()) return person.takeIf { it.starts <= date && (it.ends.isEmpty() || it.ends >= date) }
+            val member = history.lastOrNull { it.effective <= date } ?: return null
+            return person.copy(group = member.group).takeIf { member.active }
+        }
         private fun snapshotJson(rows: List<ClosedMeal>, snap: DaySnapshot): String = org.json.JSONObject()
             .put("servings", org.json.JSONArray(rows.map { row -> org.json.JSONObject().put("personId",row.personId).put("meal",row.meal).put("group",row.group).put("enabled",row.enabled).put("registered",row.registered ?: org.json.JSONObject.NULL).put("price",row.price).put("budget",row.budget).put("subsidyMilli",row.subsidyMilli).put("budgetPerServing",row.budgetPerServing).put("subsidyPerServingMilli",row.subsidyPerServingMilli) }))
             .put("menus", org.json.JSONArray(snap.menus.filter { it.date == snap.day.date }.map { org.json.JSONObject().put("meal",it.meal).put("content",it.content) }))

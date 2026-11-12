@@ -2,6 +2,14 @@
 
 ## Triển khai Mốc 2 — tiến độ theo từng phần
 
+### 2.1 — Đạt kiểm tra JVM/build, native tổng hợp ở 2.9
+
+- Schema **4**, migration 3→4 tạo MembershipPeriod từ ngày vào/ngừng đã có. Nhóm/hoạt động được giải theo ngày, ngày chốt vẫn dùng snapshot; giữ ID và không xóa người có lịch sử.
+- Cài đặt → Quản lý người ăn & định mức có form thêm/sửa hồ sơ, đổi nhóm/ngừng/ăn lại và giá/phí/gram/mức bù theo ngày hiệu lực. Có preview/xác nhận; trùng ngày hiệu lực bị từ chối để không ghi đè lịch sử. Bản form giữ khi preview bị hủy/lỗi.
+- ConfigurationRepository và AuditedWriter lưu cấu hình + Audit + receipt cùng transaction; replay so fingerprint, kiểm tra token và làm cũ preview ngày nháp bị ảnh hưởng. Technical Log vẫn ngoài transaction.
+- `scripts/build.ps1`: **BUILD SUCCESSFUL**, **38/38 JVM test đạt**, lint không có lỗi. Ca mới kiểm tra đổi nhóm/ngừng/ăn lại, đổi giá, snapshot chốt, stale, replay và rollback khi Audit lỗi.
+- Commit baseline 2.0: `f33f7b6`. Tiếp theo: **2.2** một nguồn quỹ CashEntry, liên kết Purchase, phạm vi lệnh tài chính và migration.
+
 ### 2.0 — Đạt kiểm tra JVM/build, native tổng hợp ở 2.9
 
 - Đã tái hiện lỗi khách bằng HistoricalMealsTest trước sửa (1/2 ca thất bại); sau sửa khách chỉ đăng ký trưa không bị mở sáng/tối sau chốt. Hủy bữa khách đã đăng ký vẫn giữ đúng trạng thái cắt.
@@ -9,7 +17,7 @@
 - Serving giữ unitPrice của ClosedMeal; preview điều chỉnh dùng đúng giá này dù định mức hiện tại đổi. Finance tra tên từ toàn bộ hồ sơ ID và chỉ đếm bữa đã đăng ký bị cắt.
 - Diagnostics lấy schema từ hằng dùng chung. Phiên bản hiện tại **0.2.0-demo/code 3**, package giữ nguyên.
 - `scripts/build.ps1`: **BUILD SUCCESSFUL**, **34/34 JVM test đạt**, lint **0 lỗi/30 cảnh báo**. Có ca migration từ schema v2 giữ khoản mua 85.000₫ và tiền bữa khách, cùng ca nâng v1 qua v2 lên v3.
-- Đang chuẩn bị commit baseline cục bộ từ nguồn/dữ liệu mẫu đã rà; không đẩy remote. Tiếp theo: **2.1** hồ sơ và định mức có hiệu lực.
+- Đã có commit baseline cục bộ `f33f7b6` từ nguồn/dữ liệu mẫu đã rà; không đẩy remote. Phần này kết thúc trước khi bắt đầu **2.1**.
 
 ## Rà toàn dự án và xác định mốc tiếp theo — 12/11/2026
 

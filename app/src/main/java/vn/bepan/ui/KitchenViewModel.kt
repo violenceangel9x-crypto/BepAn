@@ -26,7 +26,8 @@ data class UiState(
     val credentialBusy: Boolean = false, val credentialsReady: Boolean = false, val credentialError: String = "",
     val events: List<SafeEvent> = emptyList(), val selectedTrace: String = "", val evidence: RoomEvidence = RoomEvidence("UNKNOWN"),
     val finance: List<ClosedMeal> = emptyList(), val purchases: List<Purchase> = emptyList(),
-    val people: List<Person> = emptyList()
+    val people: List<Person> = emptyList(), val memberships: List<MembershipPeriod> = emptyList(), val rates: List<Rate> = emptyList(),
+    val configurationPreview: ConfigurationCommand? = null
 )
 class KitchenViewModel(application: Application) : AndroidViewModel(application) {
     private val app = application as BepApplication
@@ -34,6 +35,7 @@ class KitchenViewModel(application: Application) : AndroidViewModel(application)
     private val mutable = MutableStateFlow(UiState())
     val state = mutable.asStateFlow()
     private val repo get() = app.repository
+    private val configuration get() = ConfigurationRepository(repo.db, log)
     private val mockKey = booleanPreferencesKey("mock")
     private val endpointKey = stringPreferencesKey("endpoint")
     private val connectionKey = stringPreferencesKey("gemini_connection")
@@ -74,7 +76,23 @@ class KitchenViewModel(application: Application) : AndroidViewModel(application)
         val date = state.value.date
         val snap = repo.snapshot(date)
         val closed = repo.dao.closedMeals(); val purchases = repo.dao.purchases(); val people = repo.dao.people()
-        mutable.update { if (it.date == date) it.copy(snapshot = snap, finance = closed, purchases = purchases, people = people) else it }
+        val memberships = repo.dao.memberships(); val rates = repo.dao.rates()
+        mutable.update { if (it.date == date) it.copy(snapshot = snap, finance = closed, purchases = purchases, people = people, memberships = memberships, rates = rates) else it }
+    }
+    fun previewProfile(personId: String, name: String, effective: String, group: String, active: Boolean) = launch {
+        mutable.update { it.copy(configurationPreview = configuration.profile(personId, name, effective, group, active), error = "") }
+    }
+    fun previewRate(rate: Rate) = launch { mutable.update { it.copy(configurationPreview = configuration.rate(rate), error = "") } }
+    fun cancelConfiguration() { mutable.update { it.copy(configurationPreview = null) } }
+    fun confirmConfiguration() {
+        val command = state.value.configurationPreview ?: return
+        if (state.value.busy) return
+        mutable.update { it.copy(busy = true) }
+        launch {
+            configuration.commit(command)
+            refresh()
+            mutable.update { it.copy(busy = false, configurationPreview = null, notice = "Đã lưu cấu hình có hiệu lực") }
+        }
     }
     fun changeDate(date: String) = launch { java.time.LocalDate.parse(date); mutable.update { it.copy(date = date) }; refresh() }
     fun draft(text: String) {
@@ -299,6 +317,8 @@ class KitchenViewModel(application: Application) : AndroidViewModel(application)
     fun clearLog() = launch { log.clear(); diagnostics() }
     companion object {
         fun errorText(code: String): String = when(code) {
+            "EFFECTIVE_DATE_EXISTS" -> "Ngày hiệu lực này đã có cấu hình. Chọn một ngày hiệu lực khác để giữ lịch sử."
+            "NOT_REGISTERED" -> "Bữa này chưa đăng ký hoặc sổ cũ chưa đủ bằng chứng. Không thể bật suất bằng điều chỉnh."
             "DAY_CLOSED" -> "Ngày đã chốt. Cần luồng điều chỉnh có lý do."
             "STALE_VERSION", "ACTION_EXPIRED" -> "Bản xem trước đã cũ. Hãy tạo lại từ dữ liệu mới."
             "GATEWAY_TIMEOUT" -> "Kết nối Gemini quá thời gian. Bản nháp được giữ để gửi lại."
