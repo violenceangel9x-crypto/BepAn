@@ -1,0 +1,28 @@
+{
+  "realGemini": true,
+  "model": "gemini-3.5-flash",
+  "transport": "LOOPBACK_GATEWAY",
+  "thinkingLevel": "low",
+  "checks": [
+    {
+      "expected": "get_meal_counts",
+      "proposalMatched": false,
+      "dateCorrect": false,
+      "retries": [
+        "GATEWAY_TIMEOUT",
+        "GATEWAY_TIMEOUT"
+      ],
+      "error": "GATEWAY_TIMEOUT"
+    },
+    {
+      "expected": "set_attendance",
+      "proposalMatched": false,
+      "dateCorrect": false,
+      "retries": [
+        "GATEWAY_TIMEOUT",
+        "UPSTREAM_REJECTED"
+      ],
+      "error": "UPSTREAM_REJECTED"
+    }
+  ]
+}

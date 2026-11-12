@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "description": "Các ca giả lập để nghiệm thu Room, audit, log kỹ thuật, chẩn đoán và xuất báo cáo. Tên và mã dùng riêng cho test.",
+  "cases": [
+    {
+      "id": "L01-manual-restart",
+      "source": "MANUAL",
+      "provider": "NONE",
+      "scenario": "Cắt một suất trưa đang được chọn trong ngày nháp, đóng rồi mở lại app.",
+      "expected": {
+        "mealServingDelta": -1,
+        "auditRows": 1,
+        "operationReceipts": 1,
+        "eventsInclude": ["WRITE_STARTED", "WRITE_COMMITTED"],
+        "readFromRoomAfterRestart": true
+      }
+    },
+    {
+      "id": "L02-assistant-retry",
+      "source": "ASSISTANT",
+      "provider": "MOCK",
+      "scenario": "Gemini mô phỏng đưa ra khoản mua rau 85.000₫. Xác nhận, giả lập lỗi hiển thị sau commit, rồi gửi lại cùng operationId.",
+      "expected": {
+        "purchaseRows": 1,
+        "auditRows": 1,
+        "operationReceipts": 1,
+        "eventsInclude": ["PREVIEW_READY", "WRITE_COMMITTED", "IDEMPOTENT_REPLAY"],
+        "sameReceiptReturned": true
+      }
+    },
+    {
+      "id": "L03-gateway-timeout",
+      "source": "ASSISTANT",
+      "provider": "MOCK",
+      "scenario": "Mô phỏng timeout khi đang diễn giải lệnh thay đổi một bữa.",
+      "expected": {
+        "auditRows": 0,
+        "operationReceipts": 0,
+        "eventsInclude": ["REQUEST_STARTED", "GATEWAY_TIMEOUT"],
+        "eventsExclude": ["WRITE_COMMITTED"],
+        "openReportFromChatError": true
+      }
+    },
+    {
+      "id": "L04-validation-rejected",
+      "source": "ASSISTANT",
+      "provider": "MOCK",
+      "scenario": "Gateway đề xuất một lệnh ghi chi có số tiền âm.",
+      "expected": {
+        "purchaseRows": 0,
+        "auditRows": 0,
+        "operationReceipts": 0,
+        "eventsInclude": ["GATEWAY_RETURNED", "VALIDATION_REJECTED"],
+        "eventsExclude": ["WRITE_COMMITTED"]
+      }
+    },
+    {
+      "id": "L05-expired-preview",
+      "source": "ASSISTANT",
+      "provider": "MOCK",
+      "scenario": "Có thẻ xem trước khoản chi. Chốt ngày bằng một thao tác riêng rồi xác nhận thẻ cũ.",
+      "scope": "Đếm bản ghi của thao tác ghi chi trong trace đã chọn.",
+      "expected": {
+        "purchaseRows": 0,
+        "auditRows": 0,
+        "operationReceipts": 0,
+        "eventsInclude": ["PREVIEW_READY", "CONFIRMATION_RECEIVED", "PREVIEW_EXPIRED"],
+        "eventsExclude": ["WRITE_COMMITTED"]
+      }
+    },
+    {
+      "id": "L06-audit-write-failure",
+      "source": "MANUAL",
+      "provider": "NONE",
+      "scenario": "Giả lập lỗi ghi AuditEvent sau câu lệnh ghi dữ liệu nghiệp vụ trong cùng transaction.",
+      "expected": {
+        "mealServingDelta": 0,
+        "auditRows": 0,
+        "operationReceipts": 0,
+        "eventsInclude": ["WRITE_STARTED", "WRITE_ROLLED_BACK"],
+        "eventsExclude": ["WRITE_COMMITTED"]
+      }
+    },
+    {
+      "id": "L07-technical-store-failure",
+      "source": "MANUAL",
+      "provider": "NONE",
+      "scenario": "Bộ ghi file kỹ thuật không ghi được. Room vẫn mở và ghi được. Lưu một lần cắt suất trưa.",
+      "expected": {
+        "mealServingDelta": -1,
+        "auditRows": 1,
+        "operationReceipts": 1,
+        "diagnosticsShowsIncompleteLog": true
+      }
+    },
+    {
+      "id": "L08-export-redaction",
+      "source": "ASSISTANT",
+      "provider": "MOCK",
+      "scenario": "Đưa dữ liệu đánh dấu giả vào tin chat, tên người, số tiền, header và exception message rồi xuất báo cáo.",
+      "syntheticMarkers": [
+        "TEST_API_SECRET_NOT_FOR_EXPORT",
+        "TEST_PERSON_NAME_NOT_FOR_EXPORT",
+        "TEST_CHAT_TEXT_NOT_FOR_EXPORT",
+        "TEST_HTTP_HEADER_NOT_FOR_EXPORT",
+        "99912345"
+      ],
+      "expected": {
+        "absentInTechnicalStoreAndReport": true,
+        "includesSafeEventCodeAndTrace": true,
+        "userReviewBeforeShare": true
+      }
+    },
+    {
+      "id": "L09-rotation",
+      "source": "SYSTEM",
+      "provider": "NONE",
+      "scenario": "Đặt đồng hồ test và dung lượng log vượt ngưỡng, thực hiện xoay file rồi dọn log thủ công.",
+      "expected": {
+        "technicalLogWithinLimits": true,
+        "businessDataAndAuditUnchanged": true,
+        "showsUnavailableTraceDetails": true
+      }
+    },
+    {
+      "id": "L10-process-stop-after-commit",
+      "source": "ASSISTANT",
+      "provider": "MOCK",
+      "scenario": "Dừng tiến trình sau commit và trước khi bộ ghi kỹ thuật kịp lưu WRITE_COMMITTED. Mở lại chat và chẩn đoán.",
+      "expected": {
+        "auditRows": 1,
+        "operationReceipts": 1,
+        "roomOutcome": "COMMITTED",
+        "diagnosticsShowsIncompleteLog": true,
+        "duplicatesAfterRetry": 0
+      }
+    },
+    {
+      "id": "L11-room-open-failure",
+      "source": "SYSTEM",
+      "provider": "NONE",
+      "scenario": "Mô phỏng Room không mở được. Mở màn chẩn đoán và xuất báo cáo từ log kỹ thuật còn đọc được.",
+      "expected": {
+        "eventsInclude": ["ROOM_OPEN_FAILED"],
+        "roomOutcome": "UNKNOWN",
+        "reportExportAvailable": true
+      }
+    }
+  ]
+}

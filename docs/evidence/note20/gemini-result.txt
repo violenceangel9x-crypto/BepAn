@@ -1,0 +1,5 @@
+Provider: GEMINI
+Counts: PASS
+Duplicate name, cut and undo: PASS
+Purchase preview, confirm and receipt replay: PASS
+Close preview and next draft: PASS

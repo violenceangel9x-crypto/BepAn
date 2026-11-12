@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuite name="vn.bepan.RealGatewayTest" tests="1" failures="0" errors="0" skipped="0" time="60.274" timestamp="2026-11-12T11:07:37" hostname="localhost">
+  <properties>
+    <property name="device" value="SM-N986U1 - 13" />
+    <property name="flavor" value="" />
+    <property name="project" value=":app" />
+  </properties>
+  <testcase name="fourRealCommandsUseSharedLocalHandlersAndSaveOnce" classname="vn.bepan.RealGatewayTest" time="58.239" />
+</testsuite>

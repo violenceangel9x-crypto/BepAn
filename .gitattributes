@@ -1,0 +1,9 @@
+* text=auto
+gradlew text eol=lf
+*.kt text eol=lf
+*.kts text eol=lf
+*.mjs text eol=lf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+# Installed design tools are vendored as supplied.
+.agents/** -whitespace

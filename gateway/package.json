@@ -1,0 +1,8 @@
+{
+  "name": "bep-an-gemini-gateway",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": { "start": "node start.mjs", "test": "node --test" }
+}

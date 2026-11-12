@@ -1,0 +1,7 @@
+[
+  {"name":"get_meal_counts","description":"Đọc số suất ba bữa từ app.","parameters":{"type":"OBJECT","properties":{"date":{"type":"STRING","description":"Ngày ISO YYYY-MM-DD. Hôm nay/ngày mai theo referenceDate; ngày đang xem theo selectedDate."}},"required":["date"]}},
+  {"name":"get_shopping_budget","description":"Đọc ngân sách đi chợ từ app.","parameters":{"type":"OBJECT","properties":{"date":{"type":"STRING"}},"required":["date"]}},
+  {"name":"set_attendance","description":"Đổi đúng một bữa của một người. Giữ tên để app hỏi chọn khi trùng; thiếu bữa thì hỏi lại.","parameters":{"type":"OBJECT","properties":{"date":{"type":"STRING"},"personName":{"type":"STRING"},"meal":{"type":"STRING","enum":["BREAKFAST","LUNCH","DINNER"]},"enabled":{"type":"BOOLEAN"}},"required":["date","personName","meal","enabled"]}},
+  {"name":"record_purchase","description":"Đề xuất khoản mua để app xem trước và xác nhận. 85 nghìn = 85000 VND.","parameters":{"type":"OBJECT","properties":{"date":{"type":"STRING"},"description":{"type":"STRING"},"amountVnd":{"type":"INTEGER"}},"required":["date","description","amountVnd"]}},
+  {"name":"close_day","description":"Đề xuất chốt ngày và chuẩn bị ngày kế tiếp. App tự tính, xem trước và xác nhận.","parameters":{"type":"OBJECT","properties":{"date":{"type":"STRING"}},"required":["date"]}}
+]

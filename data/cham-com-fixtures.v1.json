@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "timeZone": "Asia/Ho_Chi_Minh",
+  "budgetExample": {
+    "date": "2026-11-12",
+    "meal": "LUNCH",
+    "priceVnd": 28800,
+    "feesPerServingVnd": {
+      "rice": 3000,
+      "seasoning": 1000,
+      "fuel": 800
+    },
+    "purchaseAmountsVnd": [85000],
+    "beforeCut": {
+      "servings": 10,
+      "mealChargeVnd": 288000,
+      "shoppingBudgetVnd": 240000,
+      "actualPurchasesVnd": 85000,
+      "budgetMinusPurchasesVnd": 155000
+    },
+    "afterCut": {
+      "servings": 9,
+      "mealChargeVnd": 259200,
+      "shoppingBudgetVnd": 216000,
+      "actualPurchasesVnd": 85000,
+      "budgetMinusPurchasesVnd": 131000
+    },
+    "officialChargeForThisDayWhileDraftVnd": 0
+  },
+  "monthlyAdvanceExamples": [
+    {"period": "2026-02", "calendarDays": 28, "pricePerDayVnd": 72000, "expectedVnd": 2016000},
+    {"period": "2028-02", "calendarDays": 29, "pricePerDayVnd": 72000, "expectedVnd": 2088000},
+    {"period": "2026-11", "calendarDays": 30, "pricePerDayVnd": 72000, "expectedVnd": 2160000},
+    {"period": "2026-07", "calendarDays": 31, "pricePerDayVnd": 72000, "expectedVnd": 2232000}
+  ],
+  "groupReceiptExamples": [
+    {
+      "period": "2026-11",
+      "amountVnd": 21600000,
+      "eligiblePersonCount": 10,
+      "expectedAllocationForEachVnd": 2160000,
+      "expectedCashEntries": 1
+    },
+    {
+      "period": "2026-11",
+      "amountVnd": 1000001,
+      "eligiblePersonIdsInOrder": ["cs-demo-01", "cs-demo-02", "cs-demo-03"],
+      "expectedAllocationsVndInOrder": [333334, 333334, 333333],
+      "expectedCashEntries": 1
+    }
+  ],
+  "balanceExample": {
+    "personId": "cs-demo-01",
+    "period": "2026-11",
+    "paidVnd": 2160000,
+    "closedMeals": {"BREAKFAST": 30, "LUNCH": 29, "DINNER": 30},
+    "ratesVnd": {"BREAKFAST": 14400, "LUNCH": 28800, "DINNER": 28800},
+    "expectedMealChargeVnd": 2131200,
+    "expectedAvailableSurplusVnd": 28800,
+    "oneSettlementVnd": 28800,
+    "expectedAvailableSurplusAfterSettlementVnd": 0,
+    "expectedCashDeltaIfRefundPaidVnd": -28800,
+    "expectedCashDeltaIfCarryForwardVnd": 0
+  },
+  "riceSubsidyExamples": [
+    {
+      "caseId": "N10-rate-change",
+      "gramsPerServing": {"BREAKFAST": 136, "LUNCH": 272, "DINNER": 272},
+      "days": [
+        {
+          "date": "2026-11-14",
+          "closed": true,
+          "rateVndPerKg": 700,
+          "soldierServings": {"BREAKFAST": 1, "LUNCH": 1, "DINNER": 1},
+          "officerServings": {"BREAKFAST": 1, "LUNCH": 1, "DINNER": 1},
+          "guestServings": {"BREAKFAST": 1, "LUNCH": 1, "DINNER": 1}
+        },
+        {
+          "date": "2026-11-15",
+          "closed": true,
+          "rateVndPerKg": 900,
+          "soldierServings": {"BREAKFAST": 1, "LUNCH": 1, "DINNER": 1},
+          "officerServings": {"BREAKFAST": 0, "LUNCH": 0, "DINNER": 0},
+          "guestServings": {"BREAKFAST": 0, "LUNCH": 0, "DINNER": 0}
+        },
+        {
+          "date": "2026-11-16",
+          "closed": false,
+          "rateVndPerKg": 900,
+          "soldierServings": {"BREAKFAST": 10, "LUNCH": 10, "DINNER": 10},
+          "officerServings": {"BREAKFAST": 0, "LUNCH": 0, "DINNER": 0},
+          "guestServings": {"BREAKFAST": 0, "LUNCH": 0, "DINNER": 0}
+        }
+      ],
+      "expectedRawMilliVnd": 1088000,
+      "expectedRoundedVnd": 1088
+    },
+    {
+      "caseId": "N10-rounding-at-total",
+      "gramsPerServing": {"BREAKFAST": 136, "LUNCH": 272, "DINNER": 272},
+      "days": [
+        {
+          "date": "2026-11-14",
+          "closed": true,
+          "rateVndPerKg": 700,
+          "soldierServings": {"BREAKFAST": 3, "LUNCH": 0, "DINNER": 0},
+          "officerServings": {"BREAKFAST": 0, "LUNCH": 0, "DINNER": 0},
+          "guestServings": {"BREAKFAST": 0, "LUNCH": 0, "DINNER": 0}
+        }
+      ],
+      "expectedRawMilliVnd": 285600,
+      "expectedRoundedVnd": 286
+    }
+  ],
+  "riceReceiptExample": {
+    "entitlementPeriod": "2026-11",
+    "receivedOn": "2026-12-01",
+    "amountVnd": 1088,
+    "expectedReceivedForEntitlementPeriodVnd": 1088,
+    "expectedCashMonth": "2026-12",
+    "expectedCashEntries": 1
+  }
+}

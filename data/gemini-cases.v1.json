@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "defaultContext": {
+    "timeZone": "Asia/Ho_Chi_Minh",
+    "referenceDate": "2026-11-12",
+    "selectedDate": "2026-11-10",
+    "selectedPeriod": "2026-11",
+    "route": "TODAY"
+  },
+  "samplePeople": [
+    {"id": "cs-demo-01", "name": "Nguyễn Văn Nam", "group": "SOLDIER"},
+    {"id": "cb-demo-02", "name": "Trần Văn Nam", "group": "OFFICER"}
+  ],
+  "cases": [
+    {
+      "id": "read-lunch-today",
+      "message": "Hôm nay có bao nhiêu suất trưa?",
+      "expected": {
+        "tool": "get_meal_counts",
+        "date": "2026-11-12",
+        "meal": "LUNCH",
+        "behavior": "READ_ROOM_AND_REPLY"
+      }
+    },
+    {
+      "id": "read-selected-day",
+      "message": "Ngày đang xem có bao nhiêu tiền đi chợ?",
+      "expected": {
+        "tool": "get_shopping_budget",
+        "date": "2026-11-10",
+        "behavior": "READ_ROOM_AND_REPLY"
+      }
+    },
+    {
+      "id": "clarify-duplicate-name",
+      "message": "Cắt bữa tối nay cho Nam",
+      "expected": {
+        "tool": "set_attendance",
+        "date": "2026-11-12",
+        "meal": "DINNER",
+        "candidateIds": ["cs-demo-01", "cb-demo-02"],
+        "behavior": "CLARIFY_BEFORE_WRITING"
+      }
+    },
+    {
+      "id": "draft-cut-and-undo",
+      "message": "Cắt bữa trưa hôm nay cho chiến sĩ Nguyễn Văn Nam",
+      "precondition": "Ngày 2026-11-12 còn nháp và người này đang được chấm bữa trưa.",
+      "expected": {
+        "tool": "set_attendance",
+        "date": "2026-11-12",
+        "meal": "LUNCH",
+        "personId": "cs-demo-01",
+        "behavior": "APPLY_AND_OFFER_UNDO",
+        "servingDelta": -1
+      }
+    },
+    {
+      "id": "add-guests-preview",
+      "message": "Thêm 3 khách ăn trưa mai, thu sau",
+      "expected": {
+        "tool": "add_guest",
+        "date": "2026-11-13",
+        "meal": "LUNCH",
+        "servingCount": 3,
+        "behavior": "CONFIRM_BEFORE_WRITING"
+      }
+    },
+    {
+      "id": "expense-retry",
+      "message": "Ghi tiền mua rau hôm nay 85 nghìn",
+      "expected": {
+        "tool": "record_purchase",
+        "date": "2026-11-12",
+        "description": "Mua rau",
+        "amountVnd": 85000,
+        "behavior": "CONFIRM_BEFORE_WRITING",
+        "cashEntriesAfterTwoConfirms": 1
+      }
+    },
+    {
+      "id": "closed-day-edit",
+      "message": "Cắt bữa trưa ngày 10/11/2026 cho Nguyễn Văn Nam",
+      "precondition": "Ngày 2026-11-10 đã chốt.",
+      "expected": {
+        "tool": "set_attendance",
+        "date": "2026-11-10",
+        "behavior": "REQUIRE_CLOSED_DAY_ADJUSTMENT",
+        "newWritesFromOriginalCommand": 0
+      }
+    },
+    {
+      "id": "finance-navigation",
+      "message": "Mở sổ chiến sĩ tháng này, chỉ người có cắt cơm",
+      "expected": {
+        "tool": "open_finance",
+        "period": "2026-11",
+        "group": "SOLDIER",
+        "filter": "HAS_MEAL_CUT",
+        "behavior": "NAVIGATE"
+      }
+    },
+    {
+      "id": "magic-menu-preview",
+      "message": "Tạo thực đơn trưa mai theo mẫu, giữ nguyên canh và tránh cá",
+      "expected": {
+        "tool": "suggest_menu",
+        "date": "2026-11-13",
+        "meal": "LUNCH",
+        "behavior": "PREVIEW_AND_APPLY",
+        "keep": ["SOUP"],
+        "avoidIngredients": ["cá"]
+      }
+    },
+    {
+      "id": "close-and-prepare",
+      "message": "Chốt hôm nay và chuẩn bị ngày mai",
+      "expected": {
+        "tool": "close_day",
+        "date": "2026-11-12",
+        "nextDate": "2026-11-13",
+        "behavior": "CONFIRM_BEFORE_WRITING"
+      }
+    },
+    {
+      "id": "expired-preview",
+      "message": "Ghi tiền mua rau hôm nay 85 nghìn",
+      "precondition": "Xem trước lúc còn nháp, sau đó chốt ngày từ màn khác rồi xác nhận thẻ cũ.",
+      "expected": {
+        "behavior": "REBUILD_OR_REDIRECT",
+        "writesFromStalePreview": 0
+      }
+    }
+  ]
+}

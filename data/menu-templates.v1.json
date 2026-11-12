@@ -1,0 +1,5926 @@
+{
+  "schemaVersion": 1,
+  "sourceFile": "Bảng menu cho app.xlsx",
+  "sourceSheets": [
+    "09,26",
+    "10,26",
+    "11,26",
+    "12,26"
+  ],
+  "mealMappings": {
+    "Sáng": "BREAKFAST",
+    "Trưa": "LUNCH",
+    "Chiều": "DINNER"
+  },
+  "templates": [
+    {
+      "id": "menu-001",
+      "meal": "BREAKFAST",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt bằm sốt cà",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Canh bầu",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "B5:B7"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-002",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Tôm rang lá chanh",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ rim",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt gà sáo",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau cải xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "D5:D11"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-003",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt lợn rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lạc rim mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả ram",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bắp cải",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "F5:F10"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-004",
+      "meal": "BREAKFAST",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt xào dưa",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Canh rau dền",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "I5:I7"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-005",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Tôm rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng cút rim xì dầu",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt giả cầy",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "K5:K11"
+      },
+      "sourceOccurrences": 7
+    },
+    {
+      "id": "menu-006",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt bê xào",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giò lụa",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ nhồi thịt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "M5:M10"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-007",
+      "meal": "BREAKFAST",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt sốt cà",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "B13:B15"
+      },
+      "sourceOccurrences": 8
+    },
+    {
+      "id": "menu-008",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt gà chiên mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá cơm rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Tai mui trộn",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giá đỗ xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh mồng tơi",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "D13:D19"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-009",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ nhồi thịt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau lang xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bí thịt băm",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "F13:F18"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-010",
+      "meal": "BREAKFAST",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Bánh cuốn",
+          "slot": "SINGLE"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "I14:I14"
+      },
+      "sourceOccurrences": 8
+    },
+    {
+      "id": "menu-011",
+      "meal": "LUNCH",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Chả cá rim",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lạc rim mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lươn um chuối",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau dền",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "K13:K19"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-012",
+      "meal": "DINNER",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt gà rang lá chanh",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Tép xào",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "M13:M18"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-013",
+      "meal": "BREAKFAST",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt bằm xào trứng",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Canh rau dền",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "B21:B23"
+      },
+      "sourceOccurrences": 8
+    },
+    {
+      "id": "menu-014",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng luộc",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt bò xào hành cần",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "D21:D27"
+      },
+      "sourceOccurrences": 9
+    },
+    {
+      "id": "menu-015",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá Nục sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lạc rim mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả cá sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Mướp xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bầu",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "F21:F26"
+      },
+      "sourceOccurrences": 6
+    },
+    {
+      "id": "menu-016",
+      "meal": "BREAKFAST",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Mì tôm trứng",
+          "slot": "SINGLE"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "I22:I22"
+      },
+      "sourceOccurrences": 8
+    },
+    {
+      "id": "menu-017",
+      "meal": "LUNCH",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt bê xào",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá khô rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Củ quả luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh chua",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "K21:K27"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-018",
+      "meal": "DINNER",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá Nục sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt rang sả ớt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau cải xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau ngót",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "M21:M26"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-019",
+      "meal": "BREAKFAST",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Trứng đúc thịt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Canh bí",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "B29:B31"
+      },
+      "sourceOccurrences": 8
+    },
+    {
+      "id": "menu-020",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt gà rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lươn um chuối",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng tráng",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bí xanh xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau ngót",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "F29:F34"
+      },
+      "sourceOccurrences": 3
+    },
+    {
+      "id": "menu-021",
+      "meal": "BREAKFAST",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt xào măng",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Canh bầu",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "B42:B44"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-022",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Tôm rang lá chanh",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ tẩm hành",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt lợn luộc",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau cải xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "D42:D48"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-023",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt lợn kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lạc rim mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả lá lốt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bắp cải",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "F42:F47"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-024",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt bê xào",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả cá sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ tẩm hành",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "M42:M47"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-025",
+      "meal": "BREAKFAST",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt kho củ cải",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "B50:B52"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-026",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt gà chiên mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá cơm kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt lợn áp chảo",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giá đỗ xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh mồng tơi",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "D50:D56"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-027",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Chả cá rim",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá khô rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau lang xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bí thịt băm",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "F50:F55"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-028",
+      "meal": "BREAKFAST",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Xôi thịt",
+          "slot": "SINGLE"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "I51:I51"
+      },
+      "sourceOccurrences": 8
+    },
+    {
+      "id": "menu-029",
+      "meal": "LUNCH",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt vịt rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lạc rim mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lươn um chuối",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau dền",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "K50:K56"
+      },
+      "sourceOccurrences": 5
+    },
+    {
+      "id": "menu-030",
+      "meal": "DINNER",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt gà rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng tráng",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "M50:M55"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-031",
+      "meal": "BREAKFAST",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt bằm sốt cà",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Canh rau dền",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "B58:B60"
+      },
+      "sourceOccurrences": 8
+    },
+    {
+      "id": "menu-032",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt kho tàu",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng luộc",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt bò xào hành cần",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "D58:D64"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-033",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá Nục sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lạc rim mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Gà bóp",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Mướp xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bầu",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "F58:F63"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-034",
+      "meal": "BREAKFAST",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Bánh mỳ",
+          "slot": "SINGLE"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "I59:I59"
+      },
+      "sourceOccurrences": 8
+    },
+    {
+      "id": "menu-035",
+      "meal": "LUNCH",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt bê xào",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng ốp la",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Củ quả luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh chua",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "K58:K64"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-036",
+      "meal": "DINNER",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá Nục sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Tép rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt rang sả ớt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Khoai tây xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau ngót",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "M58:M63"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-037",
+      "meal": "BREAKFAST",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt sốt cà",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Canh bí",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "B66:B68"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-038",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Chả ram",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt giả cầy",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ nhồi thịt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bắp cải",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "D66:D72"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-039",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt gà chiên mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lươn um chuối",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá cơm rim",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bí xanh xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau ngót",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "F66:F71"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-040",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt lợn kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ rim",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt gà sáo",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau cải xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "D79:D85"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-041",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Lươn um chuối",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lạc rim mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Gà bóp",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bắp cải",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "F79:F84"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-042",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt bê xào",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả cá sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ nhồi thịt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "M79:M84"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-043",
+      "meal": "BREAKFAST",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt xào dưa",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "B87:B89"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-044",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt gà chiên mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá cơm rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả cá rim",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giá đỗ xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh mồng tơi",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "D87:D93"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-045",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt lợn áp chảo",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng luộc",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau lang xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bí thịt băm",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "F87:F92"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-046",
+      "meal": "BREAKFAST",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Bún măng xương",
+          "slot": "SINGLE"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "I88:I88"
+      },
+      "sourceOccurrences": 8
+    },
+    {
+      "id": "menu-047",
+      "meal": "DINNER",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt gà rang lá chanh",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giò lụa",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Tép rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "M87:M92"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-048",
+      "meal": "BREAKFAST",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt xào măng",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Canh rau ngót",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "B95:B97"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-049",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá Nục sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Tép rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá diêu hồng sốt cà",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Mướp xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bầu",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "F95:F100"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-050",
+      "meal": "LUNCH",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả cá chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá khô rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Củ quả luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh chua",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "K95:K101"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-051",
+      "meal": "DINNER",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt bê xào nấm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt rang sả ớt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bầu luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau ngót",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "M95:M100"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-052",
+      "meal": "BREAKFAST",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt kho củ cải",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Canh bầu",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "B103:B105"
+      },
+      "sourceOccurrences": 8
+    },
+    {
+      "id": "menu-053",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt giả cầy",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bắp cải",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "D103:D109"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-054",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt lợn áp chảo",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng luộc",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "D116:D122"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-055",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Lươn um chuối",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lạc rim mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt viên sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bắp cải",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "F116:F121"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-056",
+      "meal": "BREAKFAST",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt xào măng",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Canh rau dền",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "I116:I118"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-057",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Tôm rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng cút rim xì dầu",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "K116:K122"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-058",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt bê xào",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá diêu hồng sốt cà",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ nhồi thịt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "M116:M121"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-059",
+      "meal": "BREAKFAST",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt bằm xào trứng",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Canh rau ngót",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "B124:B126"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-060",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt gà chiên mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá cơm kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Tôm rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giá đỗ xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh mồng tơi",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "D124:D130"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-061",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt lợn kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng tráng",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau lang xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bí thịt băm",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "F124:F129"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-062",
+      "meal": "DINNER",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt gà rang lá chanh",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Tép xào",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "M124:M129"
+      },
+      "sourceOccurrences": 7
+    },
+    {
+      "id": "menu-063",
+      "meal": "BREAKFAST",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Trứng đúc thịt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "B132:B134"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-064",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng tráng",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt bò xào hành cần",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "D132:D138"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-065",
+      "meal": "LUNCH",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả cá chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng ốp la",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Củ quả luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh chua",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "K132:K138"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-066",
+      "meal": "DINNER",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá Nục sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Tép rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt rang sả ớt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau cải xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau ngót",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "M132:M137"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-067",
+      "meal": "BREAKFAST",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt xào dưa",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Canh bí",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "B140:B142"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-068",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt giả cầy",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ tẩm hành",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bắp cải",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "D140:D146"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-069",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt gà rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá rô phi chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng tráng",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bí xanh xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau ngót",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "F140:F145"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-070",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Lươn um chuối",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lạc rim mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả lá lốt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bắp cải",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "F153:F158"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-071",
+      "meal": "BREAKFAST",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Trứng đúc thịt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Canh rau dền",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "I153:I155"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-072",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá Nục sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lạc rim mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt viên sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Mướp xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bầu",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "M153:M158"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-073",
+      "meal": "BREAKFAST",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt bằm sốt cà",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "B161:B163"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-074",
+      "meal": "LUNCH",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt giả cầy",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bắp cải",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "K161:K167"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-075",
+      "meal": "DINNER",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt gà chiên mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt bê xào",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá cơm rim",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bí xanh xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau ngót",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "M161:M166"
+      },
+      "sourceOccurrences": 3
+    },
+    {
+      "id": "menu-076",
+      "meal": "BREAKFAST",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt sốt cà",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Canh rau dền",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "B169:B171"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-077",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá Nục sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Tép rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả cá sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Mướp xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bầu",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "F169:F174"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-078",
+      "meal": "LUNCH",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt lợn luộc",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng cút rim xì dầu",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt giả cầy",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "K169:K175"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-079",
+      "meal": "DINNER",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt bê xào",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giò lụa",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ tẩm hành",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "M169:M174"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-080",
+      "meal": "BREAKFAST",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt bằm xào trứng",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Canh bí",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "B177:B179"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-081",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá rô phi chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt giả cầy",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ nhồi thịt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bắp cải",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "09,26",
+        "cells": "D177:D183"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-082",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Tôm rang lá chanh",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giò lụa",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Gà bóp",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau cải xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "D5:D11"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-083",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt lợn rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lạc rim mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả lá lốt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bắp cải",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "F5:F10"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-084",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt bê xào",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả lá lốt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ nhồi thịt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "M5:M10"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-085",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá rô phi chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá cơm kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Tai mui trộn",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giá đỗ xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh mồng tơi",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "D13:D19"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-086",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt viên sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau lang xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bí thịt băm",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "F13:F18"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-087",
+      "meal": "LUNCH",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Gà bóp",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giò lụa",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lươn um chuối",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau dền",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "K13:K19"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-088",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá Nục sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lạc rim mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá diêu hồng sốt cà",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Mướp xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bầu",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "F21:F26"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-089",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Chả ram chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lươn um chuối",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng tráng",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bí xanh xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau ngót",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "F29:F34"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-090",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá rô phi chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ tẩm hành",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt gà sáo",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau cải xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "D42:D48"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-091",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt lợn kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lạc rim mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả ram",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bắp cải",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "F42:F47"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-092",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt bê xào",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả ram",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ tẩm hành",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "M42:M47"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-093",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt gà chiên mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá cơm rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả lá lốt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giá đỗ xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh mồng tơi",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "D50:D56"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-094",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt viên sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá khô rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau lang xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bí thịt băm",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "F50:F55"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-095",
+      "meal": "LUNCH",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt vịt rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lạc rim mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt viên sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau dền",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "K50:K56"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-096",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt kho tàu",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giò lụa",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Gà bóp",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "D58:D64"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-097",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Chả lá lốt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt giả cầy",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ nhồi thịt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bắp cải",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "D66:D72"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-098",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá diêu hồng sốt cà",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lươn um chuối",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá cơm rim",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bí xanh xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau ngót",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "F66:F71"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-099",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá diêu hồng sốt cà",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ rim",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt gà sáo",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau cải xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "D79:D85"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-100",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Lươn um chuối",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng cút rim xì dầu",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt giả cầy",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "K79:K85"
+      },
+      "sourceOccurrences": 3
+    },
+    {
+      "id": "menu-101",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt bê xào",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả lá lốt sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ nhồi thịt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "M79:M84"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-102",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Gà bóp",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá cơm rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả cá rim",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giá đỗ xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh mồng tơi",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "D87:D93"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-103",
+      "meal": "DINNER",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Gà bóp",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giò lụa",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Tép rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "M87:M92"
+      },
+      "sourceOccurrences": 3
+    },
+    {
+      "id": "menu-104",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá rô phi chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng luộc",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt bò xào hành cần",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "D95:D101"
+      },
+      "sourceOccurrences": 5
+    },
+    {
+      "id": "menu-105",
+      "meal": "DINNER",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá diêu hồng sốt cà",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt rang sả ớt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bầu luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau ngót",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "M95:M100"
+      },
+      "sourceOccurrences": 3
+    },
+    {
+      "id": "menu-106",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt giả cầy",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá cơm rim",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bắp cải",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "D103:D109"
+      },
+      "sourceOccurrences": 3
+    },
+    {
+      "id": "menu-107",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt viên sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lươn um chuối",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng tráng",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bí xanh xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau ngót",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "F103:F108"
+      },
+      "sourceOccurrences": 4
+    },
+    {
+      "id": "menu-108",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt viên sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng luộc",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "D116:D122"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-109",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Lươn um chuối",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lạc rim mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả ram",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bắp cải",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "F116:F121"
+      },
+      "sourceOccurrences": 5
+    },
+    {
+      "id": "menu-110",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Tôm rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng cút rim xì dầu",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt gà rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "K116:K122"
+      },
+      "sourceOccurrences": 3
+    },
+    {
+      "id": "menu-111",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Gà bóp",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá cơm kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Tôm rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giá đỗ xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh mồng tơi",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "D124:D130"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-112",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt lợn kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả lá lốt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau lang xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bí thịt băm",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "F124:F129"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-113",
+      "meal": "LUNCH",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Giò lụa",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lạc rim mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lươn um chuối",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau dền",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "K124:K130"
+      },
+      "sourceOccurrences": 3
+    },
+    {
+      "id": "menu-114",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá rô phi chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng tráng",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt bò xào hành cần",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "D132:D138"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-115",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá Nục sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lạc rim mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt lợn áp chảo",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Mướp xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bầu",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "F132:F137"
+      },
+      "sourceOccurrences": 3
+    },
+    {
+      "id": "menu-116",
+      "meal": "DINNER",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Gà bóp rau răm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Tép rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt rang sả ớt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau cải xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau ngót",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "M132:M137"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-117",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá diêu hồng sốt cà",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt giả cầy",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ tẩm hành",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bắp cải",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "D140:D146"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-118",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt gà chiên mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả lá lốt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng tráng",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bí xanh xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau ngót",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "F140:F145"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-119",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Gà bóp lá chanh",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lạc rim mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả cá sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Mướp xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bầu",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "M153:M158"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-120",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Gà bóp",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá cơm kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt lợn áp chảo",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giá đỗ xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh mồng tơi",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "D161:D167"
+      },
+      "sourceOccurrences": 3
+    },
+    {
+      "id": "menu-121",
+      "meal": "LUNCH",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Chả ram",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt giả cầy",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá diêu hồng sốt cà",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bắp cải",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "K161:K167"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-122",
+      "meal": "DINNER",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt gà rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt bê xào",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá cơm rim",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bí xanh xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau ngót",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "M161:M166"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-123",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá Nục sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Tép rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giò lụa",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Mướp xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bầu",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "F169:F174"
+      },
+      "sourceOccurrences": 3
+    },
+    {
+      "id": "menu-124",
+      "meal": "LUNCH",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Chả ram",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng cút rim xì dầu",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt giả cầy",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "K169:K175"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-125",
+      "meal": "DINNER",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt bê xào",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả cá sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ tẩm hành",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "10,26",
+        "cells": "M169:M174"
+      },
+      "sourceOccurrences": 3
+    },
+    {
+      "id": "menu-126",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Gà bóp",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giò lụa",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt gà sáo",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau cải xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "D5:D11"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-127",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá diêu hồng sốt cà",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá cơm kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Tai mui trộn",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giá đỗ xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh mồng tơi",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "D13:D19"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-128",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả ram",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau lang xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bí thịt băm",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "F13:F18"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-129",
+      "meal": "LUNCH",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Chả cá rim",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giò lụa",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lươn um chuối",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau dền",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "K13:K19"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-130",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá rô phi chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lươn um chuối",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng tráng",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bí xanh xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau ngót",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "F29:F34"
+      },
+      "sourceOccurrences": 3
+    },
+    {
+      "id": "menu-131",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt bê xào",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả lá lốt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ tẩm hành",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "M42:M47"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-132",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Chả cá rim",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt viên sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau lang xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bí thịt băm",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "F50:F55"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-133",
+      "meal": "LUNCH",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt vịt rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lạc rim mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá rô phi chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau dền",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "K50:K56"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-134",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt kho tàu",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giò lụa",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá diêu hồng sốt cà",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "D58:D64"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-135",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Gà bóp",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lươn um chuối",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá cơm rim",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bí xanh xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau ngót",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "F66:F71"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-136",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt bê xào",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả ram sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ nhồi thịt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "M79:M84"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-137",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt viên sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá cơm kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả cá rim",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giá đỗ xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh mồng tơi",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "D87:D93"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-138",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Gà bóp",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng luộc",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt bò xào hành cần",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "D95:D101"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-139",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá Nục sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lạc rim mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả lá lốt sốt cà",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Mướp xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bầu",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "F95:F100"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-140",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá rô phi chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng luộc",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "D116:D122"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-141",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt lợn kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt viên sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau lang xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bí thịt băm",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "F124:F129"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-142",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá diêu hồng sốt cà",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng luộc",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt bò xào hành cần",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "D132:D138"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-143",
+      "meal": "DINNER",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt viên sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Tép rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt rang sả ớt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau cải xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau ngót",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "M132:M137"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-144",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá rô phi chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt giả cầy",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ tẩm hành",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bắp cải",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "D140:D146"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-145",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt gà chiên mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả ram",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng tráng",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bí xanh xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau ngót",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "F140:F145"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-146",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Gà bóp",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ rim",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt gà sáo",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau cải xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "D153:D159"
+      },
+      "sourceOccurrences": 2
+    },
+    {
+      "id": "menu-147",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá diêu hồng sốt cà",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lạc rim mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả cá sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Mướp xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bầu",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "M153:M158"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-148",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá diêu hồng sốt cà",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá cơm kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt lợn áp chảo",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giá đỗ xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh mồng tơi",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "D161:D167"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-149",
+      "meal": "LUNCH",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Chả lá lốt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt giả cầy",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bắp cải",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "K161:K167"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-150",
+      "meal": "LUNCH",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt viên sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng cút rim xì dầu",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt giả cầy",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "K169:K175"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-151",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt giả cầy",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ nhồi thịt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bắp cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bắp cải",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "D177:D183"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-152",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Gà bóp",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lươn um chuối",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng tráng",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bí xanh xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau ngót",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "11,26",
+        "cells": "F177:F182"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-153",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Tôm rang lá chanh",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giò lụa",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá diêu hồng sốt cà",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau cải xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "12,26",
+        "cells": "D5:D11"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-154",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Tôm rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng cút rim xì dầu",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt viên sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "12,26",
+        "cells": "K5:K11"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-155",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt bê xào",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả ram",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ nhồi thịt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau cải luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "12,26",
+        "cells": "M5:M10"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-156",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Gà bóp",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá cơm kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Tai mui trộn",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giá đỗ xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh mồng tơi",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "12,26",
+        "cells": "D13:D19"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-157",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá Nục sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lạc rim mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả lá lốt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Mướp xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bầu",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "12,26",
+        "cells": "F21:F26"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-158",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Chả lá lốt",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Đậu phụ rim",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt gà sáo",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau cải xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau cải",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "12,26",
+        "cells": "D42:D48"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-159",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt lợn luộc",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng cút rim xì dầu",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt giả cầy",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "12,26",
+        "cells": "K42:K48"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-160",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá rô phi chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá cơm kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt lợn áp chảo",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giá đỗ xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh mồng tơi",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "12,26",
+        "cells": "D50:D56"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-161",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá diêu hồng sốt cà",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá cơm kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả cá rim",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giá đỗ xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh mồng tơi",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "12,26",
+        "cells": "D87:D93"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-162",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá Nục sốt cà chua",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Lạc rim mắm",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả ram chiên giòn",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Mướp xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh bầu",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "12,26",
+        "cells": "F95:F100"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-163",
+      "meal": "LUNCH",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Cá rô phi chiên",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Cá cơm kho",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Tôm rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Giá đỗ xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh mồng tơi",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "12,26",
+        "cells": "D124:D130"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-164",
+      "meal": "DINNER",
+      "dayClass": "WEEKDAY",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Thịt gà rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Chả ram",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng tráng",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Bí xanh xào",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau ngót",
+          "slot": "SOUP"
+        }
+      ],
+      "source": {
+        "sheet": "12,26",
+        "cells": "F140:F145"
+      },
+      "sourceOccurrences": 1
+    },
+    {
+      "id": "menu-165",
+      "meal": "LUNCH",
+      "dayClass": "WEEKEND",
+      "items": [
+        {
+          "name": "Cơm tẻ",
+          "slot": "STAPLE"
+        },
+        {
+          "name": "Tôm rang",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Trứng cút rim xì dầu",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Thịt vịt giả cầy",
+          "slot": "MAIN"
+        },
+        {
+          "name": "Rau muống luộc",
+          "slot": "VEG"
+        },
+        {
+          "name": "Canh rau muống",
+          "slot": "SOUP"
+        },
+        {
+          "name": "Tráng miệng",
+          "slot": "DESSERT"
+        }
+      ],
+      "source": {
+        "sheet": "12,26",
+        "cells": "K169:K175"
+      },
+      "sourceOccurrences": 1
+    }
+  ],
+  "specialMeals": [
+    {
+      "dayClass": "WEEKDAY",
+      "meal": "LUNCH",
+      "label": "Có KH riêng",
+      "source": [
+        {
+          "sheet": "09,26",
+          "cells": "D30:D30"
+        },
+        {
+          "sheet": "10,26",
+          "cells": "D30:D30"
+        },
+        {
+          "sheet": "11,26",
+          "cells": "D30:D30"
+        },
+        {
+          "sheet": "12,26",
+          "cells": "D30:D30"
+        }
+      ]
+    }
+  ]
+}

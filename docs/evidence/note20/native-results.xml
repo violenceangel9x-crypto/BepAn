@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuite name="vn.bepan.NativeFlowTest" tests="4" failures="0" errors="0" skipped="0" time="27.797" timestamp="2026-11-12T11:11:03" hostname="localhost">
+  <properties>
+    <property name="device" value="SM-N986U1 - 13" />
+    <property name="flavor" value="" />
+    <property name="project" value=":app" />
+  </properties>
+  <testcase name="manualMealLongMenuPurchaseCloseAndAdjustment" classname="vn.bepan.NativeFlowTest" time="10.431" />
+  <testcase name="permissionDeniedStillAllowsTextCommands" classname="vn.bepan.NativeFlowTest" time="6.43" />
+  <testcase name="chatKeepsReadersPositionWhenAnAssistantReplyArrives" classname="vn.bepan.NativeFlowTest" time="2.155" />
+  <testcase name="todayChatDuplicateNameUndoTimeoutAndReport" classname="vn.bepan.NativeFlowTest" time="5.957" />
+</testsuite>

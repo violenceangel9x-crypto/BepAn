@@ -1,0 +1,43 @@
+{
+  "realGemini": true,
+  "configured": true,
+  "checks": [
+    {
+      "expected": "get_meal_counts",
+      "kind": "PROPOSALS",
+      "proposalMatched": true,
+      "dateCorrect": true
+    },
+    {
+      "expected": "set_attendance",
+      "kind": "PROPOSALS",
+      "proposalMatched": true,
+      "dateCorrect": true
+    },
+    {
+      "expected": "record_purchase",
+      "kind": "PROPOSALS",
+      "proposalMatched": true,
+      "dateCorrect": true,
+      "amountCorrect": true
+    },
+    {
+      "expected": "close_day",
+      "kind": "PROPOSALS",
+      "proposalMatched": true,
+      "dateCorrect": true
+    }
+  ],
+  "model": "gemini-3.5-flash",
+  "probes": [
+    {
+      "model": "gemini-3.8-flash",
+      "ok": false,
+      "code": "GATEWAY_TIMEOUT"
+    },
+    {
+      "model": "gemini-3.5-flash",
+      "ok": true
+    }
+  ]
+}
