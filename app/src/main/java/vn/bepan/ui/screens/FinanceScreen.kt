@@ -43,6 +43,9 @@ fun FinanceScreen(state: UiState, vm: KitchenViewModel, openToday: () -> Unit = 
     var settlementAmount by rememberSaveable { mutableStateOf("") }
     var settlementDate by rememberSaveable { mutableStateOf(today()) }
     var targetPeriod by rememberSaveable { mutableStateOf(YearMonth.parse(state.financePeriod).plusMonths(1).toString()) }
+    var receivingSubsidy by rememberSaveable { mutableStateOf(false) }
+    var subsidyAmount by rememberSaveable { mutableStateOf("") }
+    var subsidyDate by rememberSaveable { mutableStateOf(today()) }
     val tableScroll = rememberScrollState()
     val ledger = state.ledger
     val rows = ledger?.people.orEmpty().filter { group in it.groups }.filter {
@@ -77,6 +80,8 @@ fun FinanceScreen(state: UiState, vm: KitchenViewModel, openToday: () -> Unit = 
             item { Section("Bù giá gạo · Chiến sĩ", "Quyền lợi theo ngày chốt; làm tròn một lần ở tổng kỳ") {
                 Text("Được cấp ${money(ledger.subsidy)}", fontWeight = FontWeight.Bold)
                 Text("Đã nhận ${money(ledger.receivedSubsidy)} · ${if (ledger.subsidyRemaining >= 0) "Còn chờ" else "Nhận vượt"} ${money(kotlin.math.abs(ledger.subsidyRemaining))}", color = MutedOnLight)
+                LightAction("Ghi nhận bù gạo đã nhận", { subsidyAmount = ledger.subsidyRemaining.coerceAtLeast(0).toString(); receivingSubsidy = true })
+                ledger.periodCash.filter { it.kind == "SUBSIDY_RECEIPT" }.forEach { Text("${it.date} · đã nhận ${money(it.amount)} · ${it.id.take(8)}", color = Ink) }
             } }
             item { FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Group.entries.forEach { value -> FilterChip(selected = group == value.name, onClick = { group = value.name }, label = { Text(value.label) }) }
@@ -180,6 +185,15 @@ fun FinanceScreen(state: UiState, vm: KitchenViewModel, openToday: () -> Unit = 
                 settlementId = settlementId, cashDate = if (kind == Kind.REFUND) settlementDate else today()); settlementKind = ""
         }) { Text("Xem trước quyết toán") } }, dismissButton = { TextButton(onClick = { settlementKind = "" }) { Text("Hủy") } })
     }
+    if (receivingSubsidy && ledger != null) AlertDialog(onDismissRequest = { receivingSubsidy = false }, title = { Text("Bù gạo đã nhận · kỳ ${ledger.period}") }, text = {
+        Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text("Được cấp ${money(ledger.subsidy)} · đã nhận ${money(ledger.receivedSubsidy)}. Ngày nhận có thể ở tháng sau kỳ bù.")
+            OutlinedTextField(subsidyAmount, { subsidyAmount = it }, label = { Text("Tiền bù gạo thực nhận nguyên đồng") })
+            OutlinedTextField(subsidyDate, { subsidyDate = it }, label = { Text("Ngày nhận bù gạo YYYY-MM-DD") })
+        }
+    }, confirmButton = { Button(enabled = (subsidyAmount.toLongOrNull() ?: 0) in 1..1_000_000_000L && runCatching { java.time.LocalDate.parse(subsidyDate) }.isSuccess,
+        onClick = { vm.previewFinance(Kind.SUBSIDY_RECEIPT, subsidyAmount.toLong(), cashDate = subsidyDate); receivingSubsidy = false }) { Text("Xem trước nhận bù gạo") } },
+        dismissButton = { TextButton(onClick = { receivingSubsidy = false }) { Text("Hủy") } })
     state.financePreview?.let { command ->
         AlertDialog(onDismissRequest = { if (!state.busy) vm.cancelFinance() }, title = { Text("Xem trước tài chính") },
             text = { Column(Modifier.verticalScroll(rememberScrollState())) {
@@ -188,6 +202,11 @@ fun FinanceScreen(state: UiState, vm: KitchenViewModel, openToday: () -> Unit = 
                 if (command.kind == Kind.COLLECTION) {
                     Text("Quỹ tăng ${money(command.amount)}; từng số đối chiếu kỳ ${command.period} tăng theo phân bổ:")
                     command.shares.forEach { share -> Text("${state.people.firstOrNull { it.id == share.personId }?.name ?: share.personId} · ${Group.valueOf(share.group).label}: ${money(share.amount)}") }
+                }
+                if (command.kind == Kind.SUBSIDY_RECEIPT) {
+                    Text("Quỹ ngày ${command.cashDate} tăng ${money(command.amount)}; ghi nhận đã nhận cho kỳ ${command.period}. Tiền nộp cá nhân giữ nguyên.")
+                    if (ledger?.period == command.period && command.amount > ledger.subsidyRemaining)
+                        Text("Số nhận vượt khoản còn chờ ${money(command.amount - ledger.subsidyRemaining)}; chênh lệch sẽ hiện để đối soát.", color = MaterialTheme.colorScheme.error)
                 }
                 if (command.kind in listOf(Kind.RESERVE_REFUND, Kind.REFUND, Kind.CANCEL_SETTLEMENT, Kind.CARRY)) {
                     Text(command.people.joinToString { id -> state.people.firstOrNull { it.id == id }?.name ?: id })

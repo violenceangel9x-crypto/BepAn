@@ -111,7 +111,7 @@ Chuỗi chính: **2.0 → 2.1 → 2.2 → 2.3 → 2.4 → 2.5 → 2.6 → 2.7 �
 
 **Đạt khi:** dư 28.800₫ → chờ hoàn chưa giảm quỹ → đã trả giảm đúng 28.800₫; hoặc cấn sang kỳ sau đúng hai vế và không đổi quỹ; không dùng lại phần đã giữ; điều chỉnh tăng charge sau giữ dư không cho hoàn quá số khả dụng một cách âm thầm.
 
-### 2.6 · Bù giá gạo tính toán và thực nhận — P0
+### 2.6 · Bù giá gạo tính toán và thực nhận — P0 — Đã đạt JVM/build
 
 - Dùng ClosedMeal.subsidyMilli làm nguồn quyền lợi; hiển thị Được cấp/Đã nhận/Chờ nhận theo kỳ. Tổng kỳ làm tròn một lần, không làm tròn từng bữa/ngày hoặc cộng các số đã làm tròn từng người.
 - Luồng nhận tiền có kỳ bù, ngày nhận, số tiền, preview và xác nhận; liên kết dòng thu CashEntry. Cho đối soát nhận từng phần/nhận vượt mà không sửa quyền lợi đã tính.

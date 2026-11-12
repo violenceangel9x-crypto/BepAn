@@ -2,6 +2,13 @@
 
 ## Triển khai Mốc 2 — tiến độ theo từng phần
 
+### 2.6 — Đạt kiểm tra JVM/build · 13/11/2026
+
+- Bù gạo có Được cấp/Đã nhận/Còn chờ hoặc Nhận vượt; quyền lợi chỉ từ bữa chiến sĩ đã chốt và làm tròn một lần ở tổng kỳ. Nhận từng phần lưu một dòng thu CashEntry, kỳ quyền lợi độc lập ngày nhận.
+- UI có form ngày/tiền thực nhận, preview tác động quỹ/kỳ và cảnh báo nhận vượt; khoản này không vào PaymentAllocation hay tiền nộp cá nhân. Điều chỉnh sau nhận chỉ đổi quyền lợi/chênh lệch, không tự ghi tiền mới.
+- `scripts/build.ps1`: **BUILD SUCCESSFUL**, **53/53 JVM test đạt**, lint không lỗi. Đã kiểm tra 476₫; hai mức 700/900 ra 1.088₫; ba suất sáng làm tròn 286₫; nhận ngày 01/12 cho kỳ 11, nhận từng phần/vượt/replay và điều chỉnh sau nhận.
+- Tiếp theo: **2.7** hợp đồng Excel, xuất SAF và mở lại file bằng Excel thật trên Windows khi có.
+
 ### 2.5 — Đạt kiểm tra JVM/build · 13/11/2026
 
 - Schema **6**, migration 5→6 bổ sung liên kết cha của các lần hoàn từng phần, giữ ràng buộc FK và dữ liệu cũ.

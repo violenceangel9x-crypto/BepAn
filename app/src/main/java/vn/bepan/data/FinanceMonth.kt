@@ -24,7 +24,7 @@ data class FinanceMonth(val period: String, val people: List<PersonMonth>, val d
     val paid get() = people.sumOf { it.paid }
     val outstanding get() = people.sumOf { (-it.balance).coerceAtLeast(0) }
     val surplus get() = people.sumOf { it.balance.coerceAtLeast(0) }
-    val subsidy get() = Accounting.roundSubsidy(people.flatMap { it.meals }.sumOf { it.subsidyMilli })
+    val subsidy get() = Accounting.roundSubsidy(people.flatMap { it.meals }.filter { it.group == Group.SOLDIER.name && it.enabled }.sumOf { it.subsidyMilli })
     val receivedSubsidy get() = periodCash.filter { it.kind == "SUBSIDY_RECEIPT" }.sumOf { it.amount }
     val subsidyRemaining get() = subsidy - receivedSubsidy
     val cashIn get() = cash.filter { it.amount > 0 }.sumOf { it.amount }

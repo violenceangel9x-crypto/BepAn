@@ -62,6 +62,7 @@ class FinanceRepository(val db: KitchenDatabase, log: TechnicalLog, private val 
         requireRule(command.cashDate <= currentDate() && command.amount in 0..1_000_000_000L, "INVALID_ARGUMENT")
         when (command.kind) {
             Kind.OPENING_BALANCE -> requireRule(dao.cashOpening() == null, "OPENING_EXISTS")
+            Kind.SUBSIDY_RECEIPT -> requireRule(command.amount > 0 && command.people.isEmpty(), "INVALID_ARGUMENT")
             Kind.COLLECTION -> {
                 requireRule(command.amount > 0 && command.people.isNotEmpty() && command.people.distinct().size == command.people.size, "INVALID_ARGUMENT")
                 val expected = Accounting.allocate(command.amount, command.people)
@@ -96,6 +97,8 @@ class FinanceRepository(val db: KitchenDatabase, log: TechnicalLog, private val 
         val before = financialSummary(command)
         when (command.kind) {
             Kind.OPENING_BALANCE -> dao.cashOpening(CashOpening(date = command.cashDate, amount = command.amount))
+            Kind.SUBSIDY_RECEIPT -> dao.cashEntry(CashEntry(command.operationId, "SUBSIDY_RECEIPT", command.cashDate,
+                command.period, command.amount, command.text.ifBlank { "Nhận bù giá gạo · ${command.period}" }, now().toString(), "operation:${command.operationId}"))
             Kind.COLLECTION -> {
                 dao.cashEntry(CashEntry(command.operationId, "COLLECTION", command.cashDate, command.period, command.amount,
                     command.text.ifBlank { "Thu tiền ăn" }, now().toString(), "operation:${command.operationId}"))
@@ -122,6 +125,7 @@ class FinanceRepository(val db: KitchenDatabase, log: TechnicalLog, private val 
     }
     private suspend fun financialSummary(command: FinanceCommand): String {
         val ledger = month(command.period)
+        if (command.kind == Kind.SUBSIDY_RECEIPT) return "Quyền lợi ${money(ledger.subsidy)}, đã nhận ${money(ledger.receivedSubsidy)}, chênh lệch ${money(ledger.subsidyRemaining)}"
         return command.people.joinToString("\n") { person -> ledger.person(person)?.let {
             "${it.person.name}: đối chiếu ${money(it.balance)}, giữ ${money(it.reserved)}, khả dụng ${money(it.available)}"
         }.orEmpty() }
