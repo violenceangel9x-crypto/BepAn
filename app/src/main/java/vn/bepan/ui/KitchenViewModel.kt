@@ -344,6 +344,8 @@ class KitchenViewModel(application: Application) : AndroidViewModel(application)
     fun clearLog() = launch { log.clear(); diagnostics() }
     companion object {
         fun errorText(code: String): String = when(code) {
+            "SURPLUS_UNAVAILABLE" -> "Phần dư không còn đủ hoặc cần đối soát sau điều chỉnh. Hủy khoản chờ hoàn hoặc bổ sung thu rồi xem trước lại."
+            "OPENING_EXISTS" -> "Số dư đầu quỹ đã được xác lập. Không thể tạo thêm lần nữa."
             "EFFECTIVE_DATE_EXISTS" -> "Ngày hiệu lực này đã có cấu hình. Chọn một ngày hiệu lực khác để giữ lịch sử."
             "NOT_REGISTERED" -> "Bữa này chưa đăng ký hoặc sổ cũ chưa đủ bằng chứng. Không thể bật suất bằng điều chỉnh."
             "DAY_CLOSED" -> "Ngày đã chốt. Cần luồng điều chỉnh có lý do."

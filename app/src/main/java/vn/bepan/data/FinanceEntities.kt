@@ -13,9 +13,11 @@ data class CashEntry(@PrimaryKey val id: String, val kind: String, val date: Str
     ForeignKey(entity = CashEntry::class, parentColumns = ["id"], childColumns = ["entryId"], onDelete = ForeignKey.RESTRICT),
     ForeignKey(entity = Person::class, parentColumns = ["id"], childColumns = ["personId"], onDelete = ForeignKey.RESTRICT)])
 data class PaymentAllocation(val entryId: String, val personId: String, val period: String, val group: String, val amount: Long)
-@Entity(indices = [Index("personId"), Index("fromPeriod"), Index("toPeriod"), Index("cashEntryId")], foreignKeys = [
+@Entity(indices = [Index("personId"), Index("fromPeriod"), Index("toPeriod"), Index("cashEntryId"), Index("parentId")], foreignKeys = [
     ForeignKey(entity = Person::class, parentColumns = ["id"], childColumns = ["personId"], onDelete = ForeignKey.RESTRICT),
-    ForeignKey(entity = CashEntry::class, parentColumns = ["id"], childColumns = ["cashEntryId"], onDelete = ForeignKey.RESTRICT)])
+    ForeignKey(entity = CashEntry::class, parentColumns = ["id"], childColumns = ["cashEntryId"], onDelete = ForeignKey.RESTRICT),
+    ForeignKey(entity = Settlement::class, parentColumns = ["id"], childColumns = ["parentId"], onDelete = ForeignKey.RESTRICT)])
 data class Settlement(@PrimaryKey val id: String, val personId: String, val fromPeriod: String, val toPeriod: String,
-    val amount: Long, val status: String, val cashEntryId: String? = null)
+    val amount: Long, val status: String, val cashEntryId: String? = null,
+    @ColumnInfo(defaultValue = "NULL") val parentId: String? = null)
 @Entity data class FinanceDraft(@PrimaryKey val id: String, val command: String)

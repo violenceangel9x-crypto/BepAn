@@ -100,7 +100,7 @@ Chuỗi chính: **2.0 → 2.1 → 2.2 → 2.3 → 2.4 → 2.5 → 2.6 → 2.7 �
 
 **Đạt khi:** 21.600.000₫/10 người tạo đúng một thu quỹ; 1.000.001₫ chia ba ID a/b/c thành 333.334/333.334/333.333₫; đổi nhóm sau thu giữ phân bổ; thu hôm nay cho kỳ cũ đúng hai phạm vi; lỗi Audit rollback và confirm/retry chỉ ghi một lần.
 
-### 2.5 · Giữ dư, hoàn và cấn sang kỳ sau — P0
+### 2.5 · Giữ dư, hoàn và cấn sang kỳ sau — P0 — Đã đạt JVM/build
 
 - Tạo khoản chờ hoàn giữ phần dư, xác nhận đã trả mới ghi chi; hủy chờ hoàn giải phóng giữ. Hỗ trợ hoàn một phần với số dư khả dụng tính trong transaction.
 - Cấn **cùng người giữa hai kỳ** với hai vế nguyên tử, một liên kết duy nhất, không tạo thu/chi tiền mặt. Không mở rộng sang chuyển tiền giữa người khi chưa có quy tắc.

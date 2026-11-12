@@ -1,6 +1,14 @@
-# Bàn giao Bếp ăn — 12/11/2026
+# Bàn giao Bếp ăn — 13/11/2026
 
 ## Triển khai Mốc 2 — tiến độ theo từng phần
+
+### 2.5 — Đạt kiểm tra JVM/build · 13/11/2026
+
+- Schema **6**, migration 5→6 bổ sung liên kết cha của các lần hoàn từng phần, giữ ràng buộc FK và dữ liệu cũ.
+- Chờ hoàn giữ phần dư nhưng không ghi chi; đã trả từng phần mới tạo CashEntry âm và Settlement con. Hủy chờ giải phóng phần còn lại, giữ các khoản đã trả. Cấn cùng người sang tháng kế tiếp ghi một liên kết hai vế nguyên tử, không sinh tiền mặt.
+- Calculator phân biệt số đối chiếu, phần giữ và dư khả dụng; sau chốt/điều chỉnh nếu giữ vượt dư thì hiện cần đối soát và chặn ghi hoàn quá phạm vi. Audit lưu trước/sau số đối chiếu và phần giữ, log kỹ thuật không chứa các số này.
+- `scripts/build.ps1`: **BUILD SUCCESSFUL**, **51/51 JVM test đạt**, lint không lỗi. Ca mới kiểm tra hoàn từng phần/replay/hủy, rollback hai vế cấn và hai preview tranh cùng phần dư; chốt sau giữ làm giảm dư không cho hoàn cũ.
+- Tiếp theo: **2.6** thực nhận bù gạo theo kỳ quyền lợi và ngày tiền độc lập.
 
 ### 2.4 — Đạt kiểm tra JVM/build
 

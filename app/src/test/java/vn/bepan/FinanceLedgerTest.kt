@@ -100,4 +100,42 @@ class FinanceLedgerTest {
         repo.commit(Command(kind = Kind.CLOSE_DAY, date = date, expectedVersion = repo.snapshot(date).day.version), Context())
         try { finance.commit(command); fail() } catch (e: RuleViolation) { assertEquals("STALE_VERSION", e.code) }
     }
+    @Test fun reservedRefundPartialPaymentCancellationAndNoDoubleUse() = runBlocking {
+        finance.commit(finance.preview(Kind.COLLECTION, "2026-11", 28800, listOf("demo-00")))
+        val reserve = finance.preview(Kind.RESERVE_REFUND, "2026-11", 28800, listOf("demo-00"))
+        finance.commit(reserve)
+        assertEquals(1, db.dao().cashEntries().size)
+        assertEquals(0L, finance.month("2026-11").person("demo-00")!!.available)
+        try { finance.preview(Kind.CARRY, "2026-11", 1, listOf("demo-00"), targetPeriod = "2026-12"); fail() } catch (e: RuleViolation) { assertEquals("SURPLUS_UNAVAILABLE", e.code) }
+        val refund = finance.preview(Kind.REFUND, "2026-11", 10000, listOf("demo-00"), settlementId = reserve.operationId)
+        finance.commit(refund); finance.commit(refund)
+        val after = finance.month("2026-11").person("demo-00")!!
+        assertEquals(18800L, after.balance); assertEquals(18800L, after.reserved); assertEquals(10000L, after.refunded)
+        assertEquals(2, db.dao().cashEntries().size)
+        finance.commit(finance.preview(Kind.CANCEL_SETTLEMENT, "2026-11", people = listOf("demo-00"), settlementId = reserve.operationId))
+        assertEquals(18800L, finance.month("2026-11").person("demo-00")!!.available)
+        assertEquals(10000L, finance.month("2026-11").person("demo-00")!!.refunded)
+    }
+    @Test fun carryHasTwoAtomicPeriodSidesAndNoCashEntry() = runBlocking {
+        finance.commit(finance.preview(Kind.COLLECTION, "2026-11", 28800, listOf("demo-00")))
+        val command = finance.preview(Kind.CARRY, "2026-11", 28800, listOf("demo-00"), targetPeriod = "2026-12")
+        finance.writer.auditFaultForTest = true
+        try { finance.commit(command); fail() } catch (e: RuleViolation) { assertEquals("AUDIT_FAILED", e.code) }
+        assertTrue(db.dao().settlements("2026-11").isEmpty()); assertTrue(db.dao().settlements("2026-12").isEmpty())
+        finance.writer.auditFaultForTest = false; finance.commit(command); finance.commit(command)
+        assertEquals(0L, finance.month("2026-11").person("demo-00")!!.balance)
+        assertEquals(28800L, finance.month("2026-12").person("demo-00")!!.carryIn)
+        assertEquals(1, db.dao().cashEntries().size)
+    }
+    @Test fun concurrentReservationsAndAdjustmentCannotOverdrawSurplus() = runBlocking {
+        finance.commit(finance.preview(Kind.COLLECTION, "2026-11", 100000, listOf("demo-00")))
+        val first = finance.preview(Kind.RESERVE_REFUND, "2026-11", 100000, listOf("demo-00"))
+        val second = finance.preview(Kind.RESERVE_REFUND, "2026-11", 100000, listOf("demo-00"))
+        finance.commit(first)
+        try { finance.commit(second); fail() } catch (e: RuleViolation) { assertEquals("STALE_VERSION", e.code) }
+        val date = "2026-11-12"
+        repo.commit(Command(kind = Kind.CLOSE_DAY, date = date, expectedVersion = repo.snapshot(date).day.version), Context())
+        assertTrue(finance.month("2026-11").person("demo-00")!!.needsReview)
+        try { finance.preview(Kind.REFUND, "2026-11", 100000, listOf("demo-00"), settlementId = first.operationId); fail() } catch (e: RuleViolation) { assertEquals("SURPLUS_UNAVAILABLE", e.code) }
+    }
 }

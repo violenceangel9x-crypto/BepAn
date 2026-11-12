@@ -37,6 +37,12 @@ fun FinanceScreen(state: UiState, vm: KitchenViewModel, openToday: () -> Unit = 
     var collectAmount by rememberSaveable { mutableStateOf("") }
     var collectDate by rememberSaveable { mutableStateOf(today()) }
     var collectNote by rememberSaveable { mutableStateOf("") }
+    var settlementKind by rememberSaveable { mutableStateOf("") }
+    var settlementPerson by rememberSaveable { mutableStateOf("") }
+    var settlementId by rememberSaveable { mutableStateOf("") }
+    var settlementAmount by rememberSaveable { mutableStateOf("") }
+    var settlementDate by rememberSaveable { mutableStateOf(today()) }
+    var targetPeriod by rememberSaveable { mutableStateOf(YearMonth.parse(state.financePeriod).plusMonths(1).toString()) }
     val tableScroll = rememberScrollState()
     val ledger = state.ledger
     val rows = ledger?.people.orEmpty().filter { group in it.groups }.filter {
@@ -96,8 +102,22 @@ fun FinanceScreen(state: UiState, vm: KitchenViewModel, openToday: () -> Unit = 
                     if (row.needsReview) Text("Cần đối soát phần đã giữ/quyết toán sau điều chỉnh.", color = ErrorLight)
                     LightAction("Chi tiết sổ · ${row.person.name}", { detail = row.person.id })
                     LightAction("Thu tiền · ${row.person.name}", { collectPeople = listOf(row.person.id); collectAmount = ""; collecting = true })
+                    if (row.available > 0) FlowRow {
+                        LightAction("Lập chờ hoàn", { settlementKind = Kind.RESERVE_REFUND.name; settlementPerson = row.person.id; settlementId = ""; settlementAmount = row.available.toString() })
+                        LightAction("Cấn sang kỳ sau", { settlementKind = Kind.CARRY.name; settlementPerson = row.person.id; settlementId = ""; settlementAmount = row.available.toString(); targetPeriod = YearMonth.parse(ledger.period).plusMonths(1).toString() })
+                    }
                 }
             }
+            val pending = ledger.settlements.filter { it.fromPeriod == ledger.period && it.status == "PENDING" }
+            if (pending.isNotEmpty()) item { Section("Các khoản chờ hoàn", "Phần đã giữ chưa làm giảm quỹ") {
+                pending.forEach { reservation ->
+                    Text("${state.people.firstOrNull { it.id == reservation.personId }?.name ?: reservation.personId} · còn giữ ${money(reservation.remaining(ledger.settlements))}", color = Ink)
+                    FlowRow {
+                        LightAction("Ghi nhận đã trả · ${reservation.id.take(8)}", { settlementKind = Kind.REFUND.name; settlementPerson = reservation.personId; settlementId = reservation.id; settlementAmount = reservation.remaining(ledger.settlements).toString() })
+                        LightAction("Hủy chờ hoàn · ${reservation.id.take(8)}", { vm.previewFinance(Kind.CANCEL_SETTLEMENT, people = listOf(reservation.personId), settlementId = reservation.id) })
+                    }
+                }
+            } }
         }
     }
     ledger?.person(detail)?.let { person ->
@@ -144,6 +164,22 @@ fun FinanceScreen(state: UiState, vm: KitchenViewModel, openToday: () -> Unit = 
     }, confirmButton = { Button(enabled = (collectAmount.toLongOrNull() ?: 0) in 1..1_000_000_000L && collectPeople.isNotEmpty() && runCatching { java.time.LocalDate.parse(collectDate) }.isSuccess,
         onClick = { vm.previewFinance(Kind.COLLECTION, collectAmount.toLong(), collectPeople, text = collectNote, cashDate = collectDate, group = group); collecting = false }) { Text("Xem trước phân bổ") } },
         dismissButton = { TextButton(onClick = { collecting = false }) { Text("Hủy") } })
+    if (settlementKind.isNotBlank() && ledger != null) {
+        val kind = Kind.valueOf(settlementKind)
+        AlertDialog(onDismissRequest = { settlementKind = "" }, title = { Text(when (kind) { Kind.CARRY -> "Cấn sang kỳ sau"; Kind.REFUND -> "Ghi nhận tiền đã trả"; else -> "Lập chờ hoàn" }) }, text = {
+            Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(state.people.firstOrNull { it.id == settlementPerson }?.name.orEmpty())
+                ledger.person(settlementPerson)?.let { Text("Đối chiếu ${money(it.balance)} · đang giữ ${money(it.reserved)} · khả dụng ${money(it.available)}") }
+                OutlinedTextField(settlementAmount, { settlementAmount = it }, label = { Text("Số tiền quyết toán nguyên đồng") })
+                if (kind == Kind.CARRY) OutlinedTextField(targetPeriod, { targetPeriod = it }, label = { Text("Kỳ đến YYYY-MM") })
+                if (kind == Kind.REFUND) OutlinedTextField(settlementDate, { settlementDate = it }, label = { Text("Ngày đã trả tiền YYYY-MM-DD") })
+                Text(if (kind == Kind.REFUND) "Có thể ghi nhận trả từng phần của khoản đang giữ. Quỹ giảm khi xác nhận đã trả." else "Chờ hoàn hoặc cấn không tạo dòng tiền thu/chi thực tế.")
+            }
+        }, confirmButton = { Button(enabled = (settlementAmount.toLongOrNull() ?: 0) in 1..1_000_000_000L, onClick = {
+            vm.previewFinance(kind, settlementAmount.toLong(), listOf(settlementPerson), targetPeriod = if (kind == Kind.CARRY) targetPeriod else "",
+                settlementId = settlementId, cashDate = if (kind == Kind.REFUND) settlementDate else today()); settlementKind = ""
+        }) { Text("Xem trước quyết toán") } }, dismissButton = { TextButton(onClick = { settlementKind = "" }) { Text("Hủy") } })
+    }
     state.financePreview?.let { command ->
         AlertDialog(onDismissRequest = { if (!state.busy) vm.cancelFinance() }, title = { Text("Xem trước tài chính") },
             text = { Column(Modifier.verticalScroll(rememberScrollState())) {
@@ -152,6 +188,13 @@ fun FinanceScreen(state: UiState, vm: KitchenViewModel, openToday: () -> Unit = 
                 if (command.kind == Kind.COLLECTION) {
                     Text("Quỹ tăng ${money(command.amount)}; từng số đối chiếu kỳ ${command.period} tăng theo phân bổ:")
                     command.shares.forEach { share -> Text("${state.people.firstOrNull { it.id == share.personId }?.name ?: share.personId} · ${Group.valueOf(share.group).label}: ${money(share.amount)}") }
+                }
+                if (command.kind in listOf(Kind.RESERVE_REFUND, Kind.REFUND, Kind.CANCEL_SETTLEMENT, Kind.CARRY)) {
+                    Text(command.people.joinToString { id -> state.people.firstOrNull { it.id == id }?.name ?: id })
+                    Text(when (command.kind) { Kind.RESERVE_REFUND -> "Giữ ${money(command.amount)} chờ hoàn; quỹ giữ nguyên."
+                        Kind.REFUND -> "Đã trả ${money(command.amount)}: giảm quỹ và phần dư, tiêu thụ khoản giữ ${command.settlementId.take(8)}."
+                        Kind.CANCEL_SETTLEMENT -> "Hủy phần chờ còn lại, giải phóng số dư; không đổi các khoản đã trả."
+                        else -> "Cấn ${command.period} → ${command.targetPeriod}, giảm dư kỳ đi và tăng số đối chiếu kỳ đến; quỹ giữ nguyên." })
                 }
                 if (state.error.isNotEmpty()) Text(state.error, color = MaterialTheme.colorScheme.error)
             } }, confirmButton = { Button(onClick = vm::confirmFinance, enabled = !state.busy) { Text(if (state.busy) "Đang lưu…" else "Xác nhận tài chính") } },

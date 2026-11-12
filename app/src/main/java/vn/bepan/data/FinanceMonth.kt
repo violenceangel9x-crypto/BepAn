@@ -12,6 +12,7 @@ data class PersonMonth(val person: Person, val groups: Set<String>, val meals: L
     val cuts get() = meals.count { it.registered == true && !it.enabled }
     fun groupCharge(group: String) = meals.filter { it.group == group && it.enabled }.sumOf { it.price }
 }
+fun Settlement.remaining(rows: List<Settlement>): Long = amount - rows.filter { it.parentId == id && it.status in listOf("REFUNDED", "CARRIED") }.sumOf { it.amount }
 data class FinanceMonth(val period: String, val people: List<PersonMonth>, val days: List<Day>, val cash: List<CashEntry>,
     val periodCash: List<CashEntry>, val allocations: List<PaymentAllocation>, val settlements: List<Settlement>,
     val today: String, val cashBalance: Long?, val opening: CashOpening?, val revisions: List<CloseRevision> = emptyList()) {
@@ -38,7 +39,7 @@ object FinanceCalculator {
             rows.filter { it.status == "CARRIED" && it.toPeriod == period }.sumOf { it.amount },
             rows.filter { it.status == "CARRIED" && it.fromPeriod == period }.sumOf { it.amount },
             rows.filter { it.status == "REFUNDED" && it.fromPeriod == period }.sumOf { it.amount },
-            rows.filter { it.status == "PENDING" && it.fromPeriod == period }.sumOf { it.amount })
+            rows.filter { it.status == "PENDING" && it.fromPeriod == period }.sumOf { it.remaining(rows) })
     }
     fun projected(person: Person, month: YearMonth, memberships: List<MembershipPeriod>, rates: List<Rate>, meals: List<ClosedMeal>,
         closedDates: Set<String>, overrides: List<MealOverride>, schedules: List<Schedule>): Long =

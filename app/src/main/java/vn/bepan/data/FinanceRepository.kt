@@ -69,6 +69,22 @@ class FinanceRepository(val db: KitchenDatabase, log: TechnicalLog, private val 
                 val ledger = month(command.period)
                 command.shares.forEach { share -> requireRule(expected[share.personId] == share.amount && share.group in (ledger.person(share.personId)?.groups ?: emptySet()), "INVALID_ARGUMENT") }
             }
+            Kind.RESERVE_REFUND, Kind.CARRY -> {
+                requireRule(command.people.size == 1 && command.amount > 0, "INVALID_ARGUMENT")
+                val row = month(command.period).person(command.people.single()) ?: throw RuleViolation("PERSON_MISSING")
+                requireRule(!row.needsReview && row.available >= command.amount, "SURPLUS_UNAVAILABLE")
+                if (command.kind == Kind.CARRY) requireRule(YearMonth.parse(command.targetPeriod) == YearMonth.parse(command.period).plusMonths(1), "INVALID_ARGUMENT")
+            }
+            Kind.REFUND, Kind.CANCEL_SETTLEMENT -> {
+                val reservation = dao.settlement(command.settlementId) ?: throw RuleViolation("SETTLEMENT_MISSING")
+                requireRule(reservation.status == "PENDING" && reservation.fromPeriod == command.period && command.people == listOf(reservation.personId), "ACTION_EXPIRED")
+                if (command.kind == Kind.REFUND) {
+                    val ledger = month(command.period)
+                    val row = ledger.person(reservation.personId) ?: throw RuleViolation("PERSON_MISSING")
+                    requireRule(command.amount > 0 && command.amount <= reservation.remaining(ledger.settlements), "INVALID_ARGUMENT")
+                    requireRule(!row.needsReview && row.balance >= row.reserved, "SURPLUS_UNAVAILABLE")
+                }
+            }
             else -> throw RuleViolation("COMMAND_UNSUPPORTED")
         }
     }
@@ -77,6 +93,7 @@ class FinanceRepository(val db: KitchenDatabase, log: TechnicalLog, private val 
         command.kind, command.cashDate, command.encode(), command.expected, ::token, ctx) {
         requireRule(dao.financeDrafts().any { it.id == command.operationId && it.command == command.encode() }, "ACTION_EXPIRED")
         validate(command)
+        val before = financialSummary(command)
         when (command.kind) {
             Kind.OPENING_BALANCE -> dao.cashOpening(CashOpening(date = command.cashDate, amount = command.amount))
             Kind.COLLECTION -> {
@@ -84,10 +101,30 @@ class FinanceRepository(val db: KitchenDatabase, log: TechnicalLog, private val 
                     command.text.ifBlank { "Thu tiền ăn" }, now().toString(), "operation:${command.operationId}"))
                 dao.allocations(command.shares.map { PaymentAllocation(command.operationId, it.personId, command.period, it.group, it.amount) })
             }
+            Kind.RESERVE_REFUND -> dao.settlement(Settlement(command.operationId, command.people.single(), command.period, "", command.amount, "PENDING"))
+            Kind.CARRY -> dao.settlement(Settlement(command.operationId, command.people.single(), command.period, command.targetPeriod, command.amount, "CARRIED"))
+            Kind.CANCEL_SETTLEMENT -> {
+                val row = dao.settlement(command.settlementId)!!
+                dao.updateSettlement(row.copy(status = "CANCELLED"))
+            }
+            Kind.REFUND -> {
+                val reservation = dao.settlement(command.settlementId)!!
+                val remaining = reservation.remaining(dao.settlements(command.period))
+                dao.cashEntry(CashEntry(command.operationId, "REFUND", command.cashDate, command.period, -command.amount,
+                    command.text.ifBlank { "Hoàn tiền ăn" }, now().toString(), "operation:${command.operationId}"))
+                dao.settlement(Settlement(command.operationId, reservation.personId, command.period, "", command.amount, "REFUNDED", command.operationId, reservation.id))
+                if (command.amount == remaining) dao.updateSettlement(reservation.copy(status = "FULFILLED"))
+            }
             else -> throw RuleViolation("COMMAND_UNSUPPORTED")
         }
         dao.ensureFinance(FinanceVersion()); dao.bumpFinance(); dao.deleteFinanceDraft(command.operationId)
-        BusinessChange("${command.period} · ${command.kind}", "", "${money(command.amount)} · ${command.cashDate}")
+        BusinessChange("${command.period} · ${command.kind}", before, "${money(command.amount)} · ${command.cashDate}\n${financialSummary(command)}")
+    }
+    private suspend fun financialSummary(command: FinanceCommand): String {
+        val ledger = month(command.period)
+        return command.people.joinToString("\n") { person -> ledger.person(person)?.let {
+            "${it.person.name}: đối chiếu ${money(it.balance)}, giữ ${money(it.reserved)}, khả dụng ${money(it.available)}"
+        }.orEmpty() }
     }
     suspend fun cashBalance(): Long? = db.withTransaction {
         val opening = dao.cashOpening() ?: return@withTransaction null

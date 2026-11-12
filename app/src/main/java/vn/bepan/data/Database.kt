@@ -6,7 +6,7 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.flow.Flow
 
-const val KITCHEN_SCHEMA_VERSION = 5
+const val KITCHEN_SCHEMA_VERSION = 6
 
 @Entity(primaryKeys = ["personId", "effective"], foreignKeys = [ForeignKey(entity = Person::class, parentColumns = ["id"], childColumns = ["personId"], onDelete = ForeignKey.RESTRICT)])
 data class MembershipPeriod(val personId: String, val effective: String, val group: String, val active: Boolean)
@@ -110,6 +110,12 @@ data class AssistantAction(@PrimaryKey val operationId: String, val traceId: Str
 abstract class KitchenDatabase : RoomDatabase() {
     abstract fun dao(): KitchenDao
     companion object {
+        val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE Settlement ADD COLUMN parentId TEXT DEFAULT NULL REFERENCES Settlement(id) ON UPDATE NO ACTION ON DELETE RESTRICT")
+                db.execSQL("CREATE INDEX index_Settlement_parentId ON Settlement(parentId)")
+            }
+        }
         val MIGRATION_4_5 = object : Migration(4, 5) {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL("CREATE TABLE IF NOT EXISTS FinanceVersion (id INTEGER NOT NULL, version INTEGER NOT NULL, PRIMARY KEY(id))")
@@ -152,6 +158,6 @@ abstract class KitchenDatabase : RoomDatabase() {
             }
         }
         fun open(context: Context, name: String = "kitchen.db"): KitchenDatabase =
-            Room.databaseBuilder(context, KitchenDatabase::class.java, name).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5).build()
+            Room.databaseBuilder(context, KitchenDatabase::class.java, name).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6).build()
     }
 }
