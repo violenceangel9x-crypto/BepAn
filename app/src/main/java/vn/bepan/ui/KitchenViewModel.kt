@@ -28,7 +28,8 @@ data class UiState(
     val finance: List<ClosedMeal> = emptyList(), val purchases: List<Purchase> = emptyList(),
     val people: List<Person> = emptyList(), val memberships: List<MembershipPeriod> = emptyList(), val rates: List<Rate> = emptyList(),
     val configurationPreview: ConfigurationCommand? = null, val financePeriod: String = today().take(7),
-    val ledger: FinanceMonth? = null, val financePreview: FinanceCommand? = null, val lastFinanceReceipt: Receipt? = null
+    val ledger: FinanceMonth? = null, val financePreview: FinanceCommand? = null, val lastFinanceReceipt: Receipt? = null,
+    val exportingFinance: Boolean = false
 )
 class KitchenViewModel(application: Application) : AndroidViewModel(application) {
     private val app = application as BepApplication
@@ -104,6 +105,23 @@ class KitchenViewModel(application: Application) : AndroidViewModel(application)
             val receipt = financial.commit(command)
             refresh()
             mutable.update { it.copy(busy = false, financePreview = null, lastFinanceReceipt = receipt, notice = "Đã lưu · ${command.operationId.take(8)}") }
+        }
+    }
+    fun exportFinance(uri: android.net.Uri, period: String) {
+        if (state.value.exportingFinance) return
+        mutable.update { it.copy(exportingFinance = true) }
+        viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    val ledger = financial.month(period)
+                    app.contentResolver.openOutputStream(uri, "w")?.use { FinanceExcel.write(ledger, it) }
+                        ?: throw RuleViolation("EXPORT_FAILED")
+                }
+                mutable.update { it.copy(notice = "Đã xuất Excel đối soát · kỳ $period") }
+            } catch (e: Exception) {
+                if (e is CancellationException) throw e
+                mutable.update { it.copy(error = "Chưa xuất được Excel. Dữ liệu sổ vẫn giữ nguyên; chọn tệp khác để thử lại.") }
+            } finally { mutable.update { it.copy(exportingFinance = false) } }
         }
     }
     fun previewProfile(personId: String, name: String, effective: String, group: String, active: Boolean) = launch {

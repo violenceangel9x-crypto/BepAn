@@ -1,0 +1,12 @@
+﻿{
+    "fixture":  "FinanceExcelTest synthetic data",
+    "excelVersion":  "16.0",
+    "readOnly":  true,
+    "sheets":  6,
+    "charge":  72000,
+    "paid":  100000,
+    "subsidy":  476,
+    "groupColumns":  99,
+    "utf8NameRoundTrip":  true,
+    "inlineStringIsNotFormula":  true
+}

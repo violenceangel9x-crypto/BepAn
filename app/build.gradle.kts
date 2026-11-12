@@ -23,7 +23,10 @@ android {
     compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
     kotlinOptions { jvmTarget = "17" }
     buildFeatures { compose = true; buildConfig = true }
-    testOptions { unitTests.isIncludeAndroidResources = true; unitTests.all { it.systemProperty("bep.schemas", file("schemas").absolutePath) } }
+    testOptions { unitTests.isIncludeAndroidResources = true; unitTests.all {
+        it.systemProperty("bep.schemas", file("schemas").absolutePath)
+        it.systemProperty("bep.export", file("build/outputs/finance-sample.xlsx").absolutePath)
+    } }
     packaging { resources.excludes += "/META-INF/{AL2.0,LGPL2.1}" }
 }
 ksp { arg("room.schemaLocation", "$projectDir/schemas") }

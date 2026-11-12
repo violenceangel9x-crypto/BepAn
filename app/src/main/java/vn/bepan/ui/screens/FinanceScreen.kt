@@ -2,6 +2,8 @@
 package vn.bepan.ui.screens
 
 import androidx.compose.foundation.*
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -46,6 +48,10 @@ fun FinanceScreen(state: UiState, vm: KitchenViewModel, openToday: () -> Unit = 
     var receivingSubsidy by rememberSaveable { mutableStateOf(false) }
     var subsidyAmount by rememberSaveable { mutableStateOf("") }
     var subsidyDate by rememberSaveable { mutableStateOf(today()) }
+    var exportPeriod by rememberSaveable { mutableStateOf(state.financePeriod) }
+    val export = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument(FinanceExcel.MIME)) { uri ->
+        if (uri != null) vm.exportFinance(uri, exportPeriod)
+    }
     val tableScroll = rememberScrollState()
     val ledger = state.ledger
     val rows = ledger?.people.orEmpty().filter { group in it.groups }.filter {
@@ -68,6 +74,9 @@ fun FinanceScreen(state: UiState, vm: KitchenViewModel, openToday: () -> Unit = 
                 Text(money(ledger.charge), style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold)
                 Text("Đã nộp ${money(ledger.paid)} · Còn thiếu ${money(ledger.outstanding)} · Dư ${money(ledger.surplus)}", color = MutedOnLight)
                 LightAction("Xem ngày chưa chốt", { showUnclosed = true })
+                Button(onClick = { exportPeriod = ledger.period; export.launch("bep-an-doi-soat-${ledger.period}.xlsx") }, enabled = !state.exportingFinance) {
+                    Text(if (state.exportingFinance) "Đang xuất Excel…" else "Xuất Excel đối soát tháng")
+                }
                 Text("Công nợ tạm tính theo ngày đã chốt và lịch sử thu đã nhập.", color = MutedOnLight)
             } }
             item { Section("Quỹ tiền thực tế", "Thu/chi tháng theo ngày nhận hoặc trả tiền") {

@@ -121,7 +121,7 @@ Chuỗi chính: **2.0 → 2.1 → 2.2 → 2.3 → 2.4 → 2.5 → 2.6 → 2.7 �
 
 **Đạt khi:** một chiến sĩ đủ ba bữa ở 700₫/kg = 476₫; hai ngày mức 700/900 = 1.088₫; ba suất sáng = 285,6₫ → tổng 286₫; cán bộ/khách bằng 0; bù tháng 11 nhận 01/12 nằm đúng kỳ quyền lợi 11 và quỹ tháng 12; retry chỉ một thu.
 
-### 2.7 · Excel đối soát từ cùng nguồn dữ liệu — P1
+### 2.7 · Excel đối soát từ cùng nguồn dữ liệu — P1 — Đã đạt JVM/build và Excel
 
 - Chốt hợp đồng cột từ docs/06 trước khi chọn thư viện Android: ngày/bữa, tổng suất, tiền ăn, đã nộp, hoàn/cấn, thiếu/dư và bù chiến sĩ. Không ghi đè giá lịch sử bằng mức hiện tại.
 - Xuất XLSX offline qua SAF, từng nhóm có dữ liệu; thêm nguồn/cơ sở tổng hợp và phân biệt nháp. Có tổng đối chiếu giao dịch quỹ theo ngày tiền thực tế, tách khỏi kỳ ăn.

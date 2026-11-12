@@ -2,6 +2,14 @@
 
 ## Triển khai Mốc 2 — tiến độ theo từng phần
 
+### 2.7 — Đạt JVM/build và mở lại bằng Excel thật · 13/11/2026
+
+- Hợp đồng ở EXCEL_CONTRACT.md; FinanceExcel xuất ZIP/SpreadsheetML offline, không thêm thư viện desktop. Sheet đối soát, ba nhóm có dữ liệu, quỹ theo ngày tiền, chứng từ kỳ, phân bổ và quyết toán dùng cùng FinanceMonth; bảng nhóm giữ cột tên, đúng số ngày tháng nhuận.
+- Tên/nội dung là inline string, tiền là ô số; đóng góp bù gạo giữ phần lẻ, tổng kỳ làm tròn một lần. Số đối chiếu cá nhân toàn kỳ không cộng lặp giữa nhóm khi đổi nhóm. File không đọc khóa/chat/Technical Log.
+- UI xuất qua SAF giữ kỳ đã chọn khi mở picker, chỉ báo thành công sau khi ghi xong; hủy picker không ghi. `scripts/build.ps1`: **BUILD SUCCESSFUL**, **55/55 JVM test đạt**, lint không lỗi.
+- `scripts/verify-excel.ps1` đã mở file fixture bằng **Excel 16.0** ở chế độ chỉ đọc: **6 sheet, 99 cột nhóm tháng nhuận**, tiền ăn 72.000₫, đã nộp 100.000₫, bù 476₫; tên tiếng Việt/ký tự XML đọc lại đúng, ô tên không là công thức. Bằng chứng đã lọc dữ liệu mẫu: `docs/evidence/finance/excel-check.json`. XLSX mẫu nằm trong build output, không vào Git.
+- Tiếp theo: **2.8** ngữ cảnh Gemini theo màn/kỳ, công cụ đọc tài chính và đề xuất thu dùng chung handler.
+
 ### 2.6 — Đạt kiểm tra JVM/build · 13/11/2026
 
 - Bù gạo có Được cấp/Đã nhận/Còn chờ hoặc Nhận vượt; quyền lợi chỉ từ bữa chiến sĩ đã chốt và làm tròn một lần ở tổng kỳ. Nhận từng phần lưu một dòng thu CashEntry, kỳ quyền lợi độc lập ngày nhận.
