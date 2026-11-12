@@ -2,6 +2,14 @@
 
 ## Triển khai Mốc 2 — tiến độ theo từng phần
 
+### 2.3 — Đạt kiểm tra JVM/build
+
+- FinanceMonth/FinanceCalculator là nguồn tính theo YearMonth: suất chốt có hiệu lực, dự kiến theo ngày, công nợ, nhóm lịch sử, thu/chi theo ngày tiền, quyền lợi bù và phiên chốt. Query ClosedMeal/Day/CloseRevision theo khoảng ngày; màn không tự cộng từ toàn bộ lịch sử.
+- Tài chính có tháng riêng với Hôm nay, ba nhóm, lọc cắt/thiếu/dư, thẻ người, bảng S/T/C cuộn ngang giữ tên bên trái và hàng LazyColumn có khóa ID. Người đổi nhóm có suất ở từng nhóm lịch sử; công nợ là một số toàn kỳ, tổng nhóm tiền ăn không nhân đôi.
+- Có ngày đã tới chưa chốt/tương lai, liên kết về Hôm nay, chi tiết bữa/nhóm và lý do các phiên chốt; mở quỹ có preview. Draft tài chính trong Room được phục hồi khi mở lại.
+- `scripts/build.ps1`: **BUILD SUCCESSFUL**, **45/45 JVM test đạt**, lint không lỗi. Ca mới kiểm tra lịch 28/29/30/31, không tự tạo ngày khi đọc sổ, khách/người ngừng ăn, tổng nhóm, projection và điều chỉnh thay đóng góp ngày.
+- Tiếp theo: **2.4** thu cá nhân/nhóm, đóng băng phân bổ và chứng từ thực lưu.
+
 ### 2.2 — Đạt kiểm tra JVM/build
 
 - Schema **5**, migration 4→5 thêm CashEntry/PaymentAllocation/Settlement, phiên bản quỹ, số dư mở sổ và bản nháp xác nhận tài chính. Đường nâng từ v1/v2 vẫn giữ người, chat, suất chốt và Purchase/Audit/receipt.

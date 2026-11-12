@@ -77,7 +77,7 @@ Chuỗi chính: **2.0 → 2.1 → 2.2 → 2.3 → 2.4 → 2.5 → 2.6 → 2.7 �
 
 **Đạt khi:** nâng DB mẫu v2 có người/khách, menu, Purchase, ngày chốt, revision, chat/Audit/receipt; tổng trước/sau bằng nhau; một khoản mua 85.000₫ chỉ giảm quỹ một lần; mở lại/replay không nhân đôi.
 
-### 2.3 · Sổ tháng chỉ đọc và chi tiết người — P0
+### 2.3 · Sổ tháng chỉ đọc và chi tiết người — P0 — Đã đạt JVM/build
 
 - Tạo FinanceRepository/FinanceCalculator/read model theo YearMonth, query theo phạm vi thay vì nạp toàn bộ lịch sử vào composition. UI, file xuất và AI đọc chung nguồn tính.
 - Hiện tổng tiền ăn, ngày đã chốt, ngày đã tới chưa chốt và ngày tương lai. Tập ngày từ lịch tháng, không chỉ dựa vào Day đã được tạo khi người dùng xem màn hình.

@@ -64,4 +64,24 @@ class FinanceRepository(val db: KitchenDatabase, log: TechnicalLog, private val 
         val opening = dao.cashOpening() ?: return@withTransaction null
         dao.cashEntries().filter { it.date >= opening.date }.fold(opening.amount) { balance, entry -> Math.addExact(balance, entry.amount) }
     }
+    suspend fun month(period: String): FinanceMonth = db.withTransaction {
+        val month = YearMonth.parse(period)
+        val start = month.atDay(1).toString(); val end = month.plusMonths(1).atDay(1).toString()
+        val days = dao.days(start, end); val closedDates = days.filter { it.closed }.map { it.date }.toSet()
+        val meals = dao.closedMeals(start, end).filter { it.date in closedDates }
+        val allocations = dao.allocations(period); val settlements = dao.settlements(period)
+        val memberships = dao.memberships(); val rates = dao.rates()
+        val overrides = dao.overrides().filter { it.date >= start && it.date < end }; val schedules = dao.schedules()
+        val people = dao.people().mapNotNull { person ->
+            val rows = meals.filter { it.personId == person.id }
+            val historyGroups = rows.map { it.group } + allocations.filter { it.personId == person.id }.map { it.group }
+            val activeGroups = (1..month.lengthOfMonth()).mapNotNull { KitchenRepository.activePerson(person, memberships, month.atDay(it).toString())?.group }
+            val involved = rows.isNotEmpty() || allocations.any { it.personId == person.id } || settlements.any { it.personId == person.id }
+            if (!involved && activeGroups.isEmpty()) null else FinanceCalculator.person(person, rows,
+                FinanceCalculator.projected(person, month, memberships, rates, rows, closedDates, overrides, schedules),
+                allocations, settlements, period, (historyGroups + activeGroups).toSet().ifEmpty { setOf(person.group) })
+        }
+        FinanceMonth(period, people, days, dao.cashEntries(start, end), dao.periodCash(period), allocations, settlements,
+            currentDate(), cashBalance(), dao.cashOpening(), dao.revisions(start, end))
+    }
 }

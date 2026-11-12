@@ -83,6 +83,7 @@ data class AssistantAction(@PrimaryKey val operationId: String, val traceId: Str
     @Update suspend fun updateClosedMeal(value: ClosedMeal)
     @Insert suspend fun closeRevision(value: CloseRevision)
     @Query("SELECT * FROM CloseRevision WHERE date=:date ORDER BY version") suspend fun revisions(date: String): List<CloseRevision>
+    @Query("SELECT * FROM CloseRevision WHERE date>=:start AND date<:end ORDER BY date,version") suspend fun revisions(start: String, end: String): List<CloseRevision>
     @Query("SELECT * FROM Rate ORDER BY effective") suspend fun rates(): List<Rate>
     @Insert suspend fun rate(value: Rate)
     @Query("SELECT * FROM Audit ORDER BY timestamp DESC") fun observeAudits(): Flow<List<Audit>>

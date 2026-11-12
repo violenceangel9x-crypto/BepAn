@@ -144,7 +144,7 @@ fun KitchenApp(
                     tabStates.SaveableStateProvider(tab) {
                         when (tab) {
                             0 -> TodayScreen(state, vm)
-                            1 -> FinanceScreen(state)
+                            1 -> FinanceScreen(state, vm) { tab = 0 }
                             2 -> NotesScreen(state, vm) { nav.navigate("audit") }
                             3 -> SettingsScreen(state, vm, diagnose = {
                                 vm.diagnostics()

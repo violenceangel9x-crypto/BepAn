@@ -27,7 +27,8 @@ data class UiState(
     val events: List<SafeEvent> = emptyList(), val selectedTrace: String = "", val evidence: RoomEvidence = RoomEvidence("UNKNOWN"),
     val finance: List<ClosedMeal> = emptyList(), val purchases: List<Purchase> = emptyList(),
     val people: List<Person> = emptyList(), val memberships: List<MembershipPeriod> = emptyList(), val rates: List<Rate> = emptyList(),
-    val configurationPreview: ConfigurationCommand? = null
+    val configurationPreview: ConfigurationCommand? = null, val financePeriod: String = today().take(7),
+    val ledger: FinanceMonth? = null, val financePreview: FinanceCommand? = null
 )
 class KitchenViewModel(application: Application) : AndroidViewModel(application) {
     private val app = application as BepApplication
@@ -36,6 +37,7 @@ class KitchenViewModel(application: Application) : AndroidViewModel(application)
     val state = mutable.asStateFlow()
     private val repo get() = app.repository
     private val configuration get() = ConfigurationRepository(repo.db, log)
+    private val financial get() = FinanceRepository(repo.db, log)
     private val mockKey = booleanPreferencesKey("mock")
     private val endpointKey = stringPreferencesKey("endpoint")
     private val connectionKey = stringPreferencesKey("gemini_connection")
@@ -74,10 +76,35 @@ class KitchenViewModel(application: Application) : AndroidViewModel(application)
     }
     suspend fun refresh() {
         val date = state.value.date
+        val period = state.value.financePeriod
         val snap = repo.snapshot(date)
-        val closed = repo.dao.closedMeals(); val purchases = repo.dao.purchases(); val people = repo.dao.people()
+        val people = repo.dao.people()
         val memberships = repo.dao.memberships(); val rates = repo.dao.rates()
-        mutable.update { if (it.date == date) it.copy(snapshot = snap, finance = closed, purchases = purchases, people = people, memberships = memberships, rates = rates) else it }
+        val ledger = financial.month(period)
+        val draft = repo.dao.financeDrafts().firstOrNull()?.let { FinanceCommand.decode(it.command) }
+        mutable.update { if (it.date == date && it.financePeriod == period) it.copy(snapshot = snap, people = people, memberships = memberships, rates = rates, ledger = ledger, financePreview = draft) else it }
+    }
+    fun changeFinancePeriod(period: String) = launch {
+        java.time.YearMonth.parse(period)
+        mutable.update { it.copy(financePeriod = period, ledger = null) }
+        refresh()
+    }
+    fun previewFinance(kind: Kind, amount: Long = 0, people: List<String> = emptyList(), targetPeriod: String = "", settlementId: String = "", text: String = "", cashDate: String = today()) = launch {
+        mutable.update { it.copy(financePreview = financial.preview(kind, state.value.financePeriod, amount, people, targetPeriod, settlementId, text, cashDate), error = "") }
+    }
+    fun cancelFinance() = launch {
+        state.value.financePreview?.let { financial.cancel(it) }
+        mutable.update { it.copy(financePreview = null) }
+    }
+    fun confirmFinance() {
+        val command = state.value.financePreview ?: return
+        if (state.value.busy) return
+        mutable.update { it.copy(busy = true) }
+        launch {
+            financial.commit(command)
+            refresh()
+            mutable.update { it.copy(busy = false, financePreview = null, notice = "Đã lưu · ${command.operationId.take(8)}") }
+        }
     }
     fun previewProfile(personId: String, name: String, effective: String, group: String, active: Boolean) = launch {
         mutable.update { it.copy(configurationPreview = configuration.profile(personId, name, effective, group, active), error = "") }
