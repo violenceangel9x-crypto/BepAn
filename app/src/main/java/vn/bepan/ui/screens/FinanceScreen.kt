@@ -32,6 +32,11 @@ fun FinanceScreen(state: UiState, vm: KitchenViewModel, openToday: () -> Unit = 
     var opening by rememberSaveable { mutableStateOf(false) }
     var openingAmount by rememberSaveable { mutableStateOf("") }
     var openingDate by rememberSaveable { mutableStateOf(today()) }
+    var collecting by rememberSaveable { mutableStateOf(false) }
+    var collectPeople by rememberSaveable { mutableStateOf(emptyList<String>()) }
+    var collectAmount by rememberSaveable { mutableStateOf("") }
+    var collectDate by rememberSaveable { mutableStateOf(today()) }
+    var collectNote by rememberSaveable { mutableStateOf("") }
     val tableScroll = rememberScrollState()
     val ledger = state.ledger
     val rows = ledger?.people.orEmpty().filter { group in it.groups }.filter {
@@ -49,6 +54,7 @@ fun FinanceScreen(state: UiState, vm: KitchenViewModel, openToday: () -> Unit = 
         }
         if (ledger == null) item { Text("Đang mở sổ tháng tại thiết bị…") }
         else {
+            state.lastFinanceReceipt?.let { receipt -> item { Section("Chứng từ đã lưu", "${receipt.kind} · ${receipt.date}") { Text(receipt.operationId, color = Ink) } } }
             item { Section("Tiền ăn tháng", "${ledger.closedDates.size} ngày đã chốt · còn ${ledger.unclosed.size} ngày đã tới chưa chốt · ${ledger.future.size} ngày tương lai") {
                 Text(money(ledger.charge), style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold)
                 Text("Đã nộp ${money(ledger.paid)} · Còn thiếu ${money(ledger.outstanding)} · Dư ${money(ledger.surplus)}", color = MutedOnLight)
@@ -76,6 +82,7 @@ fun FinanceScreen(state: UiState, vm: KitchenViewModel, openToday: () -> Unit = 
             } }
             item { Section("Sổ ${Group.valueOf(group).label}", "Tiền ăn nhóm ${money(ledger.people.sumOf { it.groupCharge(group) })} · công nợ mỗi người tính toàn kỳ") {
                 LightAction(if (table) "Xem thẻ người" else "Xem bảng chấm cơm tháng", { table = !table })
+                Button(onClick = { collectPeople = rows.map { it.person.id }; collectAmount = ""; collecting = true }, enabled = rows.isNotEmpty()) { Text("Thu tiền nhóm · chọn người") }
             } }
             if (rows.isEmpty()) item { Text("Chưa có người hoặc phát sinh phù hợp trong kỳ.", color = MutedOnDark) }
             if (table) {
@@ -88,6 +95,7 @@ fun FinanceScreen(state: UiState, vm: KitchenViewModel, openToday: () -> Unit = 
                     Text("${if (row.balance < 0) "Còn thiếu" else "Dư"} ${money(kotlin.math.abs(row.balance))}", color = if (row.balance < 0) ErrorLight else SuccessLight, fontWeight = FontWeight.Bold)
                     if (row.needsReview) Text("Cần đối soát phần đã giữ/quyết toán sau điều chỉnh.", color = ErrorLight)
                     LightAction("Chi tiết sổ · ${row.person.name}", { detail = row.person.id })
+                    LightAction("Thu tiền · ${row.person.name}", { collectPeople = listOf(row.person.id); collectAmount = ""; collecting = true })
                 }
             }
         }
@@ -121,11 +129,30 @@ fun FinanceScreen(state: UiState, vm: KitchenViewModel, openToday: () -> Unit = 
     }, confirmButton = { Button(enabled = (openingAmount.toLongOrNull() ?: -1) in 0..1_000_000_000L && runCatching { java.time.LocalDate.parse(openingDate) }.isSuccess,
         onClick = { vm.previewFinance(Kind.OPENING_BALANCE, openingAmount.toLong(), cashDate = openingDate); opening = false }) { Text("Xem trước") } },
         dismissButton = { TextButton(onClick = { opening = false }) { Text("Hủy") } })
+    if (collecting && ledger != null) AlertDialog(onDismissRequest = { collecting = false }, title = { Text("Thu tiền ăn · kỳ ${ledger.period}") }, text = {
+        Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text("Chọn người để chia đều. Phân đồng lẻ theo ID cố định; xem từng phần trước khi lưu.")
+            ledger.people.filter { group in it.groups }.forEach { row -> Row {
+                Checkbox(checked = row.person.id in collectPeople, onCheckedChange = { checked -> collectPeople = if (checked) collectPeople + row.person.id else collectPeople - row.person.id })
+                Text(row.person.name)
+            } }
+            OutlinedTextField(collectAmount, { collectAmount = it }, label = { Text("Tổng tiền thu nguyên đồng") })
+            OutlinedTextField(collectDate, { collectDate = it }, label = { Text("Ngày nhận tiền YYYY-MM-DD") })
+            OutlinedTextField(collectNote, { collectNote = it }, label = { Text("Nội dung thu") })
+            Text("Ngày nhận độc lập kỳ ăn. Nếu nhập lịch sử, chọn đúng ngày tiền thực tế đã nhận.")
+        }
+    }, confirmButton = { Button(enabled = (collectAmount.toLongOrNull() ?: 0) in 1..1_000_000_000L && collectPeople.isNotEmpty() && runCatching { java.time.LocalDate.parse(collectDate) }.isSuccess,
+        onClick = { vm.previewFinance(Kind.COLLECTION, collectAmount.toLong(), collectPeople, text = collectNote, cashDate = collectDate, group = group); collecting = false }) { Text("Xem trước phân bổ") } },
+        dismissButton = { TextButton(onClick = { collecting = false }) { Text("Hủy") } })
     state.financePreview?.let { command ->
         AlertDialog(onDismissRequest = { if (!state.busy) vm.cancelFinance() }, title = { Text("Xem trước tài chính") },
             text = { Column(Modifier.verticalScroll(rememberScrollState())) {
                 Text("Kỳ ${command.period}\nNgày quỹ ${command.cashDate}\n${money(command.amount)}")
                 if (command.kind == Kind.OPENING_BALANCE) Text("Xác lập số dư đầu; không tạo khoản vừa thu. Chỉ cộng giao dịch từ ngày mốc này.")
+                if (command.kind == Kind.COLLECTION) {
+                    Text("Quỹ tăng ${money(command.amount)}; từng số đối chiếu kỳ ${command.period} tăng theo phân bổ:")
+                    command.shares.forEach { share -> Text("${state.people.firstOrNull { it.id == share.personId }?.name ?: share.personId} · ${Group.valueOf(share.group).label}: ${money(share.amount)}") }
+                }
                 if (state.error.isNotEmpty()) Text(state.error, color = MaterialTheme.colorScheme.error)
             } }, confirmButton = { Button(onClick = vm::confirmFinance, enabled = !state.busy) { Text(if (state.busy) "Đang lưu…" else "Xác nhận tài chính") } },
             dismissButton = { TextButton(onClick = vm::cancelFinance, enabled = !state.busy) { Text("Hủy") } })

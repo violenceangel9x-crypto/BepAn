@@ -2,6 +2,13 @@
 
 ## Triển khai Mốc 2 — tiến độ theo từng phần
 
+### 2.4 — Đạt kiểm tra JVM/build
+
+- Thu cá nhân/nhóm từ Tài chính: chọn người, số tiền, kỳ và ngày thực nhận độc lập; có preview từng phần chia đồng lẻ theo ID cố định. Phân bổ lưu cả nhóm tại lúc xem trước, không tính lại theo nhóm hiện tại sau thu.
+- Một CashEntry + các PaymentAllocation + Audit/receipt cùng transaction; bản nháp lưu Room. Có chứng từ sau commit, kiểm tra token tài chính khi xác nhận và đối chiếu receipt trước kiểm tra stale khi replay.
+- `scripts/build.ps1`: **BUILD SUCCESSFUL**, **48/48 JVM test đạt**, lint không lỗi. Đã kiểm tra 1.000.001₫/3 người, 21.600.000₫/10 người, 4 confirm đồng thời cùng ID, payload khác ID cũ, nhóm đổi sau thu, kỳ ăn cũ/ngày tiền khác kỳ, rollback Audit và stale sau chốt.
+- Tiếp theo: **2.5** giữ dư/chờ hoàn, hoàn từng phần, hủy và cấn sang kỳ sau.
+
 ### 2.3 — Đạt kiểm tra JVM/build
 
 - FinanceMonth/FinanceCalculator là nguồn tính theo YearMonth: suất chốt có hiệu lực, dự kiến theo ngày, công nợ, nhóm lịch sử, thu/chi theo ngày tiền, quyền lợi bù và phiên chốt. Query ClosedMeal/Day/CloseRevision theo khoảng ngày; màn không tự cộng từ toàn bộ lịch sử.

@@ -28,7 +28,7 @@ data class UiState(
     val finance: List<ClosedMeal> = emptyList(), val purchases: List<Purchase> = emptyList(),
     val people: List<Person> = emptyList(), val memberships: List<MembershipPeriod> = emptyList(), val rates: List<Rate> = emptyList(),
     val configurationPreview: ConfigurationCommand? = null, val financePeriod: String = today().take(7),
-    val ledger: FinanceMonth? = null, val financePreview: FinanceCommand? = null
+    val ledger: FinanceMonth? = null, val financePreview: FinanceCommand? = null, val lastFinanceReceipt: Receipt? = null
 )
 class KitchenViewModel(application: Application) : AndroidViewModel(application) {
     private val app = application as BepApplication
@@ -89,8 +89,8 @@ class KitchenViewModel(application: Application) : AndroidViewModel(application)
         mutable.update { it.copy(financePeriod = period, ledger = null) }
         refresh()
     }
-    fun previewFinance(kind: Kind, amount: Long = 0, people: List<String> = emptyList(), targetPeriod: String = "", settlementId: String = "", text: String = "", cashDate: String = today()) = launch {
-        mutable.update { it.copy(financePreview = financial.preview(kind, state.value.financePeriod, amount, people, targetPeriod, settlementId, text, cashDate), error = "") }
+    fun previewFinance(kind: Kind, amount: Long = 0, people: List<String> = emptyList(), targetPeriod: String = "", settlementId: String = "", text: String = "", cashDate: String = today(), group: String = "") = launch {
+        mutable.update { it.copy(financePreview = financial.preview(kind, state.value.financePeriod, amount, people, targetPeriod, settlementId, text, cashDate, group), error = "") }
     }
     fun cancelFinance() = launch {
         state.value.financePreview?.let { financial.cancel(it) }
@@ -101,9 +101,9 @@ class KitchenViewModel(application: Application) : AndroidViewModel(application)
         if (state.value.busy) return
         mutable.update { it.copy(busy = true) }
         launch {
-            financial.commit(command)
+            val receipt = financial.commit(command)
             refresh()
-            mutable.update { it.copy(busy = false, financePreview = null, notice = "Đã lưu · ${command.operationId.take(8)}") }
+            mutable.update { it.copy(busy = false, financePreview = null, lastFinanceReceipt = receipt, notice = "Đã lưu · ${command.operationId.take(8)}") }
         }
     }
     fun previewProfile(personId: String, name: String, effective: String, group: String, active: Boolean) = launch {

@@ -89,7 +89,7 @@ Chuỗi chính: **2.0 → 2.1 → 2.2 → 2.3 → 2.4 → 2.5 → 2.6 → 2.7 �
 
 **Đạt khi:** tháng 28/29/30/31 ngày, nhóm đổi giữa kỳ, khách lịch sử, tháng trống/chỉ nháp; tổng người = tổng nhóm = tổng tháng; thay ngày Hôm nay không làm mất tên hoặc đổi tháng tự chọn.
 
-### 2.4 · Thu tiền cá nhân và nhóm — P0
+### 2.4 · Thu tiền cá nhân và nhóm — P0 — Đã đạt JVM/build
 
 - Luồng chọn người/kỳ → nhập tiền → preview → xác nhận → mở chứng từ đã lưu. Thu nhóm đóng băng danh sách ID, nhóm tại lúc thu và phân bổ; cho thấy đồng lẻ trước lưu.
 - Lưu cash entry + allocations + Audit + receipt cùng transaction. Khóa nút đang lưu; thay nội dung tạo operation mới; retry/thẻ sau khởi động lại đối chiếu receipt.
