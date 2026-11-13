@@ -138,4 +138,15 @@ class FinanceLedgerTest {
         assertTrue(finance.month("2026-11").person("demo-00")!!.needsReview)
         try { finance.preview(Kind.REFUND, "2026-11", 100000, listOf("demo-00"), settlementId = first.operationId); fail() } catch (e: RuleViolation) { assertEquals("SURPLUS_UNAVAILABLE", e.code) }
     }
+    @Test fun closingPreviewWarnsBeforeReducingReservedSurplusAndChecksFinanceVersion() = runBlocking {
+        finance.commit(finance.preview(Kind.COLLECTION, "2026-11", 100000, listOf("demo-00")))
+        finance.commit(finance.preview(Kind.RESERVE_REFUND, "2026-11", 100000, listOf("demo-00")))
+        val date = "2026-11-12"
+        val preview = repo.prepare(Command(kind = Kind.CLOSE_DAY, date = date, expectedVersion = repo.snapshot(date).day.version))
+        assertTrue(preview.impacts.single { it.name == "Nguyễn Văn Nam" }.needsReview)
+        assertEquals(28000L, preview.impacts.single { it.name == "Nguyễn Văn Nam" }.after)
+        finance.commit(finance.preview(Kind.COLLECTION, "2026-11", 100000, listOf("demo-00")))
+        try { repo.commit(preview.command, Context()); fail() } catch (e: RuleViolation) { assertEquals("STALE_VERSION", e.code) }
+        assertFalse(repo.snapshot(date).day.closed)
+    }
 }

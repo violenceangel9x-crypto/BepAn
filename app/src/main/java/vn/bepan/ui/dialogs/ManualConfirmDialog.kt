@@ -17,7 +17,8 @@ fun ManualConfirmDialog(
     snapshot: DaySnapshot?,
     busy: Boolean,
     onDismiss: () -> Unit,
-    onConfirm: () -> Unit
+    onConfirm: () -> Unit,
+    impacts: List<vn.bepan.data.DayFinanceImpact> = emptyList()
 ) {
     AlertDialog(
         onDismissRequest = { if (!busy) onDismiss() },
@@ -73,6 +74,7 @@ fun ManualConfirmDialog(
                     }
                     else -> Text(command.text)
                 }
+                impacts.forEach { impact -> Text(impact.summary(), color = if (impact.needsReview) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface) }
             }
         },
         confirmButton = {

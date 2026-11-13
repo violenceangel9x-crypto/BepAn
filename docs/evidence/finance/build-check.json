@@ -1,0 +1,13 @@
+﻿{
+    "version":  "0.2.0-demo",
+    "versionCode":  3,
+    "package":  "vn.bepan.debug",
+    "schema":  7,
+    "jvmTests":  64,
+    "jvmFailures":  0,
+    "gatewayTests":  7,
+    "gatewayFailures":  0,
+    "lintErrors":  0,
+    "lintWarnings":  30,
+    "apkSha256":  "10105A88AF0C266E639411C85B2C26FA3CB3FF013266334DFB630D6125E97605"
+}

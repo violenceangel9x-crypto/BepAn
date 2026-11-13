@@ -1,0 +1,17 @@
+﻿{
+    "device":  "emulator-5554",
+    "sdk":  "34",
+    "fontScale":  "1.3",
+    "timestampUtc":  "2026-11-13T05:09:14.3547441Z",
+    "suite":  "core",
+    "runs":  [
+                 {
+                     "skipped":  0,
+                     "tests":  1,
+                     "class":  "vn.bepan.FinanceNativeTest",
+                     "passed":  true
+                 }
+             ],
+    "apkSha256":  "10105A88AF0C266E639411C85B2C26FA3CB3FF013266334DFB630D6125E97605",
+    "testApkSha256":  "8F4862204DCD7591E19148F8AF818B7ED709C4F758D2EF63226A338F48C82F04"
+}

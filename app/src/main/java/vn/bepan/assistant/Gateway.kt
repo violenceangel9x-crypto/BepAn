@@ -121,12 +121,16 @@ class HttpGateway(private val endpoint: String, private val openConnection: (jav
 }
 
 object CommandCodec {
-    fun encode(c: Command): String = JSONObject().put("operationId", c.operationId).put("kind", c.kind.name).put("date", c.date)
+    fun encode(c: Command): String {
+        val j = JSONObject().put("operationId", c.operationId).put("kind", c.kind.name).put("date", c.date)
         .put("expectedVersion", c.expectedVersion).put("personId", c.personId).put("meal", c.meal).put("enabled", c.enabled)
-        .put("amount", c.amount).put("text", c.text).put("endDate", c.endDate).put("group", c.group).put("parentOperationId", c.parentOperationId).toString()
+        .put("amount", c.amount).put("text", c.text).put("endDate", c.endDate).put("group", c.group).put("parentOperationId", c.parentOperationId)
+        if (c.financeExpected.isNotBlank()) j.put("financeExpected", c.financeExpected)
+        return j.toString()
+    }
     fun decode(raw: String): Command {
         val j = JSONObject(raw)
-        return Command(j.getString("operationId"), Kind.valueOf(j.getString("kind")), j.getString("date"), j.getLong("expectedVersion"), j.getString("personId"), j.getString("meal"), j.getBoolean("enabled"), j.getLong("amount"), j.getString("text"), j.getString("endDate"), j.getString("group"), j.getString("parentOperationId"))
+        return Command(j.getString("operationId"), Kind.valueOf(j.getString("kind")), j.getString("date"), j.getLong("expectedVersion"), j.getString("personId"), j.getString("meal"), j.getBoolean("enabled"), j.getLong("amount"), j.getString("text"), j.getString("endDate"), j.getString("group"), j.getString("parentOperationId"), j.optString("financeExpected"))
     }
     fun resolveDate(args: JSONObject, selected: String, reference: String): String {
         val date = args.optString("date", args.optString("dayRef", "VIEW_DATE"))

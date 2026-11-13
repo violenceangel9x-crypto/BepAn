@@ -1,0 +1,24 @@
+﻿[
+    {
+        "fixture":  "Native SAF synthetic export",
+        "device":  "samsung",
+        "excelVersion":  "16.0",
+        "readOnly":  true,
+        "sheets":  7,
+        "period":  "2092-02",
+        "charge":  0,
+        "paid":  12345,
+        "subsidy":  0
+    },
+    {
+        "fixture":  "Native SAF synthetic export",
+        "device":  "emulator",
+        "excelVersion":  "16.0",
+        "readOnly":  true,
+        "sheets":  7,
+        "period":  "2040-02",
+        "charge":  691200,
+        "paid":  1100001,
+        "subsidy":  3808
+    }
+]

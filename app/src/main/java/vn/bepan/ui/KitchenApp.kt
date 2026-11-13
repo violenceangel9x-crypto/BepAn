@@ -190,7 +190,8 @@ fun KitchenApp(
             snapshot = state.snapshot,
             busy = state.busy,
             onDismiss = vm::cancelManual,
-            onConfirm = vm::confirmManual
+            onConfirm = vm::confirmManual,
+            impacts = state.dayFinanceImpacts
         )
     }
 }

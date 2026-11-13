@@ -30,10 +30,11 @@ data class Command(
     val operationId: String = id(), val kind: Kind, val date: String,
     val expectedVersion: Long, val personId: String = "", val meal: String = "",
     val enabled: Boolean = false, val amount: Long = 0, val text: String = "",
-    val endDate: String = "", val group: String = "", val parentOperationId: String = ""
+    val endDate: String = "", val group: String = "", val parentOperationId: String = "", val financeExpected: String = ""
 ) {
     // Delimit by length so arbitrary menu/note content cannot collide.
-    fun canonical(): String = listOf(kind.name, date, expectedVersion, personId, meal, enabled, amount, text, endDate, group, parentOperationId)
+    fun canonical(): String = (listOf(kind.name, date, expectedVersion, personId, meal, enabled, amount, text, endDate, group, parentOperationId) +
+        if (financeExpected.isBlank()) emptyList() else listOf(financeExpected))
         .joinToString("") { val s = it.toString(); "${s.length}:$s" }
 }
 object Accounting {

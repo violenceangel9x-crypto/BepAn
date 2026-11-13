@@ -1,0 +1,16 @@
+﻿{
+    "device":  "R5CN70V0BED",
+    "sdk":  "33",
+    "fontScale":  "1.3",
+    "timestampUtc":  "2026-11-13T04:59:31.7912041Z",
+    "suite":  "presentation",
+    "runs":  [
+                 {
+                     "tests":  2,
+                     "class":  "vn.bepan.FinancePresentationTest",
+                     "passed":  true
+                 }
+             ],
+    "apkSha256":  "10105A88AF0C266E639411C85B2C26FA3CB3FF013266334DFB630D6125E97605",
+    "testApkSha256":  "E905B53F0FE5AAA944FA3BB20E1E53F336720C1926478C35024F11571F3A81E1"
+}

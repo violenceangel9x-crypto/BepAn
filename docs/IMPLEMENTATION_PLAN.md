@@ -143,7 +143,7 @@ Chuỗi chính: **2.0 → 2.1 → 2.2 → 2.3 → 2.4 → 2.5 → 2.6 → 2.7 �
 
 **Đạt khi:** đang xem tháng cũ rồi hỏi “tháng đang xem”, đổi ngày/màn trước retry vẫn giữ kỳ gốc; câu đọc trả đúng Room; công cụ chưa có handler không được khai báo; confirm lặp và redaction tiếp tục đạt.
 
-### 2.9 · Nghiệm thu cả tháng và gói bàn giao — P0
+### 2.9 · Nghiệm thu cả tháng và gói bàn giao — P0 — Đã đạt · 13/11/2026
 
 - Tạo fixture tháng cố định đi qua mọi luồng 2.0–2.8, so số theo ngày/người/nhóm/kỳ/quỹ/file; không chỉ kiểm tra helper tính tiền.
 - Chạy JVM/Room transaction/migration, gateway khi protocol đổi, Compose/native trên emulator mẫu và Samsung đúng serial với bản debug. Dữ liệu nghiệm thu có cả người ngừng ăn, hai Nam, khách và thay giá/nhóm giữa kỳ.
@@ -157,17 +157,17 @@ Chuỗi chính: **2.0 → 2.1 → 2.2 → 2.3 → 2.4 → 2.5 → 2.6 → 2.7 �
 
 | Mã | Điều kiện bắt buộc | Trạng thái hiện tại |
 |---|---|---|
-| M2-01 | Sổ cũ/Purchase/Audit/receipt/CloseRevision giữ nguyên qua toàn bộ đường migration | Chưa triển khai |
-| M2-02 | Khách phân biệt chưa đăng ký/cắt; người và nhóm lịch sử đúng | Chưa đạt đầy đủ — F01/F04 |
-| M2-03 | Tháng 28/29/30/31, giá/nhóm có hiệu lực, nháp/tương lai tách số chính thức | Chưa triển khai đầy đủ |
-| M2-04 | Một nguồn chi, thu cá nhân/nhóm khớp phân bổ và công nợ | Chưa triển khai |
-| M2-05 | Hoàn/cấn/giữ dư đúng, không dùng phần dư hai lần | Chưa triển khai |
-| M2-06 | Quyền lợi bù và tiền nhận khác kỳ đúng, làm tròn một lần | Mới có phần tính nền |
-| M2-07 | Bảng tháng, bộ lọc, chi tiết người và truy chứng từ chạy offline | Chưa triển khai |
-| M2-08 | Excel mở được và đối chiếu toàn bộ tổng với app/Room | Chưa triển khai |
-| M2-09 | Retry/concurrency/stale/rollback và chẩn đoán nghiệp vụ mới đạt | Chỉ có kiểm thử nền cũ |
-| M2-10 | Ngữ cảnh chat tài chính đúng; mọi công cụ ghi đã mở có handler/preview/receipt | Chưa triển khai |
-| M2-11 | Native/font lớn/TalkBack/process death và kết quả đúng APK được ghi lại | Chưa nghiệm thu mốc mới |
+| M2-01 | Sổ cũ/Purchase/Audit/receipt/CloseRevision giữ nguyên qua toàn bộ đường migration | Đạt: MigrationTest v1→7, đầy đủ dòng/cột v2–6→7 và FK; không destructive fallback |
+| M2-02 | Khách phân biệt chưa đăng ký/cắt; người và nhóm lịch sử đúng | Đạt: HistoricalMealsTest, ConfigurationTest và FullMonthTest; legacy thiếu bằng chứng giữ NULL |
+| M2-03 | Tháng 28/29/30/31, giá/nhóm có hiệu lực, nháp/tương lai tách số chính thức | Đạt: FinanceMonthTest, ConfigurationTest, fixture tháng nhuận thay giá/nhóm/ngừng/ăn lại |
+| M2-04 | Một nguồn chi, thu cá nhân/nhóm khớp phân bổ và công nợ | Đạt: FinanceLedgerTest; native thu nhóm/AI cá nhân; CashEntry liên kết Purchase duy nhất |
+| M2-05 | Hoàn/cấn/giữ dư đúng, không dùng phần dư hai lần | Đạt: FinanceLedgerTest, fixture tháng và native hoàn từng phần/hủy/cấn; preview chốt có cảnh báo giữ dư |
+| M2-06 | Quyền lợi bù và tiền nhận khác kỳ đúng, làm tròn một lần | Đạt: FinanceSubsidyTest, fixture 22.780₫ nhận tháng sau, native nhận một phần |
+| M2-07 | Bảng tháng, bộ lọc, chi tiết người và truy chứng từ chạy offline | Đạt: FinanceNativeTest/FinancePresentationTest trên emulator máy bay; giữ tên khi cuộn ngang |
+| M2-08 | Excel mở được và đối chiếu toàn bộ tổng với app/Room | Đạt: Excel 16.0 mở 8 sheet, tổng ba nhóm/phân bổ/công nợ/bù/quỹ khớp golden Room; SAF hai thiết bị |
+| M2-09 | Retry/concurrency/stale/rollback và chẩn đoán nghiệp vụ mới đạt | Đạt: 64 JVM; replay/4 confirm đồng thời/rollback Audit/stale; native replay receipt và process death |
+| M2-10 | Ngữ cảnh chat tài chính đúng; mọi công cụ ghi đã mở có handler/preview/receipt | Đạt: 9 declaration, FinanceAssistantTest/HttpGatewayTest/DirectGeminiGatewayTest, native hai Nam/confirm/retry/ngữ cảnh kỳ cũ |
+| M2-11 | Native/font lớn/TalkBack/process death và kết quả đúng APK được ghi lại | Đạt: emulator 12/12, Samsung 10 đạt/1 micro bỏ qua giữ quyền đã cấp; 320dp/font2×, 360dp/TalkBack, hai máy mất tiến trình; cùng hash APK. Xem [bằng chứng](evidence/finance/README.md) |
 
 ## Các luồng làm song song và cổng vận hành thật
 

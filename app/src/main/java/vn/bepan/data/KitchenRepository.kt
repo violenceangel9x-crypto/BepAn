@@ -9,12 +9,19 @@ import java.time.LocalDate
 
 data class Serving(val person: Person, val meal: Meal, val enabled: Boolean, val registered: Boolean,
     val unitPrice: Long = 0, val registrationKnown: Boolean = true)
+data class DayFinanceImpact(val name: String, val before: Long, val after: Long, val reserved: Long, val settled: Long) {
+    val needsReview get() = reserved > after.coerceAtLeast(0) || (settled > 0 && after < 0)
+    fun summary() = "$name: đối chiếu ${money(before)} → ${money(after)} · giữ ${money(reserved)}" +
+        if (needsReview) " · Cần đối soát khoản giữ/quyết toán" else ""
+}
+data class DayCommandPreview(val command: Command, val impacts: List<DayFinanceImpact>)
 data class DaySnapshot(val day: Day, val servings: List<Serving>, val menus: List<Menu>, val purchases: List<Purchase>, val budget: Long, val charge: Long, val rate: Rate, val nextVersion: Long = 0) {
     fun count(meal: Meal) = servings.count { it.meal == meal && it.enabled }
     val bought: Long get() = purchases.sumOf { it.amount }
 }
 
-class KitchenRepository(val db: KitchenDatabase, val log: TechnicalLog) {
+class KitchenRepository(val db: KitchenDatabase, val log: TechnicalLog, private val currentDate: () -> String = ::today,
+    private val now: () -> Instant = Instant::now) {
     val dao = db.dao()
     var auditFaultForTest: Boolean = false
     suspend fun initialize(debug: Boolean) = db.withTransaction {
@@ -27,6 +34,21 @@ class KitchenRepository(val db: KitchenDatabase, val log: TechnicalLog) {
         }
     }
     suspend fun snapshot(date: String): DaySnapshot = db.withTransaction { snapshotInside(date) }
+    suspend fun prepare(command: Command): DayCommandPreview = db.withTransaction {
+        val snap = snapshotInside(command.date)
+        requireRule(command.expectedVersion == snap.day.version, "STALE_VERSION")
+        if (command.kind !in listOf(Kind.CLOSE_DAY, Kind.ADJUST_ATTENDANCE)) return@withTransaction DayCommandPreview(command, emptyList())
+        val ledger = FinanceRepository(db, log).month(command.date.take(7))
+        val changed = if (command.kind == Kind.CLOSE_DAY) snap.servings.filter { it.enabled }
+            else snap.servings.filter { it.person.id == command.personId && it.meal.name in command.meal.split(',') && it.enabled != command.enabled }
+        val impacts = changed.groupBy { it.person.id }.map { (person, rows) ->
+            val before = ledger.person(person)
+            val delta = rows.sumOf { it.unitPrice } * if (command.kind == Kind.CLOSE_DAY || command.enabled) 1L else -1L
+            DayFinanceImpact(rows.first().person.name, before?.balance ?: 0, (before?.balance ?: 0) - delta,
+                before?.reserved ?: 0, (before?.refunded ?: 0) + (before?.carryOut ?: 0))
+        }
+        DayCommandPreview(command.copy(financeExpected = (dao.financeVersion() ?: 0).toString()), impacts)
+    }
     private suspend fun snapshotInside(date: String): DaySnapshot {
         LocalDate.parse(date)
         dao.ensureDay(Day(date))
@@ -67,6 +89,7 @@ class KitchenRepository(val db: KitchenDatabase, val log: TechnicalLog) {
                 val snap = snapshotInside(command.date)
                 requireRule(!snap.day.closed || command.kind in listOf(Kind.ADJUST_ATTENDANCE, Kind.NOTE), "DAY_CLOSED")
                 requireRule(snap.day.version == command.expectedVersion, "STALE_VERSION")
+                requireRule(command.financeExpected.isEmpty() || command.financeExpected == (dao.financeVersion() ?: 0).toString(), "STALE_VERSION")
                 var before = ""; var after = ""; var target = command.date
                 when (command.kind) {
                     Kind.ATTENDANCE, Kind.ADJUST_ATTENDANCE -> {
@@ -93,8 +116,8 @@ class KitchenRepository(val db: KitchenDatabase, val log: TechnicalLog) {
                     Kind.PURCHASE -> {
                         requireRule(command.amount in 1..1_000_000_000L && command.text.isNotBlank() && command.text.length <= 500, "INVALID_ARGUMENT")
                         dao.purchase(Purchase(command.operationId, command.date, command.amount, command.text))
-                        dao.cashEntry(CashEntry(command.operationId, "PURCHASE", today(), command.date.take(7), -command.amount,
-                            command.text, Instant.now().toString(), "purchase:${command.operationId}", command.operationId))
+                        dao.cashEntry(CashEntry(command.operationId, "PURCHASE", currentDate(), command.date.take(7), -command.amount,
+                            command.text, now().toString(), "purchase:${command.operationId}", command.operationId))
                         after = "${command.text} · ${money(command.amount)}"
                     }
                     Kind.MENU -> {
@@ -138,7 +161,7 @@ class KitchenRepository(val db: KitchenDatabase, val log: TechnicalLog) {
                     Kind.NOTE -> {
                         requireRule(command.text.isNotBlank() && command.text.length <= 16000, "INVALID_ARGUMENT")
                         command.personId.takeIf { it.isNotEmpty() }?.let { noteId -> dao.note(noteId)?.let { before = "${it.text} · Ghim: ${it.pinned}" } }
-                        dao.note(Note(command.personId.ifEmpty { command.operationId }, command.text, command.enabled, Instant.now().toString()))
+                        dao.note(Note(command.personId.ifEmpty { command.operationId }, command.text, command.enabled, now().toString()))
                         after = "${command.text} · Ghim: ${command.enabled}"
                     }
                     else -> throw RuleViolation("COMMAND_UNSUPPORTED")
@@ -149,9 +172,9 @@ class KitchenRepository(val db: KitchenDatabase, val log: TechnicalLog) {
                 }
                 dao.updateDay(snap.day.copy(version = version, closed = snap.day.closed || command.kind == Kind.CLOSE_DAY))
                 if (auditFaultForTest) throw RuleViolation("AUDIT_FAILED")
-                dao.audit(Audit(id(), command.operationId, traceId = ctx.traceId, timestamp = Instant.now().toString(), source = ctx.source.name, provider = ctx.provider.name,
+                dao.audit(Audit(id(), command.operationId, traceId = ctx.traceId, timestamp = now().toString(), source = ctx.source.name, provider = ctx.provider.name,
                     kind = command.kind.name, target = target, before = before, after = after, parentOperationId = command.parentOperationId))
-                val receipt = Receipt(command.operationId, ctx.traceId, command.kind.name, hash, command.date, version, Instant.now().toString())
+                val receipt = Receipt(command.operationId, ctx.traceId, command.kind.name, hash, command.date, version, now().toString())
                 dao.receipt(receipt)
                 dao.actionStatus(command.operationId, ActionStatus.SAVED.name)
                 if (command.parentOperationId.isNotEmpty()) dao.actionStatus(command.parentOperationId, ActionStatus.UNDONE.name)

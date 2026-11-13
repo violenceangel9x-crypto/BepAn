@@ -20,7 +20,7 @@ data class UiState(
     val error: String = "", val roomFailed: Boolean = false, val notice: String = "",
     val chat: List<ChatMessage> = emptyList(), val actions: List<AssistantAction> = emptyList(),
     val audits: List<Audit> = emptyList(), val notes: List<Note> = emptyList(),
-    val choice: PersonChoice? = null, val manualPreview: Command? = null,
+    val choice: PersonChoice? = null, val manualPreview: Command? = null, val dayFinanceImpacts: List<DayFinanceImpact> = emptyList(),
     val draft: String = "", val mock: Boolean = BuildConfig.DEBUG, val endpoint: String = "",
     val connection: GeminiConnection = GeminiConnection.DIRECT, val hasApiKey: Boolean = false,
     val credentialBusy: Boolean = false, val credentialsReady: Boolean = false, val credentialError: String = "",
@@ -105,8 +105,14 @@ class KitchenViewModel(application: Application) : AndroidViewModel(application)
         app.settings.edit { it[groupKey] = group; it[filterKey] = filter }
     }
     fun chatRoute(route: String) { if (route in setOf("TODAY", "FINANCE", "NOTES", "SETTINGS")) mutable.update { it.copy(chatRoute = route) } }
-    fun previewFinance(kind: Kind, amount: Long = 0, people: List<String> = emptyList(), targetPeriod: String = "", settlementId: String = "", text: String = "", cashDate: String = today(), group: String = "") = launch {
-        mutable.update { it.copy(financePreview = financial.preview(kind, state.value.financePeriod, amount, people, targetPeriod, settlementId, text, cashDate, group), error = "") }
+    fun previewFinance(kind: Kind, amount: Long = 0, people: List<String> = emptyList(), targetPeriod: String = "", settlementId: String = "", text: String = "", cashDate: String = today(), group: String = "", prepared: () -> Unit = {}) {
+        if (state.value.busy) return
+        mutable.update { it.copy(busy = true, error = "") }
+        launch {
+            val command = financial.preview(kind, state.value.financePeriod, amount, people, targetPeriod, settlementId, text, cashDate, group)
+            mutable.update { it.copy(financePreview = command, busy = false) }
+            prepared()
+        }
     }
     fun cancelFinance() = launch {
         state.value.financePreview?.let { financial.cancel(it) }
@@ -198,9 +204,10 @@ class KitchenViewModel(application: Application) : AndroidViewModel(application)
     }
     fun preview(kind: Kind, amount: Long = 0, text: String = "", person: String = "", meal: String = "", end: String = "", enabled: Boolean = false) = launch {
         val snap = repo.snapshot(state.value.date)
-        mutable.update { it.copy(manualPreview = Command(kind = kind, date = snap.day.date, expectedVersion = snap.day.version, amount = amount, text = text, personId = person, meal = meal, endDate = end, enabled = enabled)) }
+        val preview = repo.prepare(Command(kind = kind, date = snap.day.date, expectedVersion = snap.day.version, amount = amount, text = text, personId = person, meal = meal, endDate = end, enabled = enabled))
+        mutable.update { it.copy(manualPreview = preview.command, dayFinanceImpacts = preview.impacts) }
     }
-    fun cancelManual() { mutable.update { it.copy(manualPreview = null) } }
+    fun cancelManual() { mutable.update { it.copy(manualPreview = null, dayFinanceImpacts = emptyList()) } }
     fun confirmManual() {
         val command = state.value.manualPreview ?: return
         if (state.value.busy) return
@@ -337,9 +344,10 @@ class KitchenViewModel(application: Application) : AndroidViewModel(application)
                     number.toString().toBigDecimal().longValueExact().also { requireRule(it in 1..1_000_000_000L, "INVALID_ARGUMENT") }
                 } else 0L
                 requireRule(!snap.day.closed, "DAY_CLOSED")
-                val command = Command(kind = kind, date = date, expectedVersion = snap.day.version, amount = amount, text = args.optString("description"))
+                val preview = repo.prepare(Command(kind = kind, date = date, expectedVersion = snap.day.version, amount = amount, text = args.optString("description")))
+                val command = preview.command
                 val summary = if (kind == Kind.PURCHASE) "$date · ${command.text} · ${money(amount)}" else "$date · Sáng ${snap.count(Meal.BREAKFAST)} / Trưa ${snap.count(Meal.LUNCH)} / Tối ${snap.count(Meal.DINNER)}\nTiền ăn ${money(snap.charge)} · Đã mua ${money(snap.bought)}"
-                storeAction(command, ctx, request, summary)
+                storeAction(command, ctx, request, summary + if (preview.impacts.isEmpty()) "" else "\n" + preview.impacts.joinToString("\n") { it.summary() })
                 log.record(ctx, EventCode.PREVIEW_READY, kind, command.operationId)
             }
             else -> throw RuleViolation("COMMAND_UNSUPPORTED")
@@ -399,6 +407,7 @@ class KitchenViewModel(application: Application) : AndroidViewModel(application)
     fun clearLog() = launch { log.clear(); diagnostics() }
     companion object {
         fun errorText(code: String): String = when(code) {
+            "SETTLEMENT_MISSING" -> "Không tìm thấy khoản chờ hoàn. Mở lại sổ để xem trạng thái mới."
             "SURPLUS_UNAVAILABLE" -> "Phần dư không còn đủ hoặc cần đối soát sau điều chỉnh. Hủy khoản chờ hoàn hoặc bổ sung thu rồi xem trước lại."
             "OPENING_EXISTS" -> "Số dư đầu quỹ đã được xác lập. Không thể tạo thêm lần nữa."
             "EFFECTIVE_DATE_EXISTS" -> "Ngày hiệu lực này đã có cấu hình. Chọn một ngày hiệu lực khác để giữ lịch sử."

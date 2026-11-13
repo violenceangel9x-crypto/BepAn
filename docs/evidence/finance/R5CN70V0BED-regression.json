@@ -1,0 +1,17 @@
+﻿{
+    "device":  "R5CN70V0BED",
+    "sdk":  "33",
+    "fontScale":  "1.3",
+    "timestampUtc":  "2026-11-13T05:15:45.3029228Z",
+    "suite":  "regression",
+    "runs":  [
+                 {
+                     "skipped":  1,
+                     "tests":  4,
+                     "class":  "vn.bepan.NativeFlowTest",
+                     "passed":  true
+                 }
+             ],
+    "apkSha256":  "10105A88AF0C266E639411C85B2C26FA3CB3FF013266334DFB630D6125E97605",
+    "testApkSha256":  "7A822675DAB9678DD27FD5A177BF7B123ED0942CB6C779434EB0E5A101F211A3"
+}

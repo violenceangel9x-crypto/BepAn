@@ -4,7 +4,7 @@
 
 Đã có module native `:app`, dữ liệu Room và gateway tại workspace này. Bản debug có tên **Bếp ăn · Dữ liệu mẫu**, package **`vn.bepan.debug`**, seed 10 người giả (2 cán bộ, 8 chiến sĩ; có hai người tên Nam). Release giữ `vn.bepan`, không seed người và không bật mô phỏng. Tiến độ và kết quả kiểm tra thật ở [HANDOFF](docs/HANDOFF.md); kế hoạch theo mốc ở [IMPLEMENTATION_PLAN](docs/IMPLEMENTATION_PLAN.md).
 
-Sau [rà soát toàn dự án ngày 12/11/2026](docs/PROJECT_AUDIT_2026-11-12.md), mục tiêu lớn tiếp theo là **Mốc 2: sổ tháng, thu cá nhân/nhóm, hoàn/cấn, nhận bù gạo và Excel đối soát**. [Kế hoạch chi tiết 2.0–2.9](docs/IMPLEMENTATION_PLAN.md) bắt đầu bằng sửa trạng thái khách trong ngày chốt, tên lịch sử, giá preview và cấu hình hồ sơ/định mức có hiệu lực. Sao lưu/khôi phục vẫn là điều kiện phải đạt trước nhập dữ liệu vận hành thật.
+Sau [rà soát toàn dự án ngày 12/11/2026](docs/PROJECT_AUDIT_2026-11-12.md), **Mốc 2** đã triển khai sổ tháng, thu cá nhân/nhóm, giữ dư/hoàn/cấn, nhận bù gạo và Excel đối soát; hồ sơ/định mức có ngày hiệu lực và dữ liệu khách đã chốt giữ đúng lịch sử. [Kế hoạch 2.0–2.9](docs/IMPLEMENTATION_PLAN.md) và [HANDOFF](docs/HANDOFF.md) ghi riêng kết quả kiểm tra sau từng phần. Sao lưu/khôi phục của Mốc 3 vẫn là điều kiện phải đạt trước nhập dữ liệu vận hành thật.
 
 ### Công cụ và build
 
@@ -29,7 +29,7 @@ Trong PowerShell, đặt `JAVA_HOME` tới JDK có sẵn. Android SDK mặc đ�
 .\gradlew.bat :app:assembleDebug :app:testDebugUnitTest :app:lintDebug
 ```
 
-APK: **`app/build/outputs/apk/debug/app-debug.apk`**. Kết quả JVM: `app/build/reports/tests/testDebugUnitTest/index.html`; lint: `app/build/reports/lint-results-debug.html`. Bản triển khai Mốc 2: **0.2.0-demo/code 3**. Schema ở `app/schemas/vn.bepan.data.KitchenDatabase/`; có migration **1 → 2 → 3**, không dùng destructive fallback.
+APK: **`app/build/outputs/apk/debug/app-debug.apk`**. Kết quả JVM: `app/build/reports/tests/testDebugUnitTest/index.html`; lint: `app/build/reports/lint-results-debug.html`. Bản triển khai Mốc 2: **0.2.0-demo/code 3**, schema **7**. Schema ở `app/schemas/vn.bepan.data.KitchenDatabase/`; có migration tuần tự **1 → 2 → 3 → 4 → 5 → 6 → 7**, không dùng destructive fallback.
 
 ### Thử luồng đầu
 
@@ -38,6 +38,8 @@ APK: **`app/build/outputs/apk/debug/app-debug.apk`**. Kết quả JVM: `app/buil
 3. Nút tím mở Gemini; kéo nút trong vùng an toàn. Bản debug mặc định ghi rõ **Mô phỏng AI**. Thử bốn câu gợi ý, chọn đúng Nam, hoàn tác, xem trước khoản mua rồi xác nhận. Thu nhỏ/Back giữ chat và bản nháp.
 4. Nhắn `timeout`, mở **Xem chẩn đoán**, xem receipt/Audit, bấm **Xuất báo cáo lỗi · xem trước**. Phần mô tả trống mặc định; duyệt lại trước Lưu/Chia sẻ/Sao chép. Báo cáo không tự chứa tên, số tiền hay chat. Tự kiểm tra nội dung do mình nhập.
 5. Chốt ngày chỉ sau xem trước. Sổ tháng lấy bản chốt đang hiệu lực. Bấm bữa của ngày đã chốt để nhập lý do và xem trước điều chỉnh; các phiên cũ được giữ ở `CloseRevision`. Khoản mua đã lưu không đổi theo suất.
+6. Tài chính có tháng riêng, nhóm/bộ lọc, bảng cuộn ngang giữ tên và chi tiết người/ngày/phiên chốt. Thu cá nhân/nhóm có phân bổ từng đồng và xác nhận. Chờ hoàn giữ dư; chỉ ghi đã trả mới giảm quỹ. Cấn sang tháng kế tiếp không tạo tiền mặt. Bù gạo tách kỳ được cấp khỏi ngày thực nhận. Quỹ chỉ có số dư khi đã xác lập mốc đầu.
+7. Xuất Excel qua trình chọn tệp Android; file gồm đối soát, nhóm, quỹ theo ngày tiền, chứng từ theo kỳ, phân bổ và quyết toán. [Hợp đồng Excel](docs/EXCEL_CONTRACT.md) giải thích tổng nhóm khi có người đổi nhóm. Cài đặt → Quản lý người ăn & định mức lưu lịch sử theo ngày hiệu lực; sổ đã chốt giữ snapshot.
 
 Micro xin quyền khi bấm, bấm lại để dừng; chữ nhận dạng đưa vào ô nhập để sửa trước khi gửi. Nút + chọn ảnh/tệp tại máy; bản này chưa gửi nội dung tệp cho Gemini. Nhập chữ vẫn dùng khi không có micro/quyền.
 
@@ -49,9 +51,11 @@ $BepAdb = Join-Path $env:LOCALAPPDATA 'Android/Sdk/platform-tools/adb.exe'
 # Thay bằng đúng serial đã nhận diện:
 .\scripts\install-debug.ps1 -Serial 'SERIAL_CUA_MAY_THU'
 
-# Chỉ chạy test trên thiết bị thử có dữ liệu giả; test thay đổi suất rồi hoàn tác:
-$env:ANDROID_SERIAL = 'SERIAL_CUA_MAY_THU'
-.\scripts\build.ps1 -Tasks @(':app:connectedDebugAndroidTest')
+# Chỉ chạy trên bản debug dữ liệu giả; các suite ghi chứng từ mẫu:
+.\scripts\test-finance-native.ps1 -Serial 'SERIAL_CUA_MAY_THU' -Suite core
+.\scripts\test-finance-native.ps1 -Serial 'SERIAL_CUA_MAY_THU' -Suite presentation -SkipBuild
+.\scripts\test-finance-native.ps1 -Serial 'SERIAL_CUA_MAY_THU' -Suite recovery -SkipBuild
+# Suite recovery force-stop debug giữa 3 phase, giữ toàn bộ Room/khóa.
 ```
 
 Đã cài và thử bản dữ liệu mẫu trên Note 20 Ultra **SM-N986U1, Android 13/API 33**, cùng emulator riêng `BepAn_API34`. Giữ nguyên cỡ chữ 1,3× và mật độ hiển thị của điện thoại. Kết quả và ảnh native ở [HANDOFF](docs/HANDOFF.md). Không gỡ package để xử lý lỗi cài hoặc nâng schema.
@@ -66,7 +70,7 @@ Client trực tiếp mặc định dùng `gemini-3.6-flash`; Google ghi nhận [
 
 ### Gateway tùy chọn
 
-Gateway chỉ diễn giải qua [Gemini Function Calling](https://ai.google.dev/gemini-api/docs/function-calling); app tự tính và xác nhận. Khai báo đúng 5 hàm đã có handler: hỏi suất, ngân sách, đổi một bữa, đề xuất khoản mua, đề xuất chốt. Nhiều lệnh cùng lượt sẽ được yêu cầu tách riêng. Mô phỏng không thay thế cho thử tài khoản Gemini thật.
+Gateway chỉ diễn giải qua [Gemini Function Calling](https://ai.google.dev/gemini-api/docs/function-calling); app tự tính và xác nhận. Có **9 hàm chung cho direct/gateway**: hỏi suất, ngân sách, đổi một bữa, đề xuất mua/chốt; đọc sổ tháng, công nợ người, bù gạo và đề xuất thu tiền cá nhân/toàn nhóm. Lệnh thu luôn cần preview/xác nhận; hoàn/cấn/nhận bù hiện thao tác tay. Nhiều lệnh cùng lượt được yêu cầu tách riêng. Mô phỏng không thay thế cho thử tài khoản Gemini thật.
 
 ```powershell
 .\scripts\gateway.ps1 -Mode test
@@ -93,7 +97,7 @@ $env:ANDROID_SERIAL = 'SERIAL_CUA_MAY_THU'
 
 ### Phạm vi còn lại
 
-Tài chính hiện xem tổng ngày đã chốt, tiền mua và bù gạo; thu nhóm, hoàn/cấn, thực nhận bù gạo, bảng ngang và Excel thuộc mốc 2. Hồ sơ/giá có hiệu lực có mô hình dữ liệu, màn cấu hình đầy đủ và sao lưu/khôi phục thuộc mốc 3. Chưa coi các mốc đó là hoàn thành. Đọc [HANDOFF](docs/HANDOFF.md) trước khi tiếp tục.
+Mốc 3: sao lưu/khôi phục SAF có version/checksum, preview, thử phục hồi DB riêng và giữ Audit/receipt/phân bổ/quyết toán. Chưa dùng dữ liệu vận hành thật trước khi đạt cổng này. Voice thành công, chia sẻ sang app nhận, AI nhiều bước/tệp, khách đoàn và mẫu in chính thức nằm ngoài chuỗi tài chính Mốc 2. Công cụ tài chính Gemini mới đã thử bằng mock/gateway test; bằng chứng Gemini thật phía trên thuộc phiên bản trước. Đọc [HANDOFF](docs/HANDOFF.md) trước khi tiếp tục.
 
 Bộ này dùng để giao việc cho Codex trong VS Code trên Windows. App đích là Android native, viết bằng Kotlin và Jetpack Compose, dùng trên một điện thoại. Mốc 0 dựng đồng thời **Room, Audit Log, Technical Log, AI Debug Center và Debug Handoff**. Dùng luồng Hôm nay → Gemini → cắt bữa và hoàn tác để kiểm tra cả dữ liệu đã lưu và báo cáo lỗi có thể gửi cho GPT.
 

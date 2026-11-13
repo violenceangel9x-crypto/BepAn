@@ -13,6 +13,17 @@ import vn.bepan.domain.*
 class NativeFlowTest {
     @get:Rule val ui = createAndroidComposeRule<MainActivity>()
     private val repo get() = (ui.activity.application as BepApplication).repository
+    private var originalMock = true
+    @Before fun useLocalMockForUiAcceptance() {
+        val vm=androidx.lifecycle.ViewModelProvider(ui.activity)[vn.bepan.ui.KitchenViewModel::class.java]
+        ui.waitUntil(15000) { vm.state.value.snapshot!=null && vm.state.value.credentialsReady }
+        originalMock=vm.state.value.mock
+        ui.runOnIdle { vm.setMock(true) }; ui.waitUntil(10000) { vm.state.value.mock }
+    }
+    @After fun restoreProviderPreference() {
+        val vm=androidx.lifecycle.ViewModelProvider(ui.activity)[vn.bepan.ui.KitchenViewModel::class.java]
+        ui.runOnIdle { vm.setMock(originalMock) }; ui.waitUntil(10000) { vm.state.value.mock==originalMock }
+    }
     private fun outputDirectory(): java.io.File {
         val path = androidx.test.platform.app.InstrumentationRegistry.getArguments().getString("additionalTestOutputDir")
         return (path?.let { java.io.File(it) } ?: ui.activity.getExternalFilesDir("evidence")!!).apply { mkdirs() }
@@ -27,9 +38,9 @@ class NativeFlowTest {
     private fun send(text: String) {
         val vm = androidx.lifecycle.ViewModelProvider(ui.activity)[vn.bepan.ui.KitchenViewModel::class.java]
         val previousIds = vm.state.value.chat.map { it.id }.toSet()
-        ui.onNode(hasSetTextAction()).performTextClearance()
-        ui.onNode(hasSetTextAction()).performTextInput(text)
-        ui.onNodeWithContentDescription("Gửi tin nhắn").performClick()
+        ui.onNode(hasSetTextAction()).performTextReplacement(text)
+        ui.onNodeWithContentDescription("Gửi tin nhắn").assertIsEnabled()
+            .performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick) { it() }
         ui.waitUntil(15000) { !vm.state.value.busy && vm.state.value.chat.any { it.role == "ASSISTANT" && it.id !in previousIds } }
     }
     @Test fun todayChatDuplicateNameUndoTimeoutAndReport() {
@@ -67,15 +78,16 @@ class NativeFlowTest {
     @Test fun manualMealLongMenuPurchaseCloseAndAdjustment() {
         ui.waitUntil(15000) { runBlocking { runCatching { repo.dao.people().size == 10 }.getOrDefault(false) } }
         val vm = androidx.lifecycle.ViewModelProvider(ui.activity)[vn.bepan.ui.KitchenViewModel::class.java]
-        val date = java.time.LocalDate.of(2040,1,1).plusDays((System.nanoTime() % 2000).coerceAtLeast(0)).toString()
+        val date = runBlocking { generateSequence(java.time.LocalDate.of(2040,1,1)) { it.plusDays(1) }
+            .first { repo.dao.day(it.toString())==null }.toString() }
         ui.runOnIdle { vm.changeDate(date) }
         ui.waitUntil(10000) { vm.state.value.snapshot?.day?.date == date }
         val list = ui.onNode(hasScrollToIndexAction())
         list.performScrollToNode(hasContentDescription("Nguyễn Văn Nam, Trưa"))
         ui.onNodeWithContentDescription("Nguyễn Văn Nam, Trưa").performClick()
-        ui.waitUntil(10000) { runBlocking { repo.snapshot(date).count(Meal.LUNCH) == 9 } }
+        ui.waitUntil(10000) { vm.state.value.snapshot?.count(Meal.LUNCH) == 9 }
         ui.onNodeWithContentDescription("Nguyễn Văn Nam, Trưa").performClick()
-        ui.waitUntil(10000) { runBlocking { repo.snapshot(date).count(Meal.LUNCH) == 10 } }
+        ui.waitUntil(10000) { vm.state.value.snapshot?.count(Meal.LUNCH) == 10 }
         // Seed a long saved menu, then use the real offscreen image/clipboard button.
         val next = java.time.LocalDate.parse(date).plusDays(1).toString()
         runBlocking {
@@ -96,11 +108,13 @@ class NativeFlowTest {
         ui.onNode(hasSetTextAction() and hasText("Nội dung")).performTextInput("Mua rau thử")
         ui.onNode(hasSetTextAction() and hasText("Số tiền nguyên đồng")).performTextInput("85000")
         ui.onNodeWithText("Xem trước").performClick()
+        ui.waitUntil(10000) { vm.state.value.manualPreview!=null }
         capture("purchase-preview.png")
         ui.onNodeWithText("Xác nhận lưu").performClick()
-        ui.waitUntil(10000) { runBlocking { repo.snapshot(date).bought == 85000L } }
+        ui.waitUntil(10000) { vm.state.value.manualPreview==null && vm.state.value.snapshot?.bought==85000L }
         list.performScrollToNode(hasText("Chốt sổ và chuẩn bị ngày mai"))
         ui.onNodeWithText("Chốt sổ và chuẩn bị ngày mai").performClick()
+        ui.waitUntil(10000) { vm.state.value.manualPreview!=null }
         ui.onNodeWithText("Xác nhận lưu").performClick()
         ui.waitUntil(10000) { runBlocking { repo.dao.day(date)?.closed == true } && vm.state.value.date == next }
         ui.runOnIdle { vm.changeDate(date) }
@@ -109,6 +123,7 @@ class NativeFlowTest {
         ui.onNodeWithContentDescription("Nguyễn Văn Nam, Trưa").performClick()
         ui.onNode(hasSetTextAction() and hasText("Lý do điều chỉnh")).performTextInput("Đối soát dữ liệu mẫu")
         ui.onNodeWithText("Xem trước chênh lệch").performClick()
+        ui.waitUntil(10000) { vm.state.value.manualPreview!=null }
         ui.onNodeWithText("Xác nhận lưu").performClick()
         ui.waitUntil(10000) { runBlocking { repo.dao.revisions(date).size == 2 } }
         assertEquals(9,runBlocking { repo.snapshot(date).count(Meal.LUNCH) })
@@ -117,13 +132,20 @@ class NativeFlowTest {
         capture("closed-day-adjusted.png")
     }
     @Test fun permissionDeniedStillAllowsTextCommands() {
+        Assume.assumeTrue("Preserve an already granted microphone permission", androidx.core.content.ContextCompat.checkSelfPermission(ui.activity,
+            android.Manifest.permission.RECORD_AUDIO)!=android.content.pm.PackageManager.PERMISSION_GRANTED)
         ui.waitUntil(15000) { runBlocking { runCatching { repo.dao.people().size == 10 }.getOrDefault(false) } }
         ui.onNodeWithContentDescription("Mở Gemini").performClick()
         ui.onNodeWithContentDescription("Nhập bằng giọng nói tiếng Việt").performClick()
         val device = androidx.test.uiautomator.UiDevice.getInstance(androidx.test.platform.app.InstrumentationRegistry.getInstrumentation())
-        val deny = device.findObject(androidx.test.uiautomator.UiSelector().resourceIdMatches(".*:id/permission_deny_button"))
+        val deny = device.findObject(androidx.test.uiautomator.UiSelector().resourceIdMatches(".*:id/permission_deny.*_button"))
         if (deny.waitForExists(5000)) deny.click()
-        ui.waitUntil(10000) { ui.onAllNodesWithText("Chưa cấp quyền micro. Nhập chữ vẫn dùng được.").fetchSemanticsNodes().isNotEmpty() }
+        try {
+            ui.waitUntil(10000) { runCatching { ui.onAllNodesWithText("Chưa cấp quyền micro. Nhập chữ vẫn dùng được.").fetchSemanticsNodes().isNotEmpty() }.getOrDefault(false) }
+        } finally {
+            capture("micro-permission-state.png")
+            device.dumpWindowHierarchy(java.io.File(outputDirectory(),"micro-permission-state.xml"))
+        }
         send("Hôm nay có bao nhiêu suất trưa?")
         ui.onNodeWithText("Sáng:", substring=true).assertExists()
         capture("micro-denied-text-works.png")

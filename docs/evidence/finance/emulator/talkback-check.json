@@ -1,0 +1,9 @@
+{
+  "spokenServiceEnabled": true,
+  "touchExplorationEnabled": true,
+  "historicalMealHasPersonDateMealState": true,
+  "accessibilityFocus": true,
+  "debtAndSurplusFocus": true,
+  "fontScale": 1.3,
+  "screenWidthDp": 360
+}

@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
@@ -14,6 +15,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -58,7 +61,7 @@ fun FinanceScreen(state: UiState, vm: KitchenViewModel, openToday: () -> Unit = 
         when (filter) { "CUT" -> it.meals.any { row -> row.group == group && row.registered == true && !row.enabled }
             "DUE" -> it.balance < 0; "EXCESS" -> it.balance > 0; else -> true }
     }
-    LazyColumn(contentPadding = PaddingValues(16.dp, 8.dp, 16.dp, 110.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    LazyColumn(modifier = Modifier.testTag("finance-list"), contentPadding = PaddingValues(16.dp, 8.dp, 16.dp, 110.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         item {
             ScreenHeader("Tài chính", "Sổ tháng · số liệu từ các ngày đã chốt")
             Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
@@ -117,8 +120,8 @@ fun FinanceScreen(state: UiState, vm: KitchenViewModel, openToday: () -> Unit = 
                     LightAction("Chi tiết sổ · ${row.person.name}", { detail = row.person.id })
                     LightAction("Thu tiền · ${row.person.name}", { collectPeople = listOf(row.person.id); collectAmount = ""; collecting = true })
                     if (row.available > 0) FlowRow {
-                        LightAction("Lập chờ hoàn", { settlementKind = Kind.RESERVE_REFUND.name; settlementPerson = row.person.id; settlementId = ""; settlementAmount = row.available.toString() })
-                        LightAction("Cấn sang kỳ sau", { settlementKind = Kind.CARRY.name; settlementPerson = row.person.id; settlementId = ""; settlementAmount = row.available.toString(); targetPeriod = YearMonth.parse(ledger.period).plusMonths(1).toString() })
+                        LightAction("Lập chờ hoàn", { settlementKind = Kind.RESERVE_REFUND.name; settlementPerson = row.person.id; settlementId = ""; settlementAmount = row.available.toString() }, modifier = Modifier.semantics { contentDescription = "Chờ hoàn cho ${row.person.name}" })
+                        LightAction("Cấn sang kỳ sau", { settlementKind = Kind.CARRY.name; settlementPerson = row.person.id; settlementId = ""; settlementAmount = row.available.toString(); targetPeriod = YearMonth.parse(ledger.period).plusMonths(1).toString() }, modifier = Modifier.semantics { contentDescription = "Cấn cho ${row.person.name}" })
                     }
                 }
             }
@@ -157,11 +160,12 @@ fun FinanceScreen(state: UiState, vm: KitchenViewModel, openToday: () -> Unit = 
     if (opening) AlertDialog(onDismissRequest = { opening = false }, title = { Text("Số dư đầu quỹ") }, text = {
         Column(Modifier.verticalScroll(rememberScrollState())) {
             Text("Số tiền có trước các giao dịch của ngày mốc. Giao dịch trước ngày mốc được loại khỏi phép tính quỹ hiện tại.")
-            OutlinedTextField(openingAmount, { openingAmount = it }, label = { Text("Số dư đầu quỹ nguyên đồng") })
+            OutlinedTextField(openingAmount, { openingAmount = it }, label = { Text("Số dư đầu quỹ nguyên đồng") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number))
             OutlinedTextField(openingDate, { openingDate = it }, label = { Text("Ngày bắt đầu YYYY-MM-DD") })
+            if (state.error.isNotEmpty()) Text(state.error, color = MaterialTheme.colorScheme.error)
         }
-    }, confirmButton = { Button(enabled = (openingAmount.toLongOrNull() ?: -1) in 0..1_000_000_000L && runCatching { java.time.LocalDate.parse(openingDate) }.isSuccess,
-        onClick = { vm.previewFinance(Kind.OPENING_BALANCE, openingAmount.toLong(), cashDate = openingDate); opening = false }) { Text("Xem trước") } },
+    }, confirmButton = { Button(enabled = !state.busy && (openingAmount.toLongOrNull() ?: -1) in 0..1_000_000_000L && runCatching { java.time.LocalDate.parse(openingDate) }.isSuccess,
+        onClick = { vm.previewFinance(Kind.OPENING_BALANCE, openingAmount.toLong(), cashDate = openingDate, prepared = { opening = false }) }) { Text("Xem trước") } },
         dismissButton = { TextButton(onClick = { opening = false }) { Text("Hủy") } })
     if (collecting && ledger != null) AlertDialog(onDismissRequest = { collecting = false }, title = { Text("Thu tiền ăn · kỳ ${ledger.period}") }, text = {
         Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -170,13 +174,14 @@ fun FinanceScreen(state: UiState, vm: KitchenViewModel, openToday: () -> Unit = 
                 Checkbox(checked = row.person.id in collectPeople, onCheckedChange = { checked -> collectPeople = if (checked) collectPeople + row.person.id else collectPeople - row.person.id })
                 Text(row.person.name)
             } }
-            OutlinedTextField(collectAmount, { collectAmount = it }, label = { Text("Tổng tiền thu nguyên đồng") })
+            OutlinedTextField(collectAmount, { collectAmount = it }, label = { Text("Tổng tiền thu nguyên đồng") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number))
             OutlinedTextField(collectDate, { collectDate = it }, label = { Text("Ngày nhận tiền YYYY-MM-DD") })
             OutlinedTextField(collectNote, { collectNote = it }, label = { Text("Nội dung thu") })
             Text("Ngày nhận độc lập kỳ ăn. Nếu nhập lịch sử, chọn đúng ngày tiền thực tế đã nhận.")
+            if (state.error.isNotEmpty()) Text(state.error, color = MaterialTheme.colorScheme.error)
         }
-    }, confirmButton = { Button(enabled = (collectAmount.toLongOrNull() ?: 0) in 1..1_000_000_000L && collectPeople.isNotEmpty() && runCatching { java.time.LocalDate.parse(collectDate) }.isSuccess,
-        onClick = { vm.previewFinance(Kind.COLLECTION, collectAmount.toLong(), collectPeople, text = collectNote, cashDate = collectDate, group = group); collecting = false }) { Text("Xem trước phân bổ") } },
+    }, confirmButton = { Button(enabled = !state.busy && (collectAmount.toLongOrNull() ?: 0) in 1..1_000_000_000L && collectPeople.isNotEmpty() && runCatching { java.time.LocalDate.parse(collectDate) }.isSuccess,
+        onClick = { vm.previewFinance(Kind.COLLECTION, collectAmount.toLong(), collectPeople, text = collectNote, cashDate = collectDate, group = group, prepared = { collecting = false }) }) { Text("Xem trước phân bổ") } },
         dismissButton = { TextButton(onClick = { collecting = false }) { Text("Hủy") } })
     if (settlementKind.isNotBlank() && ledger != null) {
         val kind = Kind.valueOf(settlementKind)
@@ -184,24 +189,26 @@ fun FinanceScreen(state: UiState, vm: KitchenViewModel, openToday: () -> Unit = 
             Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(state.people.firstOrNull { it.id == settlementPerson }?.name.orEmpty())
                 ledger.person(settlementPerson)?.let { Text("Đối chiếu ${money(it.balance)} · đang giữ ${money(it.reserved)} · khả dụng ${money(it.available)}") }
-                OutlinedTextField(settlementAmount, { settlementAmount = it }, label = { Text("Số tiền quyết toán nguyên đồng") })
+                OutlinedTextField(settlementAmount, { settlementAmount = it }, label = { Text("Số tiền quyết toán nguyên đồng") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number))
                 if (kind == Kind.CARRY) OutlinedTextField(targetPeriod, { targetPeriod = it }, label = { Text("Kỳ đến YYYY-MM") })
                 if (kind == Kind.REFUND) OutlinedTextField(settlementDate, { settlementDate = it }, label = { Text("Ngày đã trả tiền YYYY-MM-DD") })
                 Text(if (kind == Kind.REFUND) "Có thể ghi nhận trả từng phần của khoản đang giữ. Quỹ giảm khi xác nhận đã trả." else "Chờ hoàn hoặc cấn không tạo dòng tiền thu/chi thực tế.")
+                if (state.error.isNotEmpty()) Text(state.error, color = MaterialTheme.colorScheme.error)
             }
-        }, confirmButton = { Button(enabled = (settlementAmount.toLongOrNull() ?: 0) in 1..1_000_000_000L, onClick = {
+        }, confirmButton = { Button(enabled = !state.busy && (settlementAmount.toLongOrNull() ?: 0) in 1..1_000_000_000L, onClick = {
             vm.previewFinance(kind, settlementAmount.toLong(), listOf(settlementPerson), targetPeriod = if (kind == Kind.CARRY) targetPeriod else "",
-                settlementId = settlementId, cashDate = if (kind == Kind.REFUND) settlementDate else today()); settlementKind = ""
+                settlementId = settlementId, cashDate = if (kind == Kind.REFUND) settlementDate else today(), prepared = { settlementKind = "" })
         }) { Text("Xem trước quyết toán") } }, dismissButton = { TextButton(onClick = { settlementKind = "" }) { Text("Hủy") } })
     }
     if (receivingSubsidy && ledger != null) AlertDialog(onDismissRequest = { receivingSubsidy = false }, title = { Text("Bù gạo đã nhận · kỳ ${ledger.period}") }, text = {
         Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text("Được cấp ${money(ledger.subsidy)} · đã nhận ${money(ledger.receivedSubsidy)}. Ngày nhận có thể ở tháng sau kỳ bù.")
-            OutlinedTextField(subsidyAmount, { subsidyAmount = it }, label = { Text("Tiền bù gạo thực nhận nguyên đồng") })
+            OutlinedTextField(subsidyAmount, { subsidyAmount = it }, label = { Text("Tiền bù gạo thực nhận nguyên đồng") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number))
             OutlinedTextField(subsidyDate, { subsidyDate = it }, label = { Text("Ngày nhận bù gạo YYYY-MM-DD") })
+            if (state.error.isNotEmpty()) Text(state.error, color = MaterialTheme.colorScheme.error)
         }
-    }, confirmButton = { Button(enabled = (subsidyAmount.toLongOrNull() ?: 0) in 1..1_000_000_000L && runCatching { java.time.LocalDate.parse(subsidyDate) }.isSuccess,
-        onClick = { vm.previewFinance(Kind.SUBSIDY_RECEIPT, subsidyAmount.toLong(), cashDate = subsidyDate); receivingSubsidy = false }) { Text("Xem trước nhận bù gạo") } },
+    }, confirmButton = { Button(enabled = !state.busy && (subsidyAmount.toLongOrNull() ?: 0) in 1..1_000_000_000L && runCatching { java.time.LocalDate.parse(subsidyDate) }.isSuccess,
+        onClick = { vm.previewFinance(Kind.SUBSIDY_RECEIPT, subsidyAmount.toLong(), cashDate = subsidyDate, prepared = { receivingSubsidy = false }) }) { Text("Xem trước nhận bù gạo") } },
         dismissButton = { TextButton(onClick = { receivingSubsidy = false }) { Text("Hủy") } })
     state.financePreview?.let { command ->
         AlertDialog(onDismissRequest = { if (!state.busy) vm.cancelFinance() }, title = { Text("Xem trước tài chính") },
@@ -233,7 +240,7 @@ private fun mealStatus(row: ClosedMeal): String = when { row.registered == null 
 
 @Composable
 private fun MonthTable(ledger: FinanceMonth, people: List<PersonMonth>, group: String, scroll: ScrollState, header: Boolean, detail: (String) -> Unit) {
-    Column(Modifier.fillMaxWidth().background(Paper).padding(8.dp)) {
+    Column(Modifier.fillMaxWidth().background(Paper).padding(8.dp).testTag(if (header) "finance-table-header" else "finance-row-${people.firstOrNull()?.person?.id.orEmpty()}")) {
         if (header) Row { Text("Họ tên", color = Ink, modifier = Modifier.width(120.dp)); Row(Modifier.horizontalScroll(scroll)) {
             ledger.calendar.forEach { Text("${it.takeLast(2)}\nS · T · C", color = Ink, modifier = Modifier.width(156.dp)) }
         } }
@@ -245,9 +252,9 @@ private fun MonthTable(ledger: FinanceMonth, people: List<PersonMonth>, group: S
                     ledger.calendar.forEach { date -> Row(Modifier.width(156.dp)) { Meal.entries.forEach { meal ->
                         val row = person.meals.firstOrNull { it.date == date && it.meal == meal.name && it.group == group }
                         val label = if (date !in ledger.closedDates) "Nháp" else row?.let { mealStatus(it) } ?: "—"
-                        TextButton(onClick = { detail(person.person.id) }, modifier = Modifier.width(52.dp).heightIn(min = 48.dp)
+                        TextButton(onClick = { detail(person.person.id) }, contentPadding = PaddingValues(2.dp), modifier = Modifier.width(52.dp).heightIn(min = 48.dp)
                             .semantics { contentDescription = "${person.person.name}, $date, ${meal.label}, $label" }) {
-                            Text(when(label) { "Có ăn" -> "Ăn"; "Cắt cơm" -> "Cắt"; "Chưa đăng ký" -> "—"; else -> label }, color = Ink)
+                            Text(when(label) { "Có ăn" -> "Ăn"; "Cắt cơm" -> "Cắt"; "Chưa đăng ký" -> "—"; "Nháp" -> "·"; else -> "?" }, color = Ink, maxLines = 1, softWrap = false)
                         }
                     } } }
                 }
