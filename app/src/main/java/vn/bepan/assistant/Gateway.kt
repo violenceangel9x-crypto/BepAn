@@ -12,12 +12,34 @@ import java.time.LocalDate
 
 data class Call(val name: String, val args: JSONObject)
 data class Interpretation(val calls: List<Call> = emptyList(), val text: String = "")
-interface Gateway { suspend fun interpret(message: String, selected: String, reference: String, trace: String, request: String, attempt: Int = 1): Interpretation }
+interface Gateway { suspend fun interpret(message: String, selected: String, reference: String, trace: String, request: String, attempt: Int = 1, scope: AssistantScope = AssistantScope()): Interpretation }
 
 class MockGateway : Gateway {
-    override suspend fun interpret(message: String, selected: String, reference: String, trace: String, request: String, attempt: Int): Interpretation {
+    override suspend fun interpret(message: String, selected: String, reference: String, trace: String, request: String, attempt: Int, scope: AssistantScope): Interpretation {
         val s = normalized(message)
         if (s.contains("timeout")) throw RuleViolation("GATEWAY_TIMEOUT")
+        if ("bu gao" in s || "so thang" in s || "tai chinh" in s || "con no" in s || "so du" in s || "thu tien" in s) {
+            val explicitMonth = Regex("\\b(\\d{1,2})/(\\d{4})\\b").find(s)
+            val period = explicitMonth?.let { java.time.YearMonth.of(it.groupValues[2].toInt(), it.groupValues[1].toInt()).toString() }
+                ?: scope.period.ifEmpty { selected.take(7) }
+            val args = JSONObject().put("period", period)
+            if ("thu tien" in s) {
+                val amount = Regex("\\b(\\d+)\\s*(nghin|ngan|trieu|dong)?").findAll(s.replace(Regex("\\d{1,2}/\\d{4}"), "")).lastOrNull()
+                    ?: return Interpretation(text = "Bạn muốn thu bao nhiêu đồng?")
+                val money = amount.groupValues[1].toLong() * when (amount.groupValues[2]) { "nghin", "ngan" -> 1000L; "trieu" -> 1000000L; else -> 1L }
+                args.put("amountVnd", money)
+                val name = message.substringAfter("của ", "").substringBefore(" tháng ").trim()
+                if (name.isNotBlank()) args.put("personName", name)
+                else if ("chien si" in s) args.put("group", "SOLDIER")
+                else if ("can bo" in s) args.put("group", "OFFICER")
+                else return Interpretation(text = "Bạn muốn thu của ai hoặc nhóm nào?")
+                return Interpretation(listOf(Call("record_collection", args)))
+            }
+            if ("bu gao" in s) return Interpretation(listOf(Call("get_rice_subsidy", args)))
+            val name = message.substringAfter("của ", "").substringBefore(" tháng ").trim()
+            if (name.isNotBlank()) return Interpretation(listOf(Call("get_person_balance", args.put("personName", name))))
+            return Interpretation(listOf(Call("get_finance_month", args)))
+        }
         val explicit = Regex("\\b(\\d{1,2})/(\\d{1,2})/(\\d{4})\\b").find(s)
         val iso = Regex("\\b\\d{4}-\\d{2}-\\d{2}\\b").find(s)?.value
         val date = when {
@@ -57,17 +79,18 @@ class MockGateway : Gateway {
     }
 }
 
-class HttpGateway(private val endpoint: String) : Gateway {
-    override suspend fun interpret(message: String, selected: String, reference: String, trace: String, request: String, attempt: Int): Interpretation = withContext(Dispatchers.IO) {
+class HttpGateway(private val endpoint: String, private val openConnection: (java.net.URL) -> HttpURLConnection = { it.openConnection() as HttpURLConnection }) : Gateway {
+    override suspend fun interpret(message: String, selected: String, reference: String, trace: String, request: String, attempt: Int, scope: AssistantScope): Interpretation = withContext(Dispatchers.IO) {
         val uri = runCatching { URI(endpoint) }.getOrElse { throw RuleViolation("CONFIGURATION") }
         requireRule(uri.scheme == "https" || (vn.bepan.BuildConfig.DEBUG && uri.scheme == "http" && uri.host in listOf("127.0.0.1", "localhost")), "CONFIGURATION")
-        val connection = uri.resolve("/v1/assistant/interpret").toURL().openConnection() as HttpURLConnection
+        val connection = openConnection(uri.resolve("/v1/assistant/interpret").toURL())
         try {
             connection.connectTimeout = 10000; connection.readTimeout = 30000
+            connection.instanceFollowRedirects = false
             connection.requestMethod = "POST"; connection.doOutput = true
             connection.setRequestProperty("Content-Type", "application/json; charset=utf-8")
             val body = JSONObject().put("requestId", request).put("traceId", trace).put("attempt", attempt).put("message", message)
-                .put("context", JSONObject().put("selectedDate", selected).put("referenceDate", reference).put("timeZone", "Asia/Ho_Chi_Minh").put("selectedPeriod", selected.take(7)).put("route", "TODAY"))
+                .put("context", scope.json(selected, reference))
             connection.outputStream.use { it.write(body.toString().toByteArray(Charsets.UTF_8)) }
             if (connection.responseCode != 200) {
                 val response = connection.errorStream?.use { stream ->

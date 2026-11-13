@@ -6,7 +6,7 @@ const request = () => ({ requestId:randomUUID(),traceId:randomUUID(),message:'Gh
 test('function calling returns proposals and keeps correlation',async () => {
   const body=request();
   const result=await interpret(body,{key:'synthetic-secret',model:'gemini-3.5-flash',fetcher:async (url,options) => {
-    const parsed=JSON.parse(options.body); assert.equal(parsed.tools[0].functionDeclarations.length,5); assert.equal(parsed.contents[0].role,'user');
+    const parsed=JSON.parse(options.body); assert.equal(parsed.tools[0].functionDeclarations.length,9); assert.equal(parsed.contents[0].role,'user'); assert.equal(options.redirect,'error');
     return { ok:true,json:async () => ({ candidates:[{ content:{ parts:[{functionCall:{ name:'record_purchase',args:{date:'2026-11-12',amountVnd:85000,description:'Mua rau'} }}] } }] }) };
   }});
   assert.equal(result.traceId,body.traceId); assert.equal(result.calls[0].args.amountVnd,85000); assert.equal(result.kind,'PROPOSALS');
@@ -19,6 +19,16 @@ test('timeouts have safe codes',async () => {
   await assert.rejects(interpret(request(),{key:'synthetic',model:'model',fetcher:async()=>{throw Object.assign(new Error('SECRET_NOT_FOR_EXPORT'),{name:'TimeoutError'});}}),{message:'GATEWAY_TIMEOUT'});
 });
 test('request validation bounds input',() => { assert.throws(()=>validateRequest({...request(),message:'x'.repeat(8001)}),{message:'INVALID_REQUEST'}); });
+test('finance context is preserved and internal thoughts are excluded',async () => {
+  const body=request(); body.context={...body.context,route:'FINANCE',selectedPeriod:'2026-10',selectedGroup:'SOLDIER',selectedFilter:'DUE'};
+  const result=await interpret(body,{key:'synthetic',model:'model',fetcher:async(_url,options)=> {
+    const context=JSON.parse(JSON.parse(options.body).contents[0].parts[0].text).context;
+    assert.equal(context.selectedPeriod,'2026-10'); assert.equal(context.route,'FINANCE');
+    return {ok:true,json:async()=>({candidates:[{content:{parts:[{thought:true,text:'PRIVATE_INTERNAL'},{functionCall:{name:'get_finance_month',args:{period:context.selectedPeriod}}}]}}]})};
+  }});
+  assert.equal(result.calls[0].args.period,'2026-10'); assert.equal(result.text,'');
+  assert.throws(()=>validateRequest({...body,context:{...body.context,selectedPeriod:'2026-99'}}),{message:'INVALID_CONTEXT'});
+});
 test('HTTP errors redact provider and client secrets',async () => {
   const server=createGateway({key:'SYNTHETIC_API_SECRET',model:'model',fetcher:async()=>{throw new Error('PRIVATE_CHAT_AND_HTTP_HEADER');}});
   await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));

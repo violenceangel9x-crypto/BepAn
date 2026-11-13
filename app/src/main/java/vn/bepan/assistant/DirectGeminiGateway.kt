@@ -19,7 +19,7 @@ class DirectGeminiGateway(
     private val model: String = "gemini-3.6-flash",
     private val openConnection: (URL) -> HttpURLConnection = { it.openConnection() as HttpURLConnection }
 ) : Gateway {
-    override suspend fun interpret(message: String, selected: String, reference: String, trace: String, request: String, attempt: Int): Interpretation = withContext(Dispatchers.IO) {
+    override suspend fun interpret(message: String, selected: String, reference: String, trace: String, request: String, attempt: Int, scope: AssistantScope): Interpretation = withContext(Dispatchers.IO) {
         val key = try { loadKey() } catch (_: Exception) { throw RuleViolation("CREDENTIAL_UNAVAILABLE") }
         requireRule(!key.isNullOrBlank(), "API_KEY_MISSING")
         requireRule(model.matches(Regex("[a-zA-Z0-9._-]+")) && message.length in 1..8000, "INVALID_ARGUMENT")
@@ -30,7 +30,7 @@ class DirectGeminiGateway(
             connection.requestMethod = "POST"; connection.doOutput = true
             connection.setRequestProperty("Content-Type", "application/json; charset=utf-8")
             connection.setRequestProperty("x-goog-api-key", key)
-            val context = JSONObject().put("selectedDate", selected).put("referenceDate", reference).put("timeZone", "Asia/Ho_Chi_Minh")
+            val context = scope.json(selected, reference)
             val content = JSONObject().put("message", message).put("context", context)
             val body = JSONObject()
                 .put("systemInstruction", JSONObject().put("parts", JSONArray().put(JSONObject().put("text", loadSystemPrompt()))))
@@ -63,7 +63,7 @@ class DirectGeminiGateway(
     }
 
     companion object {
-        private val supported = setOf("get_meal_counts", "get_shopping_budget", "set_attendance", "record_purchase", "close_day")
+        private val supported = setOf("get_meal_counts", "get_shopping_budget", "set_attendance", "record_purchase", "close_day", "get_finance_month", "get_person_balance", "get_rice_subsidy", "record_collection")
         internal fun parse(json: JSONObject): Interpretation {
             val parts = json.optJSONArray("candidates")?.optJSONObject(0)?.optJSONObject("content")?.optJSONArray("parts")
                 ?: throw RuleViolation("PROTOCOL")

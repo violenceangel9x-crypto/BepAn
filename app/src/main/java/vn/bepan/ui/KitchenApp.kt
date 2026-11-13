@@ -54,6 +54,7 @@ fun KitchenApp(
     val back by nav.currentBackStackEntryAsState()
     val route = back?.destination?.route ?: "home"
     var tab by rememberSaveable { mutableIntStateOf(0) }
+    LaunchedEffect(tab, route) { if (route == "home") vm.chatRoute(listOf("TODAY", "FINANCE", "NOTES", "SETTINGS")[tab]) }
     val tabStates = rememberSaveableStateHolder()
     var bubbleX by rememberSaveable { mutableFloatStateOf(0f) }
     var bubbleY by rememberSaveable { mutableFloatStateOf(0f) }
@@ -168,7 +169,8 @@ fun KitchenApp(
                         openToday = {
                             tab = 0
                             nav.popBackStack("home", false)
-                        }
+                        },
+                        openFinance = { tab = 1; nav.popBackStack("home", false) }
                     )
                 }
                 composable("audit") {

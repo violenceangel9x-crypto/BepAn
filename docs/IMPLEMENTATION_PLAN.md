@@ -132,7 +132,7 @@ Chuỗi chính: **2.0 → 2.1 → 2.2 → 2.3 → 2.4 → 2.5 → 2.6 → 2.7 �
 
 **Đạt khi:** tổng từng sheet/người/bữa bằng UI và Room; đủ tháng nhuận; dữ liệu điều chỉnh/thu nhóm/hoàn/cấn/nhận khác kỳ đúng; hủy SAF không tạo trạng thái thành công giả; mở lại tệp thật trên thiết bị/máy tính.
 
-### 2.8 · Nối ngữ cảnh Gemini và chẩn đoán tài chính — P1
+### 2.8 · Nối ngữ cảnh Gemini và chẩn đoán tài chính — P1 — Đã đạt JVM/build/gateway
 
 - Khi mở chat, truyền route/tháng/nhóm/ngày đang xem đúng thực tế; giữ ngữ cảnh gốc khi retry. Bổ sung query sổ tháng/số dư/bù từ read model đã kiểm chứng.
 - Công cụ ghi tài chính chỉ được khai báo sau khi có handler dùng chung và UI thủ công đã đạt. Ưu tiên thu cá nhân rồi thu nhóm; hoàn/cấn và nhiều bước AI có thể tách mốc sau. Không lấy số mô hình tự tính làm kết quả chính thức.

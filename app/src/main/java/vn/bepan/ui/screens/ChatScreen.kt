@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import vn.bepan.assistant.CommandCodec
+import vn.bepan.data.FinanceCommand
 import vn.bepan.domain.Group
 import vn.bepan.domain.Kind
 import vn.bepan.domain.businessZone
@@ -54,7 +55,8 @@ fun ChatScreen(
     voice: () -> Unit,
     back: () -> Unit,
     diagnose: (String) -> Unit,
-    openToday: () -> Unit
+    openToday: () -> Unit,
+    openFinance: () -> Unit = {}
 ) {
     val list = rememberLazyListState()
     val scope = rememberCoroutineScope()
@@ -100,7 +102,8 @@ fun ChatScreen(
             ScreenHeader("Gemini", "Trợ lý bếp ăn · ${if (state.mock) "Mô phỏng AI" else "Gemini thật"}", back)
         }
         Text(
-            "Đang xem ${state.date} · ${if (state.snapshot?.day?.closed == true) "Đã chốt" else "Nháp"}",
+            if (state.chatRoute == "FINANCE") "Đang xem kỳ ${state.financePeriod} · ${Group.valueOf(state.financeGroup).label}"
+            else "Đang xem ${state.date} · ${if (state.snapshot?.day?.closed == true) "Đã chốt" else "Nháp"}",
             color = Cyan,
             fontSize = if (keyboardOpen) 12.sp else 16.sp,
             modifier = Modifier.padding(horizontal = 20.dp, vertical = if (keyboardOpen) 4.dp else 8.dp)
@@ -178,7 +181,8 @@ fun ChatScreen(
                                 }
                             }
                             state.actions.firstOrNull { it.operationId == message.operationId }?.let { action ->
-                                val command = CommandCodec.decode(action.command)
+                                val financial = runCatching { FinanceCommand.decode(action.command) }.getOrNull()
+                                val command = if (financial == null) runCatching { CommandCodec.decode(action.command) }.getOrNull() else null
                                 Card(
                                     colors = CardDefaults.cardColors(containerColor = SlotCardBg),
                                     shape = RoundedCornerShape(12.dp),
@@ -235,10 +239,10 @@ fun ChatScreen(
                                                 }
                                                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                                     LightAction("Xem mục đã thay đổi", {
-                                                        vm.changeDate(command.date)
-                                                        openToday()
+                                                        if (financial != null) { vm.changeFinancePeriod(financial.period); openFinance() }
+                                                        else command?.let { vm.changeDate(it.date); openToday() }
                                                     })
-                                                    if (command.kind == Kind.ATTENDANCE) {
+                                                    if (command?.kind == Kind.ATTENDANCE) {
                                                         TextButton(
                                                             onClick = { vm.undo(action) },
                                                             enabled = !state.busy,

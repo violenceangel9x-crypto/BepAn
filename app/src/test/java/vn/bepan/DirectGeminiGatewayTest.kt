@@ -52,7 +52,7 @@ class DirectGeminiGatewayTest {
         val body = response.written.toString("UTF-8")
         assertFalse(body.contains(synthetic))
         val json = JSONObject(body)
-        assertEquals(5, json.getJSONArray("tools").getJSONObject(0).getJSONArray("functionDeclarations").length())
+        assertEquals(9, json.getJSONArray("tools").getJSONObject(0).getJSONArray("functionDeclarations").length())
         val context = JSONObject(json.getJSONArray("contents").getJSONObject(0).getJSONArray("parts").getJSONObject(0).getString("text")).getJSONObject("context")
         assertEquals("2026-11-10", context.getString("selectedDate")); assertEquals("2026-11-12", context.getString("referenceDate"))
         assertEquals("2026-11-12", result.calls.single().args.getString("date"))
@@ -61,6 +61,15 @@ class DirectGeminiGatewayTest {
         var opened = false
         expectCode("API_KEY_MISSING") { runBlocking { gateway(Response(200, "{}"), null) { opened = true }.interpret("Hỏi suất", "2026-11-12", "2026-11-12", "t", "r") } }
         assertFalse(opened)
+    }
+    @Test fun directFinanceContextUsesChosenPeriodAndGroup() = runBlocking {
+        val response = Response(200, """{"candidates":[{"content":{"parts":[{"functionCall":{"name":"get_finance_month","args":{"period":"2026-10"}}}]}}]}""")
+        val result = gateway(response).interpret("Sổ tháng đang xem", "2026-11-13", "2026-11-13", "trace", "request",
+            scope = vn.bepan.assistant.AssistantScope("FINANCE", "2026-10", "SOLDIER", "DUE"))
+        val body = JSONObject(response.written.toString("UTF-8"))
+        val context = JSONObject(body.getJSONArray("contents").getJSONObject(0).getJSONArray("parts").getJSONObject(0).getString("text")).getJSONObject("context")
+        assertEquals("2026-10", context.getString("selectedPeriod")); assertEquals("SOLDIER", context.getString("selectedGroup"))
+        assertEquals("FINANCE", context.getString("route")); assertEquals("get_finance_month", result.calls.single().name)
     }
     @Test fun providerErrorTextCannotEscapeIntoAppErrors() {
         expectCode("API_KEY_REJECTED") { call(Response(400, """{"error":{"message":"$synthetic PRIVATE_CHAT","details":[{"reason":"API_KEY_INVALID"}]}}""")) }

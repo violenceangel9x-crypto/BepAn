@@ -6,7 +6,7 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.flow.Flow
 
-const val KITCHEN_SCHEMA_VERSION = 6
+const val KITCHEN_SCHEMA_VERSION = 7
 
 @Entity(primaryKeys = ["personId", "effective"], foreignKeys = [ForeignKey(entity = Person::class, parentColumns = ["id"], childColumns = ["personId"], onDelete = ForeignKey.RESTRICT)])
 data class MembershipPeriod(val personId: String, val effective: String, val group: String, val active: Boolean)
@@ -34,7 +34,11 @@ data class AssistantAction(@PrimaryKey val operationId: String, val traceId: Str
     @ColumnInfo(defaultValue = "'NONE'") val provider: String = "NONE",
     @ColumnInfo(defaultValue = "''") val selectedDate: String = "",
     @ColumnInfo(defaultValue = "''") val referenceDate: String = "",
-    @ColumnInfo(defaultValue = "1") val attempt: Int = 1)
+    @ColumnInfo(defaultValue = "1") val attempt: Int = 1,
+    @ColumnInfo(defaultValue = "'TODAY'") val route: String = "TODAY",
+    @ColumnInfo(defaultValue = "''") val selectedPeriod: String = "",
+    @ColumnInfo(defaultValue = "''") val selectedGroup: String = "",
+    @ColumnInfo(defaultValue = "'ALL'") val selectedFilter: String = "ALL")
 @Entity data class Note(@PrimaryKey val id: String, val text: String, val pinned: Boolean = false, val updated: String)
 
 @Dao interface KitchenDao {
@@ -110,6 +114,14 @@ data class AssistantAction(@PrimaryKey val operationId: String, val traceId: Str
 abstract class KitchenDatabase : RoomDatabase() {
     abstract fun dao(): KitchenDao
     companion object {
+        val MIGRATION_6_7 = object : Migration(6, 7) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE ChatMessage ADD COLUMN route TEXT NOT NULL DEFAULT 'TODAY'")
+                db.execSQL("ALTER TABLE ChatMessage ADD COLUMN selectedPeriod TEXT NOT NULL DEFAULT ''")
+                db.execSQL("ALTER TABLE ChatMessage ADD COLUMN selectedGroup TEXT NOT NULL DEFAULT ''")
+                db.execSQL("ALTER TABLE ChatMessage ADD COLUMN selectedFilter TEXT NOT NULL DEFAULT 'ALL'")
+            }
+        }
         val MIGRATION_5_6 = object : Migration(5, 6) {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL("ALTER TABLE Settlement ADD COLUMN parentId TEXT DEFAULT NULL REFERENCES Settlement(id) ON UPDATE NO ACTION ON DELETE RESTRICT")
@@ -158,6 +170,6 @@ abstract class KitchenDatabase : RoomDatabase() {
             }
         }
         fun open(context: Context, name: String = "kitchen.db"): KitchenDatabase =
-            Room.databaseBuilder(context, KitchenDatabase::class.java, name).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6).build()
+            Room.databaseBuilder(context, KitchenDatabase::class.java, name).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7).build()
     }
 }

@@ -10,6 +10,8 @@ export function validateRequest(body) {
   if (!body || !uuid.test(body.requestId) || !uuid.test(body.traceId) || typeof body.message !== 'string' || body.message.length < 1 || body.message.length > 8000) throw new GatewayError('INVALID_REQUEST',400);
   const ctx = body.context;
   if (!ctx || ctx.timeZone !== 'Asia/Ho_Chi_Minh' || ![ctx.referenceDate,ctx.selectedDate].every(d => typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d))) throw new GatewayError('INVALID_CONTEXT',400);
+  if (ctx.route !== undefined && !['TODAY','FINANCE','NOTES','SETTINGS'].includes(ctx.route)) throw new GatewayError('INVALID_CONTEXT',400);
+  if (ctx.selectedPeriod !== undefined && !/^\d{4}-(0[1-9]|1[0-2])$/.test(ctx.selectedPeriod)) throw new GatewayError('INVALID_CONTEXT',400);
 }
 export async function interpret(body, { key, model, fetcher = fetch } = {}) {
   validateRequest(body);
@@ -18,7 +20,7 @@ export async function interpret(body, { key, model, fetcher = fetch } = {}) {
   let response;
   try {
     response = await fetcher(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
-      method: 'POST', signal: AbortSignal.timeout(25000), headers: { 'Content-Type':'application/json', 'x-goog-api-key':key },
+      method: 'POST', redirect: 'error', signal: AbortSignal.timeout(25000), headers: { 'Content-Type':'application/json', 'x-goog-api-key':key },
       body: JSON.stringify({ systemInstruction: { parts:[{ text: system + '\nChỉ đề xuất một hàm trong danh sách. Không thực hiện hay báo đã lưu. Khi thiếu trường thì hỏi lại bằng tiếng Việt. Không tính số từ trí nhớ.' }] },
         contents:[{ role:'user', parts:[{ text: JSON.stringify({ message:body.message, context:body.context }) }] }],
         tools:[{ functionDeclarations:declarations }], generationConfig:{ temperature:0.1, maxOutputTokens:2048 } })
@@ -31,7 +33,7 @@ export async function interpret(body, { key, model, fetcher = fetch } = {}) {
   const calls = parts.filter(p => p.functionCall).map((p,i) => ({ callId:`call-${i+1}`, name:p.functionCall.name, args:p.functionCall.args }));
   if (calls.length > 1) throw new GatewayError('MULTI_STEP_UNSUPPORTED',422);
   if (calls.some(c => !allowed.has(c.name) || !c.args || Array.isArray(c.args))) throw new GatewayError('PROTOCOL');
-  return { requestId:body.requestId, traceId:body.traceId, kind:calls.length ? 'PROPOSALS':'CLARIFY', calls, text:calls.length ? '' : parts.map(p=>p.text || '').join('').slice(0,2000) };
+  return { requestId:body.requestId, traceId:body.traceId, kind:calls.length ? 'PROPOSALS':'CLARIFY', calls, text:calls.length ? '' : parts.filter(p=>!p.thought).map(p=>p.text || '').join('').slice(0,2000) };
 }
 export function createGateway(config = {}) {
   let active = 0;

@@ -26,8 +26,8 @@ import java.time.YearMonth
 
 @Composable
 fun FinanceScreen(state: UiState, vm: KitchenViewModel, openToday: () -> Unit = {}) {
-    var group by rememberSaveable { mutableStateOf(Group.OFFICER.name) }
-    var filter by rememberSaveable { mutableStateOf("ALL") }
+    val group = state.financeGroup
+    val filter = state.financeFilter
     var table by rememberSaveable { mutableStateOf(false) }
     var detail by rememberSaveable { mutableStateOf("") }
     var showUnclosed by rememberSaveable { mutableStateOf(false) }
@@ -93,11 +93,11 @@ fun FinanceScreen(state: UiState, vm: KitchenViewModel, openToday: () -> Unit = 
                 ledger.periodCash.filter { it.kind == "SUBSIDY_RECEIPT" }.forEach { Text("${it.date} · đã nhận ${money(it.amount)} · ${it.id.take(8)}", color = Ink) }
             } }
             item { FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Group.entries.forEach { value -> FilterChip(selected = group == value.name, onClick = { group = value.name }, label = { Text(value.label) }) }
+                Group.entries.forEach { value -> FilterChip(selected = group == value.name, onClick = { vm.financeFilters(group = value.name) }, label = { Text(value.label) }) }
             } }
             item { FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf("ALL" to "Tất cả", "CUT" to "Có cắt cơm", "DUE" to "Còn thiếu", "EXCESS" to "Có dư").forEach { (key, label) ->
-                    FilterChip(selected = filter == key, onClick = { filter = key }, label = { Text(label) })
+                    FilterChip(selected = filter == key, onClick = { vm.financeFilters(filter = key) }, label = { Text(label) })
                 }
             } }
             item { Section("Sổ ${Group.valueOf(group).label}", "Tiền ăn nhóm ${money(ledger.people.sumOf { it.groupCharge(group) })} · công nợ mỗi người tính toàn kỳ") {

@@ -2,6 +2,15 @@
 
 ## Triển khai Mốc 2 — tiến độ theo từng phần
 
+### 2.8 — Đạt JVM/build/gateway · 13/11/2026
+
+- Schema **7**, migration 6→7 giữ route/kỳ/nhóm/bộ lọc cùng tin nhắn. Retry dùng ngữ cảnh đã lưu; tháng Hôm nay không thay tháng tài chính. Tháng/nhóm/bộ lọc tài chính lưu DataStore; mở lại thẻ đã lưu điều hướng đúng kỳ.
+- Có **9 Function Declaration và handler**: 5 luồng ngày cũ, 3 đọc tháng/công nợ/bù gạo, 1 đề xuất thu cá nhân/toàn nhóm. FinanceAssistant dùng FinanceRepository đã đạt; trùng tên chọn tại máy, tiền phải nguyên đồng, xem trước phân bổ và số đối chiếu trước/sau. Preview/action/tin thẻ lưu cùng transaction; confirm dùng AuditedWriter chung và success từ receipt. Hoàn/cấn/nhận bù chưa mở qua AI ghi.
+- Gateway HTTP và upstream không theo redirect; direct/gateway đều gửi đúng scope và whitelist công cụ. Báo cáo vẫn chỉ chứa enum/ID/trạng thái, không đưa số tiền/tên của các reply vào Technical Log.
+- `scripts/build.ps1`: **BUILD SUCCESSFUL**, **61/61 JVM test đạt**, lint không lỗi. `scripts/gateway.ps1 -Mode test`: **7/7 đạt**. Ca mới gồm context hai transport, 3xx, ngữ cảnh lưu qua mở DB, tháng cũ, trùng tên, thu chưa confirm không ghi, nhóm/đồng lẻ và nguồn Audit Gemini.
+- Emulator BepAn_API34 đã khởi động để nghiệm thu 2.9, có TalkBack cài sẵn. Điện thoại Samsung chưa bị thay dữ liệu trong chuỗi này; kiểm thử native tiếp dùng dữ liệu mẫu và giữ cài đặt máy thật.
+- Tiếp theo: **2.9** fixture tháng tổng hợp/migration đầy đủ, native/emulator/Samsung, chữ lớn, TalkBack, process death, kết quả APK và bàn giao.
+
 ### 2.7 — Đạt JVM/build và mở lại bằng Excel thật · 13/11/2026
 
 - Hợp đồng ở EXCEL_CONTRACT.md; FinanceExcel xuất ZIP/SpreadsheetML offline, không thêm thư viện desktop. Sheet đối soát, ba nhóm có dữ liệu, quỹ theo ngày tiền, chứng từ kỳ, phân bổ và quyết toán dùng cùng FinanceMonth; bảng nhóm giữ cột tên, đúng số ngày tháng nhuận.

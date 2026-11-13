@@ -14,7 +14,7 @@ import vn.bepan.diagnostics.*
 import vn.bepan.domain.*
 import java.time.Instant
 
-data class PersonChoice(val call: Call, val date: String, val context: vn.bepan.domain.Context, val request: String, val people: List<Person>)
+data class PersonChoice(val call: Call, val date: String, val context: vn.bepan.domain.Context, val request: String, val people: List<Person>, val scope: AssistantScope = AssistantScope())
 data class UiState(
     val date: String = today(), val snapshot: DaySnapshot? = null, val busy: Boolean = false,
     val error: String = "", val roomFailed: Boolean = false, val notice: String = "",
@@ -29,7 +29,7 @@ data class UiState(
     val people: List<Person> = emptyList(), val memberships: List<MembershipPeriod> = emptyList(), val rates: List<Rate> = emptyList(),
     val configurationPreview: ConfigurationCommand? = null, val financePeriod: String = today().take(7),
     val ledger: FinanceMonth? = null, val financePreview: FinanceCommand? = null, val lastFinanceReceipt: Receipt? = null,
-    val exportingFinance: Boolean = false
+    val exportingFinance: Boolean = false, val financeGroup: String = Group.OFFICER.name, val financeFilter: String = "ALL", val chatRoute: String = "TODAY"
 )
 class KitchenViewModel(application: Application) : AndroidViewModel(application) {
     private val app = application as BepApplication
@@ -43,13 +43,19 @@ class KitchenViewModel(application: Application) : AndroidViewModel(application)
     private val endpointKey = stringPreferencesKey("endpoint")
     private val connectionKey = stringPreferencesKey("gemini_connection")
     private val draftKey = stringPreferencesKey("draft")
+    private val periodKey = stringPreferencesKey("finance_period")
+    private val groupKey = stringPreferencesKey("finance_group")
+    private val filterKey = stringPreferencesKey("finance_filter")
     private var draftJob: Job? = null
     init {
         viewModelScope.launch {
             app.settings.data.catch { emit(emptyPreferences()) }.collect { prefs ->
                 val endpoint = prefs[endpointKey].orEmpty()
                 val connection = runCatching { GeminiConnection.valueOf(prefs[connectionKey].orEmpty()) }.getOrDefault(if (endpoint.isNotBlank()) GeminiConnection.GATEWAY else GeminiConnection.DIRECT)
-                mutable.update { it.copy(mock = BuildConfig.DEBUG && (prefs[mockKey] ?: true), endpoint = endpoint, connection = connection, draft = prefs[draftKey] ?: "") }
+                val previousPeriod = state.value.financePeriod
+                mutable.update { it.copy(mock = BuildConfig.DEBUG && (prefs[mockKey] ?: true), endpoint = endpoint, connection = connection, draft = prefs[draftKey] ?: "",
+                    financePeriod = prefs[periodKey] ?: it.financePeriod, financeGroup = prefs[groupKey] ?: it.financeGroup, financeFilter = prefs[filterKey] ?: it.financeFilter) }
+                if (previousPeriod != state.value.financePeriod && state.value.snapshot != null) refresh()
             }
         }
         viewModelScope.launch {
@@ -59,6 +65,8 @@ class KitchenViewModel(application: Application) : AndroidViewModel(application)
         }
         launch {
             repo.initialize(BuildConfig.DEBUG)
+            val prefs = app.settings.data.first()
+            mutable.update { it.copy(financePeriod = prefs[periodKey] ?: it.financePeriod, financeGroup = prefs[groupKey] ?: it.financeGroup, financeFilter = prefs[filterKey] ?: it.financeFilter) }
             refresh()
             launch { repo.dao.observeChat().collect { rows -> mutable.update { it.copy(chat = rows) } } }
             launch { repo.dao.observeActions().collect { rows -> mutable.update { it.copy(actions = rows) } } }
@@ -82,14 +90,21 @@ class KitchenViewModel(application: Application) : AndroidViewModel(application)
         val people = repo.dao.people()
         val memberships = repo.dao.memberships(); val rates = repo.dao.rates()
         val ledger = financial.month(period)
-        val draft = repo.dao.financeDrafts().firstOrNull()?.let { FinanceCommand.decode(it.command) }
+        val draft = repo.dao.financeDrafts().firstOrNull { repo.dao.action(it.id) == null }?.let { FinanceCommand.decode(it.command) }
         mutable.update { if (it.date == date && it.financePeriod == period) it.copy(snapshot = snap, people = people, memberships = memberships, rates = rates, ledger = ledger, financePreview = draft) else it }
     }
     fun changeFinancePeriod(period: String) = launch {
         java.time.YearMonth.parse(period)
         mutable.update { it.copy(financePeriod = period, ledger = null) }
+        app.settings.edit { it[periodKey] = period }
         refresh()
     }
+    fun financeFilters(group: String = state.value.financeGroup, filter: String = state.value.financeFilter) = launch {
+        Group.valueOf(group); requireRule(filter in setOf("ALL", "CUT", "DUE", "EXCESS"), "INVALID_ARGUMENT")
+        mutable.update { it.copy(financeGroup = group, financeFilter = filter) }
+        app.settings.edit { it[groupKey] = group; it[filterKey] = filter }
+    }
+    fun chatRoute(route: String) { if (route in setOf("TODAY", "FINANCE", "NOTES", "SETTINGS")) mutable.update { it.copy(chatRoute = route) } }
     fun previewFinance(kind: Kind, amount: Long = 0, people: List<String> = emptyList(), targetPeriod: String = "", settlementId: String = "", text: String = "", cashDate: String = today(), group: String = "") = launch {
         mutable.update { it.copy(financePreview = financial.preview(kind, state.value.financePeriod, amount, people, targetPeriod, settlementId, text, cashDate, group), error = "") }
     }
@@ -219,7 +234,8 @@ class KitchenViewModel(application: Application) : AndroidViewModel(application)
             val request = id()
             val reference = today()
             val ctx = vn.bepan.domain.Context(source = Source.ASSISTANT, provider = if (frozen.mock) Provider.MOCK else Provider.GEMINI, requestId = request)
-            val user = ChatMessage(request, Instant.now().toString(), "USER", message, ctx.traceId, provider = ctx.provider.name, selectedDate = frozen.date, referenceDate = reference)
+            val user = ChatMessage(request, Instant.now().toString(), "USER", message, ctx.traceId, provider = ctx.provider.name, selectedDate = frozen.date, referenceDate = reference,
+                route = frozen.chatRoute, selectedPeriod = if (frozen.chatRoute == "FINANCE") frozen.financePeriod else frozen.date.take(7), selectedGroup = frozen.financeGroup, selectedFilter = frozen.financeFilter)
             repo.dao.chat(user)
             interpret(user, ctx, frozen.endpoint, frozen.connection)
         }
@@ -239,11 +255,12 @@ class KitchenViewModel(application: Application) : AndroidViewModel(application)
                         { app.assets.open("gemini-system.vi.txt").bufferedReader(Charsets.UTF_8).use { it.readText() } },
                         { app.assets.open("gemini-functions.v1.json").bufferedReader(Charsets.UTF_8).use { it.readText() } })
                 }
-                val result = provider.interpret(user.text, user.selectedDate, user.referenceDate, ctx.traceId, user.id, ctx.attempt)
+                val scope = AssistantScope(user.route, user.selectedPeriod, user.selectedGroup, user.selectedFilter)
+                val result = provider.interpret(user.text, user.selectedDate, user.referenceDate, ctx.traceId, user.id, ctx.attempt, scope)
                 log.record(ctx, EventCode.GATEWAY_RETURNED)
                 requireRule(result.calls.size <= 1, "MULTI_STEP_UNSUPPORTED")
                 if (result.calls.isEmpty()) reply(ctx, "Gợi ý từ Gemini · chưa ghi dữ liệu:\n" + result.text.ifEmpty { "Bạn vui lòng bổ sung yêu cầu." })
-                else handle(result.calls.single(), user.selectedDate, user.referenceDate, ctx, user.id)
+                else handle(result.calls.single(), user.selectedDate, user.referenceDate, ctx, user.id, scope = scope)
                 draft("")
             } catch (e: Exception) {
                 if (e is CancellationException) throw e
@@ -265,7 +282,21 @@ class KitchenViewModel(application: Application) : AndroidViewModel(application)
     private suspend fun reply(ctx: vn.bepan.domain.Context, text: String, operation: String = "", error: String = "") {
         repo.dao.chat(ChatMessage(id(), Instant.now().toString(), "ASSISTANT", text, ctx.traceId, operation, error, provider = ctx.provider.name, attempt = ctx.attempt))
     }
-    private suspend fun handle(call: Call, selected: String, reference: String, ctx: vn.bepan.domain.Context, request: String, selectedPerson: String = "") {
+    private suspend fun handle(call: Call, selected: String, reference: String, ctx: vn.bepan.domain.Context, request: String, selectedPerson: String = "", scope: AssistantScope = AssistantScope()) {
+        if (call.name in FinanceAssistant.functions) {
+            val result = repo.db.withTransaction {
+                val result = FinanceAssistant(financial).propose(call, scope, selected, selectedPerson)
+                result.command?.let { command ->
+                    repo.dao.action(AssistantAction(command.operationId, ctx.traceId, request, ctx.provider.name, command.encode(), result.text))
+                    reply(ctx, result.text, command.operationId)
+                }
+                result
+            }
+            if (result.choices.isNotEmpty()) mutable.update { it.copy(choice = PersonChoice(call, selected, ctx, request, result.choices, scope)) }
+            if (result.command == null) reply(ctx, result.text)
+            log.record(ctx, when { result.command != null -> EventCode.PREVIEW_READY; result.choices.isNotEmpty() -> EventCode.CLARIFICATION_REQUIRED; else -> EventCode.READ_COMPLETED }, result.command?.kind, result.command?.operationId.orEmpty())
+            return
+        }
         val date = CommandCodec.resolveDate(call.args, selected, reference)
         val snap = repo.snapshot(date)
         val args = call.args
@@ -321,7 +352,7 @@ class KitchenViewModel(application: Application) : AndroidViewModel(application)
     fun choose(person: String) {
         val choice = state.value.choice ?: return
         mutable.update { it.copy(choice = null) }
-        launch { handle(choice.call, choice.date, choice.date, choice.context, choice.request, person) }
+        launch { handle(choice.call, choice.date, choice.date, choice.context, choice.request, person, choice.scope) }
     }
     fun confirm(action: AssistantAction) {
         if (state.value.busy) return
@@ -332,7 +363,10 @@ class KitchenViewModel(application: Application) : AndroidViewModel(application)
                 val latest = repo.dao.action(action.operationId) ?: throw RuleViolation("ACTION_MISSING")
                 requireRule(latest.status in listOf("PENDING", "SAVED"), "ACTION_EXPIRED")
                 log.record(ctx, EventCode.CONFIRMATION_RECEIVED, operationId = action.operationId)
-                repo.commit(CommandCodec.decode(action.command), ctx)
+                if (org.json.JSONObject(action.command).has("expected")) {
+                    val receipt = financial.commit(FinanceCommand.decode(action.command), ctx)
+                    mutable.update { it.copy(lastFinanceReceipt = receipt) }
+                } else repo.commit(CommandCodec.decode(action.command), ctx)
                 refresh()
             } catch (e: Exception) {
                 if (e is CancellationException) throw e
@@ -345,7 +379,10 @@ class KitchenViewModel(application: Application) : AndroidViewModel(application)
     fun cancel(action: AssistantAction) = launch {
         // Commit and cancel are serialized by Room. Cancellation cannot overwrite a saved card.
         repo.db.withTransaction {
-            if (repo.dao.receipt(action.operationId) == null && repo.dao.action(action.operationId)?.status == "PENDING") repo.dao.actionStatus(action.operationId, "CANCELLED")
+            if (repo.dao.receipt(action.operationId) == null && repo.dao.action(action.operationId)?.status == "PENDING") {
+                repo.dao.actionStatus(action.operationId, "CANCELLED")
+                repo.dao.deleteFinanceDraft(action.operationId)
+            }
         }
         log.record(vn.bepan.domain.Context(action.traceId, Source.ASSISTANT, Provider.valueOf(action.provider)), EventCode.USER_CANCELLED, operationId = action.operationId)
     }
